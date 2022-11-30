@@ -9,6 +9,8 @@ helper functions for cartopy and matplotlib
 
  * Added ``nrow`` and ``ncol`` parameters to ``set_map_layout`` for use with a
    gridspec.
+ * Replaced `ax.get_subplotspec().get_geometry()` with `ax.get_subplotspec().get_geometry()`
+   as the former was deprecated in matplotlib.
  * Formatted with black and isort, checked with flake8.
 
 
@@ -34,4 +36,4 @@ Mayor release, mostly introducing the new `colorbar` functionality.
 ## History
 
 This package bases on functions developped for the [python visualisation workshop at C2SM](https://github.com/C2SM/pyvis/) (Part 3 -> `utils.py`).
-`utils.py` in turn is based on [mutils](https://github.com/mathause/mutils). 
+`utils.py` in turn is based on [mutils](https://github.com/mathause/mutils).
