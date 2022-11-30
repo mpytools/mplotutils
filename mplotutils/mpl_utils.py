@@ -1,10 +1,7 @@
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
-import six
 from matplotlib.colors import from_levels_and_colors
-
-# =============================================================================
 
 
 def from_levels_and_cmap(levels, cmap, extend="neither"):
@@ -23,8 +20,9 @@ def from_levels_and_cmap(levels, cmap, extend="neither"):
         The behaviour when a value falls out of range of the given levels.
         See :func:`~matplotlib.pyplot.contourf` for details.
 
-    ..note::
-      Adapted from xarray.
+    Notes
+    -----
+    Adapted from xarray.
 
     """
     if np.isscalar(levels):
@@ -47,14 +45,11 @@ def from_levels_and_cmap(levels, cmap, extend="neither"):
     return cmap, norm
 
 
-# -----------------------------------------------------------------------------
-
-# _color_palette is adapted from xarray:
-# https://github.com/pydata/xarray/blob/v0.10.2/xarray/plot/utils.py#L110
-# Used under the terms of xarrays's license, see licenses/XARRAY_LICENSE.
-
-
 def _color_palette(cmap, n_colors):
+    # _color_palette is adapted from xarray:
+    # https://github.com/pydata/xarray/blob/v0.10.2/xarray/plot/utils.py#L110
+    # Used under the terms of xarrays's license, see licenses/XARRAY_LICENSE.
+
     import matplotlib.pyplot as plt
     from matplotlib.colors import ListedColormap
 
@@ -63,7 +58,7 @@ def _color_palette(cmap, n_colors):
         # we have a list of colors
         cmap = ListedColormap(cmap, N=n_colors)
         pal = cmap(colors_i)
-    elif isinstance(cmap, six.string_types):
+    elif isinstance(cmap, str):
         # we have some sort of named palette
         try:
             # is this a matplotlib cmap?
@@ -86,9 +81,6 @@ def _color_palette(cmap, n_colors):
     return pal
 
 
-# =============================================================================
-
-
 def set_map_layout(axes, width=17.0, nrow=None, ncol=None):
     """
     set figure height, given width
@@ -108,7 +100,9 @@ def set_map_layout(axes, width=17.0, nrow=None, ncol=None):
     ncol : integer, default: None
         As nrow but for the number of rows.
 
-    ..note: only works if all the axes have the same aspect ratio.
+    Notes
+    -----
+    Only works if all the axes have the same aspect ratio.
     """
 
     if (nrow is None and ncol is not None) or (nrow is not None and ncol is None):
@@ -149,9 +143,6 @@ def set_map_layout(axes, width=17.0, nrow=None, ncol=None):
 
     f.set_figwidth(width / 2.54)
     f.set_figheight(height / 2.54)
-
-
-# =============================================================================
 
 
 def _get_label_attr(labelpad, size, weight):

@@ -120,8 +120,9 @@ def _is_monotonic(coord, axis=0):
 
 
 def cyclic_dataarray(da, coord="lon"):
-    """Add a cyclic coordinate point to a DataArray along a specified
-    named coordinate dimension.
+    """
+    Add a cyclic coordinate point to a DataArray along a specified named dimension.
+
     >>> import xarray as xr
     >>> data = xr.DataArray([[1, 2, 3], [4, 5, 6]],
     ...                      coords={'x': [1, 2], 'y': range(3)},
@@ -131,7 +132,7 @@ def cyclic_dataarray(da, coord="lon"):
     array([[1, 2, 3, 1],
            [4, 5, 6, 4]])
 
-    Note
+    Notes
     -----
     After: https://github.com/darothen/plot-all-in-ncfile/blob/master/plot_util.py
 
@@ -193,7 +194,6 @@ def ylabel_map(s, labelpad=None, size=None, weight=None, y=0.5, ax=None, **kwarg
     -------
     h : handle
         text handle of the created text field
-
     ..note::
     http://stackoverflow.com/questions/35479508/cartopy-set-xlabel-set-ylabel-not-ticklabels
 
@@ -259,7 +259,6 @@ def xlabel_map(s, labelpad=None, size=None, weight=None, x=0.5, ax=None, **kwarg
     -------
     h : handle
         text handle of the created text field
-
     ..note::
     http://stackoverflow.com/questions/35479508/cartopy-set-xlabel-set-ylabel-not-ticklabels
 
@@ -333,7 +332,7 @@ def yticklabels(
         Vertical alignment, default: 'center'.
     bbox_props : dict
         Properties of the bounding box. Default: dict(ec='none', fc='none')
-    kwargs : additional arguments
+    **kwargs : additional arguments
         Passed to ax.annotate
 
     """
@@ -435,7 +434,7 @@ def xticklabels(
         Vertical alignment, default: 'top'.
     bbox_props : dict
         Properties of the bounding box. Default: dict(ec='none', fc='none')
-    kwargs : additional arguments
+    **kwargs : additional arguments
         Passed to ax.annotate
 
     """

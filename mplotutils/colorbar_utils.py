@@ -44,65 +44,52 @@ def colorbar(
     shrink : None or float in 0..1
         Fraction of the total height that the colorbar is shrunk.
         See Note. Default: None.
-
-    Note
-    ----
-
-    shift='symmetric', shrink=None  -> colorbar extends over the whole height
-    shift='symmetric', shrink=0.1   -> colorbar is 10 % smaller, and centered
-    shift=0., shrink=0.1            -> colorbar is 10 % smaller, and aligned
-                                       with the bottom
-    shift=0.1, shrink=None          -> colorbar is 10 % smaller, and aligned
-                                       with the top
-
-    kwargs
-    ------
-    colorbar properties
-    ============  ====================================================
-    Property      Description
-    ============  ====================================================
-    *extend*      [ 'neither' | 'both' | 'min' | 'max' ]
-                  If not 'neither', make pointed end(s) for out-of-
-                  range values.  These are set for a given colormap
-                  using the colormap set_under and set_over methods.
-    *extendfrac*  [ *None* | 'auto' | length | lengths ]
-                  If set to *None*, both the minimum and maximum
-                  triangular colorbar extensions with have a length of
-                  5% of the interior colorbar length (this is the
-                  default setting). If set to 'auto', makes the
-                  triangular colorbar extensions the same lengths as
-                  the interior boxes (when *spacing* is set to
-                  'uniform') or the same lengths as the respective
-                  adjacent interior boxes (when *spacing* is set to
-                  'proportional'). If a scalar, indicates the length
-                  of both the minimum and maximum triangular colorbar
-                  extensions as a fraction of the interior colorbar
-                  length. A two-element sequence of fractions may also
-                  be given, indicating the lengths of the minimum and
-                  maximum colorbar extensions respectively as a
-                  fraction of the interior colorbar length.
-    *extendrect*  [ *False* | *True* ]
-                  If *False* the minimum and maximum colorbar extensions
-                  will be triangular (the default). If *True* the
-                  extensions will be rectangular.
-    *spacing*     [ 'uniform' | 'proportional' ]
-                  Uniform spacing gives each discrete color the same
-                  space; proportional makes the space proportional to
-                  the data interval.
-    *ticks*       [ None | list of ticks | Locator object ]
-                  If None, ticks are determined automatically from the
-                  input.
-    *format*      [ None | format string | Formatter object ]
-                  If None, the
-                  :class:`~matplotlib.ticker.ScalarFormatter` is used.
-                  If a format string is given, e.g., '%.3f', that is
-                  used. An alternative
-                  :class:`~matplotlib.ticker.Formatter` object may be
-                  given instead.
-    *drawedges*   [ False | True ] If true, draw lines at color
-                  boundaries.
-    ============  ====================================================
-
+    **kwargs : keyword arguments
+        colorbar properties
+        ============  ====================================================
+        Property      Description
+        ============  ====================================================
+        *extend*      [ 'neither' | 'both' | 'min' | 'max' ]
+                    If not 'neither', make pointed end(s) for out-of-
+                    range values.  These are set for a given colormap
+                    using the colormap set_under and set_over methods.
+        *extendfrac*  [ *None* | 'auto' | length | lengths ]
+                    If set to *None*, both the minimum and maximum
+                    triangular colorbar extensions with have a length of
+                    5% of the interior colorbar length (this is the
+                    default setting). If set to 'auto', makes the
+                    triangular colorbar extensions the same lengths as
+                    the interior boxes (when *spacing* is set to
+                    'uniform') or the same lengths as the respective
+                    adjacent interior boxes (when *spacing* is set to
+                    'proportional'). If a scalar, indicates the length
+                    of both the minimum and maximum triangular colorbar
+                    extensions as a fraction of the interior colorbar
+                    length. A two-element sequence of fractions may also
+                    be given, indicating the lengths of the minimum and
+                    maximum colorbar extensions respectively as a
+                    fraction of the interior colorbar length.
+        *extendrect*  [ *False* | *True* ]
+                    If *False* the minimum and maximum colorbar extensions
+                    will be triangular (the default). If *True* the
+                    extensions will be rectangular.
+        *spacing*     [ 'uniform' | 'proportional' ]
+                    Uniform spacing gives each discrete color the same
+                    space; proportional makes the space proportional to
+                    the data interval.
+        *ticks*       [ None | list of ticks | Locator object ]
+                    If None, ticks are determined automatically from the
+                    input.
+        *format*      [ None | format string | Formatter object ]
+                    If None, the
+                    :class:`~matplotlib.ticker.ScalarFormatter` is used.
+                    If a format string is given, e.g., '%.3f', that is
+                    used. An alternative
+                    :class:`~matplotlib.ticker.Formatter` object may be
+                    given instead.
+        *drawedges*   [ False | True ] If true, draw lines at color
+                    boundaries.
+        ============  ====================================================
 
     Examples
     --------
@@ -122,7 +109,6 @@ def colorbar(
 
     ax.set_global()
 
-
     # =========================
     # example with 2 axes
 
@@ -136,7 +122,6 @@ def colorbar(
     cbar = mpu.colorbar(h, axes[0], axes[1])
 
     cbar.set_label('[°C]', labelpad=10)
-
 
     # =========================
     # example with 3 axes & 2 colorbars
@@ -157,8 +142,16 @@ def colorbar(
 
     plt.draw()
 
+    Notes
+    -----
+    shift='symmetric', shrink=None  -> colorbar extends over the whole height
+    shift='symmetric', shrink=0.1   -> colorbar is 10 % smaller, and centered
+    shift=0., shrink=0.1            -> colorbar is 10 % smaller, and aligned
+                                       with the bottom
+    shift=0.1, shrink=None          -> colorbar is 10 % smaller, and aligned
+                                       with the top
 
-    See also
+    See Also
     --------
     _resize_colorbar_horz
     """
@@ -247,8 +240,8 @@ def _resize_colorbar_vert(
 
     see 'colorbar'
 
-    Example
-    -------
+    Examples
+    --------
     import matplotlib.pyplot as plt
     import mplotutils as mpu
     import cartopy.crs as ccrs
@@ -269,7 +262,7 @@ def _resize_colorbar_vert(
 
     plt.draw()
 
-    See also
+    See Also
     --------
     _resize_colorbar_horz
     """
@@ -336,8 +329,8 @@ def _resize_colorbar_horz(
 
     see 'colorbar'
 
-    Example
-    -------
+    Examples
+    --------
     import matplotlib.pyplot as plt
     import mplotutils as mpu
     import cartopy.crs as ccrs
@@ -357,7 +350,7 @@ def _resize_colorbar_horz(
 
     plt.draw()
 
-    See also
+    See Also
     --------
     _resize_colorbar_vert
     """
