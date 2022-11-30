@@ -14,7 +14,7 @@ except ImportError:
     _get_version = lambda pkg: pkg_resources.get_distribution(pkg).version
 
 try:
-    __version__ = _get_version("mesmer-emulator")
+    __version__ = _get_version("mplotutils")
 except Exception:
     # Local copy or not installed with setuptools.
     # Disable minimum version checks on downstream libraries.
