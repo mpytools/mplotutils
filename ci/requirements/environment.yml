@@ -1,0 +1,13 @@
+name: mplotutils-tests
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - cartopy
+  - matplotlib-base
+  - xarray
+# for testing
+  - pytest
+  - pytest-cov
+  - pytest-env
+  - pytest-timeout
