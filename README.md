@@ -5,12 +5,13 @@ helper functions for cartopy and matplotlib
 
 ## Versions
 
-### 0.3.0
+### 0.3.0 (unreleased)
 
  * Added ``nrow`` and ``ncol`` parameters to ``set_map_layout`` for use with a
    gridspec.
  * Replaced `ax.get_subplotspec().get_geometry()` with `ax.get_subplotspec().get_geometry()`
-   as the former was deprecated in matplotlib.
+   as the former was deprecated in matplotlib (#8).
+ * Enabled CI on github actions (#9).
  * Formatted with black and isort, checked with flake8.
 
 
