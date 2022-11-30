@@ -127,10 +127,14 @@ def cyclic_dataarray(da, coord="lon"):
     >>> data = xr.DataArray([[1, 2, 3], [4, 5, 6]],
     ...                      coords={'x': [1, 2], 'y': range(3)},
     ...                      dims=['x', 'y'])
-    >>> cd = cyclic_dataarray(data, 'y')
-    >>> print cd.data
+    >>> data_cyclic = cyclic_dataarray(data, 'y')
+    >>> data_cyclic
+    <xarray.DataArray (x: 2, y: 4)>
     array([[1, 2, 3, 1],
            [4, 5, 6, 4]])
+    Coordinates:
+      * x        (x) int64 1 2
+      * y        (y) int64 0 1 2 3
 
     Notes
     -----
