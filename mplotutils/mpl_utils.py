@@ -135,7 +135,7 @@ def set_map_layout(axes, width=17.0, nrow=None, ncol=None):
 
     if nrow is None and ncol is None:
         # get geometry tells how many subplots there are
-        nrow, ncol, __ = ax.get_geometry()
+        nrow, ncol, __, __ = ax.get_subplotspec().get_geometry()
 
     # width of one plot, taking into account
     # left * wf, (1-right) * wf, ncol * wp, (1-ncol) * wp * wspace
