@@ -38,9 +38,7 @@ def sample_data_map(nlons, nlats):
 
 # from xarray
 def infer_interval_breaks(x, y, clip=False):
-    """ "
-    find edges of gridcells, given their centers
-    """
+    """find edges of gridcells, given their centers"""
 
     if len(x.shape) == 1:
         x = _infer_interval_breaks(x)

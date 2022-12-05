@@ -162,9 +162,7 @@ def colorbar(
 
     k = kwargs.keys()
     if ("anchor" in k) or ("panchor" in k):
-        msg = (
-            "'anchor' and 'panchor' keywords not " "supported, use 'shrink' and 'shift'"
-        )
+        msg = "'anchor' and 'panchor' keywords not supported, use 'shrink' and 'shift'"
         raise ValueError(msg)
 
     # ensure 'ax' does not end up in plt.colorbar(**kwargs)
