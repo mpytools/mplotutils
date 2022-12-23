@@ -64,7 +64,6 @@ def _infer_interval_breaks(coord, axis=0):
     return np.concatenate([first, coord[trim_last] + deltas, last], axis=axis)
 
 
-# from xarray
 def _is_monotonic(coord, axis=0):
     """
     >>> _is_monotonic(np.array([0, 1, 2]))
