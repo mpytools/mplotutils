@@ -7,6 +7,13 @@ helper functions for cartopy and matplotlib
 
 ### 0.3.0 (unreleased)
 
+#### Bug fixes
+
+ * Fixed compatibility of `mpu.colorbar` with `bbox_inches="tight"` for matplotlib 3.4 and
+   newer [#26](https://github.com/mathause/mplotutils/pull/26).
+
+#### Internal changes
+
  * Added ``nrow`` and ``ncol`` parameters to ``set_map_layout`` for use with a
    gridspec.
  * Replaced `ax.get_subplotspec().get_geometry()` with `ax.get_subplotspec().get_geometry()`
