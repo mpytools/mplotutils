@@ -11,6 +11,10 @@ Without mplotutils         |  With mplotutils
 
 The code to create the examples can be found in [docs/example.py](docs/example.py).
 
+## Installation
+
+See [docs/installation.md](docs/installation.md).
+
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md).
