@@ -4,6 +4,7 @@ from . import cartopy_utils, colorbar_utils, mpl_utils
 from .cartopy_utils import *
 from .colorbar_utils import *
 from .mpl_utils import *
+from .xrcompat import *
 
 try:
     from importlib.metadata import version as _get_version
