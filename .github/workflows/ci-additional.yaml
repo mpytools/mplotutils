@@ -83,7 +83,7 @@ jobs:
           fetch-depth: 0 # Fetch all history for all branches and tags.
 
       - name: Create conda environment
-        uses: mamba-org/provision-with-micromamba@main
+        uses: mamba-org/provision-with-micromamba@v14
         with:
           environment-name: min-version-policy
           environment-file: false
