@@ -3,6 +3,11 @@
 
 ## v0.3.0 (unreleased)
 
+### Deprecations
+
+ * Deprecated `mpu.infer_interval_breaks` as this is no longer necessary with matplotlib v3.2
+   and cartopy v0.21 [#32](https://github.com/mathause/mplotutils/pull/32).
+
 ### Bug fixes
 
  * Fixed compatibility of `mpu.colorbar` with `bbox_inches="tight"` for matplotlib 3.4 and
