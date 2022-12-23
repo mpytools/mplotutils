@@ -19,6 +19,7 @@
    gridspec.
  * Replaced `ax.get_subplotspec().get_geometry()` with `ax.get_subplotspec().get_geometry()`
    as the former was deprecated in matplotlib (#8).
+ * Refactor `mpu.cyclic_dataarray` using `obj.pad` ([#33](https://github.com/mathause/mplotutils/pull/33)).
  * Enabled CI on github actions (#9).
  * Formatted with black and isort, checked with flake8.
 
