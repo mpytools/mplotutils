@@ -1,7 +1,14 @@
 import numpy as np
+import pytest
 from numpy.testing import assert_array_equal  # noqa: F401
 
 from mplotutils.cartopy_utils import _infer_interval_breaks, infer_interval_breaks
+
+
+def test_infer_interval_breaks_warns():
+
+    with pytest.warns(FutureWarning):
+        infer_interval_breaks(np.array([1, 2, 3]), np.array([1, 2, 3]))
 
 
 def test__infer_interval_breaks():
@@ -26,6 +33,7 @@ def test__infer_interval_breaks():
     #     _infer_interval_breaks(np.array([0, 2, 1]))
 
 
+@pytest.mark.filterwarnings("ignore:It's no longer necessary")
 def test_infer_interval_breaks():
 
     # 1D
@@ -52,6 +60,7 @@ def test_infer_interval_breaks():
     np.testing.assert_allclose(yref, y)
 
 
+@pytest.mark.filterwarnings("ignore:It's no longer necessary")
 def test_infer_interval_breaks_clip():
 
     # no clip
@@ -74,17 +83,3 @@ def test_infer_interval_breaks_clip():
 
     np.testing.assert_allclose(lon_expected, lon_result)
     np.testing.assert_allclose(lat_expected, lat_result)
-
-    # 2D, as above
-
-    # def test_is_monotonic():
-
-    # _is_monotonic(coord, axis=0):
-    """
-    >>> _is_monotonic(np.array([0, 1, 2]))
-    True
-    >>> _is_monotonic(np.array([2, 1, 0]))
-    True
-    >>> _is_monotonic(np.array([0, 2, 1]))
-    False
-    """
