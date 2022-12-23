@@ -6,7 +6,6 @@ import warnings
 import numpy as np
 
 
-# from xarray
 def infer_interval_breaks(x, y, clip=False):
     """find edges of gridcells, given their centers"""
 
