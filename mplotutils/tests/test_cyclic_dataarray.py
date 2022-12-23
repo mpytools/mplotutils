@@ -1,28 +1,31 @@
-import numpy as np
+import pytest
 import xarray as xr
 
-from mplotutils.cartopy_utils import cyclic_dataarray
+from mplotutils import cyclic_dataarray
 
 
-def test_cyclic_dataarray():
+@pytest.mark.parametrize("as_dataset", (True, False))
+def test_cyclic_dataarray(as_dataset):
 
-    data = xr.DataArray(
-        [[1, 2, 3], [4, 5, 6]], coords={"x": [1, 2], "y": range(3)}, dims=["x", "y"]
+    data = [[1, 2, 3], [4, 5, 6]]
+    da = xr.DataArray(
+        data, dims=("y", "x"), coords={"y": [1, 2], "x": [0, 1, 2]}, name="data"
     )
 
-    res = cyclic_dataarray(data, "y")
+    expected = [[1, 2, 3, 1], [4, 5, 6, 4]]
+    da_expected = xr.DataArray(
+        expected, dims=("y", "x"), coords={"y": [1, 2], "x": [0, 1, 2, 0]}, name="data"
+    )
 
-    expected_data = np.asarray([[1, 2, 3, 1], [4, 5, 6, 4]])
+    data = da.to_dataset() if as_dataset else da
+    expected = da_expected.to_dataset() if as_dataset else da_expected
 
-    np.testing.assert_allclose(res, expected_data)
-
-    np.testing.assert_allclose(res.y, [0, 1, 2, 3])
-    np.testing.assert_allclose(res.x, [1, 2])
+    result = cyclic_dataarray(data, "x")
+    xr.testing.assert_identical(result, expected)
 
     # per default use 'lon'
-    data = xr.DataArray(
-        [[1, 2, 3], [4, 5, 6]], coords={"x": [1, 2], "lon": range(3)}, dims=["x", "lon"]
-    )
+    data = data.rename(x="lon")
+    expected = expected.rename(x="lon")
 
-    res = cyclic_dataarray(data)
-    np.testing.assert_allclose(res, expected_data)
+    result = cyclic_dataarray(data)
+    xr.testing.assert_identical(result, expected)

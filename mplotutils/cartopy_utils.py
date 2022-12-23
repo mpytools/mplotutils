@@ -1,9 +1,6 @@
-# code by M.Hauser
-
 import warnings
 
 import cartopy.crs as ccrs
-import cartopy.util as cutil
 import matplotlib.pyplot as plt
 import numpy as np
 import shapely.geometry as sgeom
@@ -127,14 +124,29 @@ def _is_monotonic(coord, axis=0):
 # =============================================================================
 
 
-def cyclic_dataarray(da, coord="lon"):
-    """
-    Add a cyclic coordinate point to a DataArray along a specified named dimension.
+def cyclic_dataarray(obj, coord="lon"):
+    """Add a cyclic coordinate point to a DataArray or Dataset along a dimension.
 
+    Parameters
+    ----------
+    obj : xr.Dataset | xr.DataArray
+        Object to add the cyclic data point to.
+    coord : str, default: "lon"
+        Name of the
+
+    Returns
+    -------
+    obj_cyclic : xr.Dataset | xr.DataArray
+        The same as `obj` with a cyclic data point added.
+
+    Examples
+    --------
     >>> import xarray as xr
-    >>> data = xr.DataArray([[1, 2, 3], [4, 5, 6]],
-    ...                      coords={'x': [1, 2], 'y': range(3)},
-    ...                      dims=['x', 'y'])
+    >>> data = xr.DataArray(
+    ...     [[1, 2, 3], [4, 5, 6]],
+    ...     coords={'x': [1, 2], 'y': range(3)},
+    ...     dims=['x', 'y']
+    ... )
     >>> data_cyclic = cyclic_dataarray(data, 'y')
     >>> data_cyclic
     <xarray.DataArray (x: 2, y: 4)>
@@ -144,38 +156,9 @@ def cyclic_dataarray(da, coord="lon"):
       * x        (x) int64 1 2
       * y        (y) int64 0 1 2 3
 
-    Notes
-    -----
-    After: https://github.com/darothen/plot-all-in-ncfile/blob/master/plot_util.py
-
     """
-    import xarray as xr
 
-    assert isinstance(da, xr.DataArray)
-
-    lon_idx = da.dims.index(coord)
-    cyclic_data, cyclic_coord = cutil.add_cyclic_point(
-        da.values, coord=da.coords[coord], axis=lon_idx
-    )
-
-    # Copy and add the cyclic coordinate and data
-    new_coords = dict(da.coords)
-    new_coords[coord] = cyclic_coord
-    new_values = cyclic_data
-
-    new_da = xr.DataArray(new_values, dims=da.dims, coords=new_coords)
-
-    # Copy the attributes for the re-constructed data and coords
-    for att, val in da.attrs.items():
-        new_da.attrs[att] = val
-    for c in da.coords:
-        for att in da.coords[c].attrs:
-            new_da.coords[c].attrs[att] = da.coords[c].attrs[att]
-
-    return new_da
-
-
-# =============================================================================
+    return obj.pad({coord: (0, 1)}, mode="wrap")
 
 
 def ylabel_map(s, labelpad=None, size=None, weight=None, y=0.5, ax=None, **kwargs):
