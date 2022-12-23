@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from numpy.testing import assert_array_equal  # noqa: F401
 
-from mplotutils.cartopy_utils import _infer_interval_breaks, infer_interval_breaks
+from mplotutils.xrcompat import _infer_interval_breaks, infer_interval_breaks
 
 
 def test_infer_interval_breaks_warns():
