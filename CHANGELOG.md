@@ -6,29 +6,33 @@
 ### Deprecations
 
  * Deprecated `mpu.infer_interval_breaks` as this is no longer necessary with matplotlib v3.2
-   and cartopy v0.21 [#32](https://github.com/mathause/mplotutils/pull/32).
+   and cartopy v0.21 ([#32](https://github.com/mathause/mplotutils/pull/32)).
+
+### Enhancements
+
+ * Added ``nrow`` and ``ncol`` parameters to ``set_map_layout`` for use with a
+   gridspec.
 
 ### Bug fixes
 
  * Fixed compatibility of `mpu.colorbar` with `bbox_inches="tight"` for matplotlib 3.4 and
-   newer [#26](https://github.com/mathause/mplotutils/pull/26).
+   newer ([#26](https://github.com/mathause/mplotutils/pull/26)).
 
 ### Internal changes
 
- * Added ``nrow`` and ``ncol`` parameters to ``set_map_layout`` for use with a
-   gridspec.
  * Replaced `ax.get_subplotspec().get_geometry()` with `ax.get_subplotspec().get_geometry()`
-   as the former was deprecated in matplotlib (#8).
+   as the former was deprecated in matplotlib ([#8](https://github.com/mathause/mplotutils/pull/8)).
  * Refactor `mpu.cyclic_dataarray` using `obj.pad` ([#33](https://github.com/mathause/mplotutils/pull/33)).
- * Enabled CI on github actions (#9).
+ * Enabled CI on github actions ([#9](https://github.com/mathause/mplotutils/pull/9)).
  * Formatted with black and isort, checked with flake8.
-
 
 ## v0.2.0 (01.06.2018)
 
 Mayor release, mostly introducing the new `colorbar` functionality.
 
- * add `_color_palette` that selects colors from the whole range of the colormap. Previously we used the `seaborn` logic that excludes colors at the edge of the colorbar (closes GH:#1).
+ * add `_color_palette` that selects colors from the whole range of the colormap. Previously
+   we used the `seaborn` logic that excludes colors at the edge of the colorbar
+   ([#1](https://github.com/mathause/mplotutils/issues/1)).
  * the colorbar functionality was entirely redesigned:
    * new top-level function `mpu.colorbar`
    * added `aspect` keyword which defines the ratio of long to short side
