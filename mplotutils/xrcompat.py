@@ -33,7 +33,6 @@ def infer_interval_breaks(x, y, clip=False):
     return x, y
 
 
-# from xarray
 def _infer_interval_breaks(coord, axis=0):
     """
     >>> _infer_interval_breaks(np.arange(5))
