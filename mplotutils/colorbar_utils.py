@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def colorbar(
@@ -21,29 +22,26 @@ def colorbar(
     Parameters
     ----------
     mappable : handle
-        The return value of 'ax.contourf', 'ax.pcolormesh' etc to
-        which the colorbar applies.
-    ax1 : Axes
-        Axes to adjust the colorbar to.
-    ax2 : Axes, optional
-        If the colorbar should span more than one Axes. Default: None.
-    orientation : 'vertical' | 'horizontal', optional
-        Orientation of the colorbar. Default: 'vertical'.
-    aspect : float, optional
-        The ratio of long to short dimensions of the colorbar. Default 20.
-        Mutually exclusive with 'size'.
-    size : float
+        The `matplotlib.cm.ScalarMappable` described by this colorbar.
+    ax1 : `matplotlib.axes.Axes`
+        The axes to adjust the colorbar to.
+    ax2 : `~matplotlib.axes.Axes`, default: None.
+        If the colorbar should span more than one axes.
+    orientation : 'vertical' | 'horizontal'. Default: 'vertical'.
+        Orientation of the colorbar.
+    aspect : float, default 20.
+        The ratio of long to short dimensions of the colorbar Mutually exclusive with
+        `size`.
+    size : float, default: None
         Width of the colorbar as fraction of the axes width (vertical) or
-        height (horizontal). Mutually exclusive with 'aspect'. Default: None.
-    pad : float
+        height (horizontal). Mutually exclusive with `aspect`.
+    pad : float, default: None.
         Distance of the colorbar to the axes in Figure coordinates.
          Default: 0.05 (vertical) or 0.15 (horizontal).
-    shift : 'symmetric' or float in 0..1
-        Fraction of the total height that the colorbar is shifted upwards.
-        See Note. Default: 'symmetric'
-    shrink : None or float in 0..1
-        Fraction of the total height that the colorbar is shrunk.
-        See Note. Default: None.
+    shift : 'symmetric' or float in 0..1, default: 'symmetric'
+        Fraction of the total height that the colorbar is shifted upwards. See Note.
+    shrink : None or float in 0..1, default: None.
+        Fraction of the total height that the colorbar is shrunk. See Note.
     **kwargs : keyword arguments
         colorbar properties
         ============  ====================================================
@@ -99,36 +97,30 @@ def colorbar(
 
     # example with 1 axes
 
-    f = plt.figure()
-    ax = plt.axes(projection=ccrs.PlateCarree())
+    f, ax = plt.subplots(subplot_kw={"projection": ccrs.PlateCarree()})
     h = ax.pcolormesh([[0, 1]])
-
     ax.coastlines()
-
     mpu.colorbar(h, ax)
-
     ax.set_global()
 
     # =========================
     # example with 2 axes
 
-    f, axes = plt.subplots(2, 1, subplot_kw=dict(projection=ccrs.Robinson()))
+    f, axs = plt.subplots(2, 1, subplot_kw={"projection": ccrs.PlateCarree()})
 
-    for ax in axes:
+    for ax in axs:
         ax.coastlines()
         ax.set_global()
         h = ax.pcolormesh([[0, 1]])
 
-    cbar = mpu.colorbar(h, axes[0], axes[1])
-
-    cbar.set_label('[°C]', labelpad=10)
+    cbar = mpu.colorbar(h, axs[0], axs[1])
 
     # =========================
     # example with 3 axes & 2 colorbars
 
-    f, axes = plt.subplots(3, 1, subplot_kw=dict(projection=ccrs.Robinson()))
+    f, axs = plt.subplots(3, 1, subplot_kw={"projection": ccrs.PlateCarree()})
 
-    for ax in axes:
+    for ax in axs:
         ax.coastlines()
         ax.set_global()
 
@@ -136,24 +128,21 @@ def colorbar(
     h1 = ax.pcolormesh([[0, 1]])
     h2 = ax.pcolormesh([[0, 1]], cmap='Blues')
 
-    cbar = mpu.colorbar(h, axes[0], axes[1], size=0.05)
-
-    cbar = mpu.colorbar(h, axes[2], size=0.05)
+    cbar = mpu.colorbar(h, axs[0], axs[1], size=0.05)
+    cbar = mpu.colorbar(h, axs[2], size=0.05)
 
     plt.draw()
 
     Notes
     -----
-    shift='symmetric', shrink=None  -> colorbar extends over the whole height
-    shift='symmetric', shrink=0.1   -> colorbar is 10 % smaller, and centered
-    shift=0., shrink=0.1            -> colorbar is 10 % smaller, and aligned
-                                       with the bottom
-    shift=0.1, shrink=None          -> colorbar is 10 % smaller, and aligned
-                                       with the top
+    - ``shift='symmetric', shrink=None`` -> colorbar extends over the whole height
+    - ``shift='symmetric', shrink=0.1`` -> colorbar is 10 % smaller, and centered
+    - ``shift=0., shrink=0.1`` -> colorbar is 10 % smaller, and aligned with the bottom
+    - ``shift=0.1, shrink=None`` -> colorbar is 10 % smaller, and aligned with the top
 
     See Also
     --------
-    _resize_colorbar_horz
+    plt.colorbar
     """
 
     orientations = ("vertical", "horizontal")
@@ -269,6 +258,8 @@ def _resize_colorbar_vert(
 
     size, aspect, pad = _parse_size_aspect_pad(size, aspect, pad, "vertical")
 
+    f = ax1.get_figure()
+
     # swap axes if ax1 is above ax2
     if ax2 is not None:
         posn1 = ax1.get_position()
@@ -278,29 +269,34 @@ def _resize_colorbar_vert(
 
     if aspect is not None:
         anchor = (0, 0.5)
-        cbax.set_aspect(aspect, anchor=anchor, adjustable="box")
+        cbax.set_anchor(anchor)
+        cbax.set_box_aspect(aspect)
 
     # inner function is called by event handler
     def inner(event=None):
 
-        posn1 = ax1.get_position()
+        pos1 = ax1.get_position()
 
         # determine total height of all axes
-        if ax2 is not None:
-            posn2 = ax2.get_position()
-            full_height = posn2.y0 - posn1.y0 + posn2.height
+        if ax2 is None:
+            full_height = pos1.height
         else:
-            full_height = posn1.height
+            pos2 = ax2.get_position()
+            full_height = pos2.y0 - pos1.y0 + pos2.height
 
-        pad_scaled = pad * posn1.width
-        size_scaled = size * posn1.width
+        pad_scaled = pad * pos1.width
 
-        # calculate position
-        left = posn1.x0 + posn1.width + pad_scaled
-        bottom = posn1.y0 + shift * full_height
-        height = full_height - shrink * full_height
-        # ignored if aspect is set
-        width = size_scaled
+        # calculate position of cbax
+        left = pos1.x0 + pos1.width + pad_scaled
+        bottom = pos1.y0 + shift * full_height
+        height = (1 - shrink) * full_height
+
+        if aspect is None:
+            size_scaled = size * pos1.width
+            width = size_scaled
+        else:
+            figure_aspect = np.divide(*f.get_size_inches())
+            width = height / (aspect * figure_aspect)
 
         pos = [left, bottom, width, height]
 
@@ -357,6 +353,8 @@ def _resize_colorbar_horz(
 
     size, aspect, pad = _parse_size_aspect_pad(size, aspect, pad, "horizontal")
 
+    f = ax1.get_figure()
+
     if ax2 is not None:
         posn1 = ax1.get_position()
         posn2 = ax2.get_position()
@@ -367,27 +365,32 @@ def _resize_colorbar_horz(
     if aspect is not None:
         aspect = 1 / aspect
         anchor = (0.5, 1.0)
-        cbax.set_aspect(aspect, anchor=anchor, adjustable="box")
+        cbax.set_anchor(anchor)
+        cbax.set_box_aspect(aspect)
 
     def inner(event=None):
 
         posn1 = ax1.get_position()
 
-        if ax2 is not None:
+        if ax2 is None:
+            full_width = posn1.width
+        else:
             posn2 = ax2.get_position()
             full_width = posn2.x0 - posn1.x0 + posn2.width
-        else:
-            full_width = posn1.width
 
         pad_scaled = pad * posn1.height
         size_scaled = size * posn1.height
 
-        left = posn1.x0 + shift * full_width
-        bottom = posn1.y0 - (pad_scaled + size_scaled)
         width = full_width - shrink * full_width
 
-        # ignored if aspect is set
-        height = size_scaled
+        if aspect is None:
+            height = size_scaled
+        else:
+            figure_aspect = np.divide(*f.get_size_inches())
+            height = (width * figure_aspect) / (aspect)
+
+        left = posn1.x0 + shift * full_width
+        bottom = posn1.y0 - (pad_scaled + height)
 
         pos = [left, bottom, width, height]
 

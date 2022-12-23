@@ -131,7 +131,7 @@ def test_resize_colorbar_vert():
     exp = [0.8, 0, 1.0]
     np.testing.assert_allclose(res, exp)
 
-    assert cbar.ax.get_aspect() == 5
+    assert cbar.ax.get_box_aspect() == 5
 
     plt.close()
 
@@ -147,7 +147,7 @@ def test_resize_colorbar_vert():
     exp = [0.8, 0, 1.0]
     np.testing.assert_allclose(res, exp)
 
-    assert cbar.ax.get_aspect() == 20
+    assert cbar.ax.get_box_aspect() == 20
 
     plt.close()
 
@@ -274,7 +274,7 @@ def test_resize_colorbar_horz():
     exp = [0.0, 0.2, 1.0]
     np.testing.assert_allclose(res, exp)
 
-    assert cbar.ax.get_aspect() == 1.0 / 5
+    assert cbar.ax.get_box_aspect() == 1.0 / 5
 
     plt.close()
 
@@ -290,7 +290,7 @@ def test_resize_colorbar_horz():
     exp = [0.0, 0.2, 1.0]
     np.testing.assert_allclose(res, exp)
 
-    assert cbar.ax.get_aspect() == 1.0 / 20
+    assert cbar.ax.get_box_aspect() == 1.0 / 20
 
     plt.close()
 
