@@ -11,6 +11,8 @@ from mplotutils._colorbar import (
     colorbar,
 )
 
+from . import figure_context, subplots_context
+
 
 def test_parse_shift_shrink():
 
@@ -73,27 +75,31 @@ def test_parse_size_aspect_pad():
 
 def test_colorbar_differnt_figures():
 
-    _, ax1 = plt.subplots()
-    _, ax2 = plt.subplots()
+    with figure_context() as f1, figure_context() as f2:
+        ax1 = f1.subplots()
+        ax2 = f2.subplots()
 
-    h = ax1.pcolormesh([[0, 1]])
+        h = ax1.pcolormesh([[0, 1]])
 
-    with pytest.raises(ValueError, match="must belong to the same figure"):
-        colorbar(h, ax1, ax2)
+        with pytest.raises(ValueError, match="must belong to the same figure"):
+            colorbar(h, ax1, ax2)
 
 
 def test_colorbar_ax_and_ax2_error():
 
-    _, (ax1, ax2, ax3) = plt.subplots(3, 1)
-    h = ax1.pcolormesh([[0, 1]])
+    with figure_context() as f:
+        ax1, ax2, ax3 = f.subplots(3, 1)
+        h = ax1.pcolormesh([[0, 1]])
 
-    with pytest.raises(ValueError, match="Cannot pass `ax`, and `ax2`"):
-        colorbar(h, ax1, ax2, ax=ax3)
+        with pytest.raises(ValueError, match="Cannot pass `ax`, and `ax2`"):
+            colorbar(h, ax1, ax2, ax=ax3)
 
 
 def _easy_cbar_vert(**kwargs):
 
-    f, ax = plt.subplots()
+    f = plt.gcf()
+
+    ax = f.subplots()
 
     f.subplots_adjust(left=0, bottom=0, right=0.8, top=1)
 
@@ -110,132 +116,116 @@ def _easy_cbar_vert(**kwargs):
 
     f.canvas.draw()
 
-    return f, cbar
+    return cbar
 
 
 def test_resize_colorbar_vert():
 
-    # test pad=0, size=0.2
-    f, cbar = _easy_cbar_vert(size=0.2, pad=0)
+    with figure_context() as f:
 
-    pos = cbar.ax.get_position()
-    res = [pos.x0, pos.y0, pos.width, pos.height]
-    exp = [0.8, 0, 0.2 * 0.8, 1.0]
+        # test pad=0, size=0.2
+        cbar = _easy_cbar_vert(size=0.2, pad=0)
 
-    np.testing.assert_allclose(res, exp, atol=1e-08)
+        pos = cbar.ax.get_position()
+        res = [pos.x0, pos.y0, pos.width, pos.height]
+        exp = [0.8, 0, 0.2 * 0.8, 1.0]
 
-    # -----------------------------------------------------------
+        np.testing.assert_allclose(res, exp, atol=1e-08)
 
-    f.subplots_adjust(left=0, bottom=0.1, right=0.8, top=0.9)
-    f.canvas.draw()
+        # -----------------------------------------------------------
 
-    pos = cbar.ax.get_position()
-    res = [pos.x0, pos.y0, pos.width, pos.height]
-    exp = [0.8, 0.1, 0.2 * 0.8, 0.8]
+        f.subplots_adjust(left=0, bottom=0.1, right=0.8, top=0.9)
+        f.canvas.draw()
 
-    np.testing.assert_allclose(res, exp, atol=1e-08)
+        pos = cbar.ax.get_position()
+        res = [pos.x0, pos.y0, pos.width, pos.height]
+        exp = [0.8, 0.1, 0.2 * 0.8, 0.8]
 
-    plt.close()
+        np.testing.assert_allclose(res, exp, atol=1e-08)
 
-    # ===========================================================
+    with figure_context():
 
-    # test pad=0, aspect=5
-    f, cbar = _easy_cbar_vert(aspect=5, pad=0)
+        # test pad=0, aspect=5
+        cbar = _easy_cbar_vert(aspect=5, pad=0)
 
-    pos = cbar.ax.get_position()
+        pos = cbar.ax.get_position()
 
-    # don't test width if aspect is given, but also test aspect
-    res = [pos.x0, pos.y0, pos.height]
-    exp = [0.8, 0, 1.0]
-    np.testing.assert_allclose(res, exp, atol=1e-08)
+        # don't test width if aspect is given, but also test aspect
+        res = [pos.x0, pos.y0, pos.height]
+        exp = [0.8, 0, 1.0]
+        np.testing.assert_allclose(res, exp, atol=1e-08)
 
-    assert cbar.ax.get_box_aspect() == 5
+        assert cbar.ax.get_box_aspect() == 5
 
-    plt.close()
+    with figure_context():
 
-    # ===========================================================
+        # test pad=0, aspect=default (=20)
+        cbar = _easy_cbar_vert(pad=0)
 
-    # test pad=0, aspect=default (=20)
-    f, cbar = _easy_cbar_vert(pad=0)
+        pos = cbar.ax.get_position()
 
-    pos = cbar.ax.get_position()
+        # don't test width if aspect is given, but also test aspect
+        res = [pos.x0, pos.y0, pos.height]
+        exp = [0.8, 0, 1.0]
+        np.testing.assert_allclose(res, exp, atol=1e-08)
 
-    # don't test width if aspect is given, but also test aspect
-    res = [pos.x0, pos.y0, pos.height]
-    exp = [0.8, 0, 1.0]
-    np.testing.assert_allclose(res, exp, atol=1e-08)
+        assert cbar.ax.get_box_aspect() == 20
 
-    assert cbar.ax.get_box_aspect() == 20
+    with figure_context():
 
-    plt.close()
+        # pad=0.05, size=0.1
 
-    # ===========================================================
+        cbar = _easy_cbar_vert(size=0.1, pad=0.05)
 
-    # pad=0.05, size=0.1
+        pos = cbar.ax.get_position()
+        res = [pos.x0, pos.y0, pos.width, pos.height]
+        exp = [0.8 + 0.8 * 0.05, 0, 0.8 * 0.1, 1.0]
 
-    f, cbar = _easy_cbar_vert(size=0.1, pad=0.05)
+        np.testing.assert_allclose(res, exp, atol=1e-08)
 
-    pos = cbar.ax.get_position()
-    res = [pos.x0, pos.y0, pos.width, pos.height]
-    exp = [0.8 + 0.8 * 0.05, 0, 0.8 * 0.1, 1.0]
+    with figure_context():
 
-    np.testing.assert_allclose(res, exp, atol=1e-08)
+        # shift='symmetric', shrink=0.1
+        # --> colorbar is 10 % smaller, and centered
 
-    plt.close()
+        cbar = _easy_cbar_vert(size=0.2, pad=0.0, shrink=0.1)
 
-    # ===========================================================
+        pos = cbar.ax.get_position()
+        res = [pos.x0, pos.y0, pos.width, pos.height]
+        exp = [0.8, 0.05, 0.2 * 0.8, 0.9]
 
-    # shift='symmetric', shrink=0.1
-    # --> colorbar is 10 % smaller, and centered
+        np.testing.assert_allclose(res, exp, atol=1e-08)
 
-    f, cbar = _easy_cbar_vert(size=0.2, pad=0.0, shrink=0.1)
+    with figure_context():
+        # shift=0., shrink=0.1
+        # --> colorbar is 10 % smaller, and aligned with the bottom
 
-    pos = cbar.ax.get_position()
-    res = [pos.x0, pos.y0, pos.width, pos.height]
-    exp = [0.8, 0.05, 0.2 * 0.8, 0.9]
+        cbar = _easy_cbar_vert(size=0.2, pad=0.0, shrink=0.1, shift=0.0)
 
-    np.testing.assert_allclose(res, exp, atol=1e-08)
+        pos = cbar.ax.get_position()
+        res = [pos.x0, pos.y0, pos.width, pos.height]
+        exp = [0.8, 0.0, 0.2 * 0.8, 0.9]
 
-    plt.close()
+        np.testing.assert_allclose(res, exp, atol=1e-08)
 
-    # ===========================================================
+    with figure_context():
+        # shift=0.1, shrink=None
+        # --> colorbar is 10 % smaller, and aligned with the top
 
-    # shift=0., shrink=0.1
-    # --> colorbar is 10 % smaller, and aligned with the bottom
+        cbar = _easy_cbar_vert(size=0.2, pad=0.0, shrink=None, shift=0.1)
 
-    f, cbar = _easy_cbar_vert(size=0.2, pad=0.0, shrink=0.1, shift=0.0)
+        pos = cbar.ax.get_position()
+        res = [pos.x0, pos.y0, pos.width, pos.height]
+        exp = [0.8, 0.1, 0.2 * 0.8, 0.9]
 
-    pos = cbar.ax.get_position()
-    res = [pos.x0, pos.y0, pos.width, pos.height]
-    exp = [0.8, 0.0, 0.2 * 0.8, 0.9]
-
-    np.testing.assert_allclose(res, exp, atol=1e-08)
-
-    plt.close()
-
-    # ===========================================================
-
-    # shift=0.1, shrink=None
-    # --> colorbar is 10 % smaller, and aligned with the top
-
-    f, cbar = _easy_cbar_vert(size=0.2, pad=0.0, shrink=None, shift=0.1)
-
-    pos = cbar.ax.get_position()
-    res = [pos.x0, pos.y0, pos.width, pos.height]
-    exp = [0.8, 0.1, 0.2 * 0.8, 0.9]
-
-    np.testing.assert_allclose(res, exp, atol=1e-08)
-
-    plt.close()
-
-
-# =============================================================================
-# =============================================================================
+        np.testing.assert_allclose(res, exp, atol=1e-08)
 
 
 def _easy_cbar_horz(**kwargs):
 
-    f, ax = plt.subplots()
+    f = plt.gcf()
+
+    ax = f.subplots()
 
     f.subplots_adjust(left=0, bottom=0.2, right=1, top=1)
 
@@ -252,163 +242,140 @@ def _easy_cbar_horz(**kwargs):
 
     f.canvas.draw()
 
-    return f, cbar
+    return cbar
 
 
 def test_resize_colorbar_horz():
 
-    # test pad=0, size=0.2
-    f, cbar = _easy_cbar_horz(size=0.2, pad=0)
+    with figure_context() as f:
+        # test pad=0, size=0.2
+        cbar = _easy_cbar_horz(size=0.2, pad=0)
 
-    pos = cbar.ax.get_position()
-    res = [pos.x0, pos.y0, pos.width, pos.height]
-    exp = [0, 0.2 * (1 - 0.8), 1, 0.2 * 0.8]
+        pos = cbar.ax.get_position()
+        res = [pos.x0, pos.y0, pos.width, pos.height]
+        exp = [0, 0.2 * (1 - 0.8), 1, 0.2 * 0.8]
 
-    # adding atol because else 5e-17 != 0
-    np.testing.assert_allclose(res, exp, atol=1e-08)
+        # adding atol because else 5e-17 != 0
+        np.testing.assert_allclose(res, exp, atol=1e-08)
 
-    # -----------------------------------------------------------
+        # -----------------------------------------------------------
 
-    f.subplots_adjust(left=0.1, bottom=0.2, right=0.9, top=1)
-    f.canvas.draw()
+        f.subplots_adjust(left=0.1, bottom=0.2, right=0.9, top=1)
+        f.canvas.draw()
 
-    pos = cbar.ax.get_position()
-    res = [pos.x0, pos.y0, pos.width, pos.height]
-    exp = [0.1, 0.2 * (1 - 0.8), 0.8, 0.2 * 0.8]
+        pos = cbar.ax.get_position()
+        res = [pos.x0, pos.y0, pos.width, pos.height]
+        exp = [0.1, 0.2 * (1 - 0.8), 0.8, 0.2 * 0.8]
 
-    np.testing.assert_allclose(res, exp, atol=1e-08)
+        np.testing.assert_allclose(res, exp, atol=1e-08)
 
-    plt.close()
+    with figure_context():
 
-    # ===========================================================
+        # test pad=0, aspect=5
+        cbar = _easy_cbar_horz(aspect=5, pad=0)
 
-    # test pad=0, aspect=5
-    f, cbar = _easy_cbar_horz(aspect=5, pad=0)
+        pos = cbar.ax.get_position()
 
-    pos = cbar.ax.get_position()
+        # don't test width if aspect is given, but also test aspect
+        res = [pos.x0, pos.y0 + pos.height, pos.width]
+        exp = [0.0, 0.2, 1.0]
+        np.testing.assert_allclose(res, exp, atol=1e-08)
 
-    # don't test width if aspect is given, but also test aspect
-    res = [pos.x0, pos.y0 + pos.height, pos.width]
-    exp = [0.0, 0.2, 1.0]
-    np.testing.assert_allclose(res, exp, atol=1e-08)
+        assert cbar.ax.get_box_aspect() == 1.0 / 5
 
-    assert cbar.ax.get_box_aspect() == 1.0 / 5
+    with figure_context():
+        # test pad=0, aspect=default (=20)
 
-    plt.close()
+        cbar = _easy_cbar_horz(pad=0)
 
-    # ===========================================================
+        pos = cbar.ax.get_position()
 
-    # test pad=0, aspect=default (=20)
-    f, cbar = _easy_cbar_horz(pad=0)
+        # don't test width if aspect is given, but also test aspect
+        res = [pos.x0, pos.y0 + pos.height, pos.width]
+        exp = [0.0, 0.2, 1.0]
+        np.testing.assert_allclose(res, exp, atol=1e-08)
 
-    pos = cbar.ax.get_position()
+        assert cbar.ax.get_box_aspect() == 1.0 / 20
 
-    # don't test width if aspect is given, but also test aspect
-    res = [pos.x0, pos.y0 + pos.height, pos.width]
-    exp = [0.0, 0.2, 1.0]
-    np.testing.assert_allclose(res, exp, atol=1e-08)
+    with figure_context():
+        # pad=0.05, size=0.1
 
-    assert cbar.ax.get_box_aspect() == 1.0 / 20
+        cbar = _easy_cbar_horz(size=0.1, pad=0.05)
 
-    plt.close()
+        pos = cbar.ax.get_position()
+        res = [pos.x0, pos.y0, pos.width, pos.height]
+        exp = [0.0, 0.2 - 0.15 * 0.8, 1, 0.1 * 0.8]
 
-    # ===========================================================
+        np.testing.assert_allclose(res, exp, atol=1e-08)
 
-    # pad=0.05, size=0.1
+    with figure_context():
+        # shift='symmetric', shrink=0.1
+        # --> colorbar is 10 % smaller, and centered
 
-    f, cbar = _easy_cbar_horz(size=0.1, pad=0.05)
+        cbar = _easy_cbar_horz(size=0.2, pad=0.0, shrink=0.1)
 
-    pos = cbar.ax.get_position()
-    res = [pos.x0, pos.y0, pos.width, pos.height]
-    exp = [0.0, 0.2 - 0.15 * 0.8, 1, 0.1 * 0.8]
+        pos = cbar.ax.get_position()
+        res = [pos.x0, pos.y0, pos.width, pos.height]
+        exp = [0.05, 0.2 * (1 - 0.8), 0.9, 0.2 * 0.8]
 
-    np.testing.assert_allclose(res, exp, atol=1e-08)
+        np.testing.assert_allclose(res, exp, atol=1e-08)
 
-    plt.close()
+    with figure_context():
+        # shift=0., shrink=0.1
+        # --> colorbar is 10 % smaller, and aligned with lhs
 
-    # ===========================================================
+        cbar = _easy_cbar_horz(size=0.2, pad=0.0, shrink=0.1, shift=0.0)
 
-    # shift='symmetric', shrink=0.1
-    # --> colorbar is 10 % smaller, and centered
+        pos = cbar.ax.get_position()
+        res = [pos.x0, pos.y0, pos.width, pos.height]
+        exp = [0.0, 0.2 * (1 - 0.8), 0.9, 0.2 * 0.8]
 
-    f, cbar = _easy_cbar_horz(size=0.2, pad=0.0, shrink=0.1)
+        np.testing.assert_allclose(res, exp, atol=1e-08)
 
-    pos = cbar.ax.get_position()
-    res = [pos.x0, pos.y0, pos.width, pos.height]
-    exp = [0.05, 0.2 * (1 - 0.8), 0.9, 0.2 * 0.8]
+    with figure_context():
+        # shift=0.1, shrink=None
+        # --> colorbar is 10 % smaller, and aligned with rhs
 
-    np.testing.assert_allclose(res, exp, atol=1e-08)
+        cbar = _easy_cbar_horz(size=0.2, pad=0.0, shrink=None, shift=0.1)
 
-    plt.close()
+        pos = cbar.ax.get_position()
+        res = [pos.x0, pos.y0, pos.width, pos.height]
+        exp = [0.1, 0.2 * (1 - 0.8), 0.9, 0.2 * 0.8]
 
-    # ===========================================================
-
-    # shift=0., shrink=0.1
-    # --> colorbar is 10 % smaller, and aligned with lhs
-
-    f, cbar = _easy_cbar_horz(size=0.2, pad=0.0, shrink=0.1, shift=0.0)
-
-    pos = cbar.ax.get_position()
-    res = [pos.x0, pos.y0, pos.width, pos.height]
-    exp = [0.0, 0.2 * (1 - 0.8), 0.9, 0.2 * 0.8]
-
-    np.testing.assert_allclose(res, exp, atol=1e-08)
-
-    plt.close()
-
-    # ===========================================================
-
-    # shift=0.1, shrink=None
-    # --> colorbar is 10 % smaller, and aligned with rhs
-
-    f, cbar = _easy_cbar_horz(size=0.2, pad=0.0, shrink=None, shift=0.1)
-
-    pos = cbar.ax.get_position()
-    res = [pos.x0, pos.y0, pos.width, pos.height]
-    exp = [0.1, 0.2 * (1 - 0.8), 0.9, 0.2 * 0.8]
-
-    np.testing.assert_allclose(res, exp, atol=1e-08)
-
-    plt.close()
+        np.testing.assert_allclose(res, exp, atol=1e-08)
 
 
-# =============================================================================
+def test_colorbar_errors():
 
+    with subplots_context() as (f, ax):
 
-def test_colorbar():
+        h = ax.pcolormesh([[0, 1]])
 
-    # only test high level functionality
-    f1, ax1 = plt.subplots()
-    h = ax1.pcolormesh([[0, 1]])
+        with pytest.raises(ValueError):
+            colorbar(h, ax, orientation="wrong")
 
-    with pytest.raises(ValueError):
-        colorbar(h, ax1, orientation="wrong")
+        with pytest.raises(ValueError):
+            colorbar(h, ax, anchor=5)
 
-    with pytest.raises(ValueError):
-        colorbar(h, ax1, anchor=5)
-
-    with pytest.raises(ValueError):
-        colorbar(h, ax1, panchor=5)
-
-
-# =============================================================================
+        with pytest.raises(ValueError):
+            colorbar(h, ax, panchor=5)
 
 
 def test_get_cbax():
 
-    f, ax = plt.subplots()
+    with subplots_context() as (f, ax):
 
-    cbax = _get_cbax(f)
+        cbax = _get_cbax(f)
 
-    assert isinstance(cbax, plt.Axes)
+        assert isinstance(cbax, plt.Axes)
 
-    assert len(f.get_axes()) == 2
+        assert len(f.get_axes()) == 2
 
-    _get_cbax(f)
-    assert len(f.get_axes()) == 3
+        _get_cbax(f)
+        assert len(f.get_axes()) == 3
 
-    _get_cbax(f)
-    assert len(f.get_axes()) == 4
+        _get_cbax(f)
+        assert len(f.get_axes()) == 4
 
-    _get_cbax(f)
-    assert len(f.get_axes()) == 5
+        _get_cbax(f)
+        assert len(f.get_axes()) == 5
