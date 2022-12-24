@@ -1,3 +1,5 @@
+import warnings
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -145,8 +147,7 @@ def colorbar(
     plt.colorbar
     """
 
-    orientations = ("vertical", "horizontal")
-    if orientation not in orientations:
+    if orientation not in ("vertical", "horizontal"):
         raise ValueError("orientation must be 'vertical' or 'horizontal'")
 
     k = kwargs.keys()
@@ -156,14 +157,15 @@ def colorbar(
 
     # ensure 'ax' does not end up in plt.colorbar(**kwargs)
     if "ax" in k:
+        if ax2 is not None:
+            raise ValueError("Cannot pass `ax`, and `ax2`")
         # assume it is ax2 (it can't be ax1)
         ax2 = kwargs.pop("ax")
 
     f = ax1.get_figure()
 
-    if ax2 is not None:
-        f2 = ax2.get_figure()
-        assert f == f2, "'ax1' and 'ax2' must belong to the same figure"
+    if ax2 is not None and f != ax2.get_figure():
+        raise ValueError("'ax1' and 'ax2' must belong to the same figure")
 
     cbax = _get_cbax(f)
 
@@ -242,7 +244,7 @@ def _resize_colorbar_vert(
     cbax = f.add_axes([0, 0, 0.1, 0.1])
     cbar = plt.colorbar(h, orientation='vertical', cax=cbax)
 
-    func = mpu.colorbar_utils_resize_colorbar_vert(cbax, ax)
+    func = mpu._resize_colorbar_vert(cbax, ax)
     f.canvas.mpl_connect('draw_event', func)
 
     ax.set_global()
@@ -337,7 +339,7 @@ def _resize_colorbar_horz(
     cbax = f.add_axes([0, 0, 0.1, 0.1])
     cbar = plt.colorbar(h, orientation='horizontal', cax=cbax)
 
-    func = mpu.colorbar_utils._resize_colorbar_horz(cbax, ax)
+    func = mpu._resize_colorbar_horz(cbax, ax)
     f.canvas.mpl_connect('draw_event', func)
 
     ax.set_global()
@@ -379,11 +381,11 @@ def _resize_colorbar_horz(
             full_width = posn2.x0 - posn1.x0 + posn2.width
 
         pad_scaled = pad * posn1.height
-        size_scaled = size * posn1.height
 
         width = full_width - shrink * full_width
 
         if aspect is None:
+            size_scaled = size * posn1.height
             height = size_scaled
         else:
             figure_aspect = np.divide(*f.get_size_inches())
@@ -414,15 +416,16 @@ def _parse_shift_shrink(shift, shrink):
         if shrink is None:
             shrink = shift
 
-    assert (shift >= 0.0) & (shift <= 1.0), "'shift' must be in 0...1"
-    assert (shrink >= 0.0) & (shrink <= 1.0), "'shrink' must be in 0...1"
+    if (shift < 0.0) or (shift > 1.0):
+        raise ValueError("'shift' must be in 0...1")
+
+    if (shrink < 0.0) or (shrink > 1.0):
+        raise ValueError("'shrink' must be in 0...1")
 
     if shift > shrink:
-        msg = (
-            "Warning: 'shift' is larger than 'shrink', colorbar\n"
-            "will extend beyond the axes!"
+        warnings.warn(
+            "'shift' is larger than 'shrink', colorbar will extend beyond the axes"
         )
-        print(msg)
 
     return shift, shrink
 
@@ -433,15 +436,11 @@ def _parse_shift_shrink(shift, shrink):
 def _parse_size_aspect_pad(size, aspect, pad, orientation):
 
     if (size is not None) and (aspect is not None):
-        raise ValueError("you can only pass one of 'aspect' and 'size'")
+        raise ValueError("Can only pass one of 'aspect' and 'size'")
 
     # default is aspect=20
     if (size is None) and (aspect is None):
         aspect = 20
-
-    # we need a large size so it is not limiting for set_aspect
-    if aspect is not None:
-        size = 10
 
     # default mpl setting
     if pad is None:

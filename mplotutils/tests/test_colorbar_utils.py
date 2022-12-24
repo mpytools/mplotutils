@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from pytest import raises
+import pytest
 
-from mplotutils.colorbar_utils import (
+from mplotutils._colorbar import (
     _get_cbax,
     _parse_shift_shrink,
     _parse_size_aspect_pad,
@@ -25,20 +25,20 @@ def test_parse_shift_shrink():
 
     assert _parse_shift_shrink(0.5, 0.5) == (0.5, 0.5)
 
-    with raises(AssertionError):
+    with pytest.raises(ValueError, match="'shift' must be in 0...1"):
         _parse_shift_shrink(-0.1, 0)
 
-    with raises(AssertionError):
+    with pytest.raises(ValueError, match="'shift' must be in 0...1"):
         _parse_shift_shrink(1.1, 0)
 
-    with raises(AssertionError):
+    with pytest.raises(ValueError, match="'shrink' must be in 0...1"):
         _parse_shift_shrink(0, -0.1)
 
-    with raises(AssertionError):
+    with pytest.raises(ValueError, match="'shrink' must be in 0...1"):
         _parse_shift_shrink(0, 1.1)
 
-
-# =============================================================================
+    with pytest.warns(UserWarning, match="'shift' is larger than 'shrink'"):
+        _parse_shift_shrink(0.6, 0.3)
 
 
 def test_parse_size_aspect_pad():
@@ -46,31 +46,49 @@ def test_parse_size_aspect_pad():
     size, aspect, pad = _parse_size_aspect_pad(size, aspect, pad, 'horizontal')
     """
 
-    res = _parse_size_aspect_pad(0.1, None, 0.1, "horizontal")
-    exp = (0.1, None, 0.1)
-    assert res == exp
-
-    res = _parse_size_aspect_pad(None, None, 0.1, "horizontal")
-    exp = (10, 20, 0.1)
-    assert res == exp
-
-    res = _parse_size_aspect_pad(None, 20, 0.1, "horizontal")
-    exp = (10, 20, 0.1)
-    assert res == exp
-
-    with raises(ValueError):
+    with pytest.raises(ValueError, match="Can only pass one of 'aspect' and 'size'"):
         _parse_size_aspect_pad(1, 1, 0.1, "horizontal")
 
-    res = _parse_size_aspect_pad(None, None, None, "horizontal")
-    exp = (10, 20, 0.15)
-    assert res == exp
+    result = _parse_size_aspect_pad(0.1, None, 0.1, "horizontal")
+    assert result == (0.1, None, 0.1)
 
-    res = _parse_size_aspect_pad(None, None, None, "vertical")
-    exp = (10, 20, 0.05)
-    assert res == exp
+    result = _parse_size_aspect_pad(None, None, 0.1, "horizontal")
+    assert result == (None, 20, 0.1)
+
+    result = _parse_size_aspect_pad(None, 10, 0.1, "horizontal")
+    assert result == (None, 10, 0.1)
+
+    result = _parse_size_aspect_pad(None, 20, 0.1, "horizontal")
+    assert result == (None, 20, 0.1)
+
+    result = _parse_size_aspect_pad(None, None, None, "horizontal")
+    assert result == (None, 20, 0.15)
+
+    result = _parse_size_aspect_pad(None, None, None, "vertical")
+    assert result == (None, 20, 0.05)
 
 
 # =============================================================================
+
+
+def test_colorbar_differnt_figures():
+
+    _, ax1 = plt.subplots()
+    _, ax2 = plt.subplots()
+
+    h = ax1.pcolormesh([[0, 1]])
+
+    with pytest.raises(ValueError, match="must belong to the same figure"):
+        colorbar(h, ax1, ax2)
+
+
+def test_colorbar_ax_and_ax2_error():
+
+    _, (ax1, ax2, ax3) = plt.subplots(3, 1)
+    h = ax1.pcolormesh([[0, 1]])
+
+    with pytest.raises(ValueError, match="Cannot pass `ax`, and `ax2`"):
+        colorbar(h, ax1, ax2, ax=ax3)
 
 
 def _easy_cbar_vert(**kwargs):
@@ -363,18 +381,14 @@ def test_colorbar():
     f1, ax1 = plt.subplots()
     h = ax1.pcolormesh([[0, 1]])
 
-    with raises(ValueError):
+    with pytest.raises(ValueError):
         colorbar(h, ax1, orientation="wrong")
 
-    with raises(ValueError):
+    with pytest.raises(ValueError):
         colorbar(h, ax1, anchor=5)
 
-    with raises(ValueError):
+    with pytest.raises(ValueError):
         colorbar(h, ax1, panchor=5)
-
-    with raises(AssertionError):
-        f2, ax2 = plt.subplots()
-        colorbar(h, ax1, ax2)
 
 
 # =============================================================================

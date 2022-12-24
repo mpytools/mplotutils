@@ -1,8 +1,8 @@
 # flake8: noqa
 
-from . import cartopy_utils, colorbar_utils, mpl_utils
+from . import _colorbar, cartopy_utils, mpl_utils
+from ._colorbar import *
 from .cartopy_utils import *
-from .colorbar_utils import *
 from .mpl_utils import *
 from .xrcompat import *
 
