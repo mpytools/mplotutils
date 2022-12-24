@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import numpy as np
 import pytest
 
@@ -79,7 +78,6 @@ def test_vert_borders():
 
     # width:height = 1:1
     with subplots_context() as (f, ax):
-        f, ax = plt.subplots()
         ax.set_aspect("equal")
         ax.set(xlim=(0, 1), ylim=(0, 1))
 
