@@ -6,8 +6,6 @@ from mplotutils._colorbar import (
     _get_cbax,
     _parse_shift_shrink,
     _parse_size_aspect_pad,
-    _resize_colorbar_horz,
-    _resize_colorbar_vert,
     colorbar,
 )
 
@@ -73,7 +71,7 @@ def test_parse_size_aspect_pad():
 # =============================================================================
 
 
-def test_colorbar_differnt_figures():
+def test_colorbar_different_figures():
 
     with figure_context() as f1, figure_context() as f2:
         ax1 = f1.subplots()
@@ -106,15 +104,7 @@ def _easy_cbar_vert(**kwargs):
     # simplest 'mappable'
     h = ax.pcolormesh([[0, 1]])
 
-    # create colorbar
-    cbax = f.add_axes([0, 0, 0.1, 0.1])
-
-    cbar = plt.colorbar(h, orientation="vertical", cax=cbax)
-
-    func = _resize_colorbar_vert(cbax, ax, **kwargs)
-    f.canvas.mpl_connect("draw_event", func)
-
-    f.canvas.draw()
+    cbar = colorbar(h, ax, **kwargs)
 
     return cbar
 
@@ -232,15 +222,7 @@ def _easy_cbar_horz(**kwargs):
     # simplest 'mappable'
     h = ax.pcolormesh([[0, 1]])
 
-    # create colorbar
-    cbax = f.add_axes([0, 0, 0.1, 0.1])
-
-    cbar = plt.colorbar(h, orientation="horizontal", cax=cbax)
-
-    func = _resize_colorbar_horz(cbax, ax, **kwargs)
-    f.canvas.mpl_connect("draw_event", func)
-
-    f.canvas.draw()
+    cbar = colorbar(h, ax, orientation="horizontal", **kwargs)
 
     return cbar
 
