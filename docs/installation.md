@@ -9,6 +9,7 @@
 
 ## Optional dependencies
 
+-   [seaborn](https://seaborn.pydata.org/) (0.11 or later)
 -   [xarray](http://xarray.pydata.org/) (0.15 or later)
 
 ## Instructions
