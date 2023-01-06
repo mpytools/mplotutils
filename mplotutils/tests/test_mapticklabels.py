@@ -42,7 +42,7 @@ def test_yticklabels_robinson_180():
         x_pos = 0.0
 
         # two elements are not added because they are beyond the map limits
-        # lat = lat[1:-1]
+        lat = lat[1:-1]
         for t, y_pos in zip(ax.texts, lat, strict=True):
 
             np.testing.assert_allclose((x_pos, y_pos), t.xy, atol=0.01)
@@ -64,7 +64,7 @@ def test_xticklabels_robinson():
         y_pos = -89.99
 
         # two elements are not added because they are beyond the map limits
-        # lon = lon[1:-1]
+        lon = lon[1:-1]
         for t, x_pos in zip(ax.texts, lon, strict=True):
 
             np.testing.assert_allclose((x_pos, y_pos), t.xy, atol=0.01)
