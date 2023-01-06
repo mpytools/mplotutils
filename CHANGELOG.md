@@ -12,6 +12,9 @@
 
  * Added ``nrow`` and ``ncol`` parameters to ``set_map_layout`` for use with a
    gridspec.
+ * Allow passing list of axes to ``set_map_layout``, renamed the files and extended
+   the test coverage ([#42](https://github.com/mathause/mplotutils/pull/42)
+   and [#43](https://github.com/mathause/mplotutils/pull/43)).
 
 ### Bug fixes
 
@@ -21,7 +24,7 @@
 
 ### Internal changes
 
- * Replaced `ax.get_subplotspec().get_geometry()` with `ax.get_subplotspec().get_geometry()`
+ * Replaced `ax.get_geometry()` with `ax.get_subplotspec().get_geometry()`
    as the former was deprecated in matplotlib ([#8](https://github.com/mathause/mplotutils/pull/8)).
  * Refactor `mpu.cyclic_dataarray` using `obj.pad` ([#33](https://github.com/mathause/mplotutils/pull/33)).
  * Enabled CI on github actions ([#9](https://github.com/mathause/mplotutils/pull/9)).
