@@ -401,9 +401,6 @@ def _get_boundary_platecarree(ax):
     return boundary_pc
 
 
-""
-
-
 def _determine_intersection(polygon, xy1, xy2):
 
     p1 = sgeom.Point(xy1)
