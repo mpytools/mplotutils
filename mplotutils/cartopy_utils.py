@@ -348,6 +348,11 @@ def xticklabels(
 
     ax.figure.canvas.draw()
 
+    # proj = ccrs.PlateCarree()
+    # points = shapely.geometry.MultiPoint([shapely.geometry.Point(x, 0) for x in x_ticks])
+    # points = proj.project_geometry(points, proj)
+    # x_ticks = [x.x for x in points.geoms]
+
     labelpad, size, weight = _get_label_attr(labelpad, size, weight)
 
     boundary_pc = _get_boundary_platecarree(ax)
@@ -423,8 +428,7 @@ def _determine_intersection(polygon, xy1, xy2):
             return np.array([])
         else:
             return np.array(intersection.coords)
-            # raise ValueError("Found non-empyt LinearRing")
     else:
-        raise TypeError(f"Unexpected type {type(intersection)=}")
+        raise TypeError(f"Unexpected type: {type(intersection)}")
 
     return arr
