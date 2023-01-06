@@ -1,7 +1,9 @@
+import warnings
+
 import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
 import numpy as np
-import shapely.geometry as sgeom
+import shapely.geometry
 from cartopy.mpl.gridliner import LATITUDE_FORMATTER, LONGITUDE_FORMATTER
 
 from .colormaps import _get_label_attr
@@ -123,7 +125,7 @@ def ylabel_map(s, labelpad=None, size=None, weight=None, y=0.5, ax=None, **kwarg
         rotation_mode=rotation_mode,
         size=size,
         weight=weight,
-        **kwargs
+        **kwargs,
     )
 
     return h
@@ -188,7 +190,7 @@ def xlabel_map(s, labelpad=None, size=None, weight=None, x=0.5, ax=None, **kwarg
         rotation_mode=rotation_mode,
         size=size,
         weight=weight,
-        **kwargs
+        **kwargs,
     )
 
     return h
@@ -206,7 +208,7 @@ def yticklabels(
     ha="right",
     va="center",
     bbox_props=dict(ec="none", fc="none"),
-    **kwargs
+    **kwargs,
 ):
 
     """
@@ -238,18 +240,18 @@ def yticklabels(
 
     """
 
-    plt.draw()
-
     # get ax if necessary
     if ax is None:
         ax = plt.gca()
+
+    ax.figure.canvas.draw()
 
     labelpad, size, weight = _get_label_attr(labelpad, size, weight)
 
     boundary_pc = _get_boundary_platecarree(ax)
 
     # ensure labels are on rhs and not in the middle
-    if len(boundary_pc) == 1:
+    if len(boundary_pc.geoms) == 1:
         lonmin, lonmax = -180, 180
     else:
         lonmin, lonmax = 0, 360
@@ -265,7 +267,7 @@ def yticklabels(
             "WARN: no points found for ylabel\n"
             "y_lim is: {:0.2f} to {:0.2f}".format(y_lim[0], y_lim[1])
         )
-        print(msg)
+        warnings.warn(msg)
 
     # get a transform instance that mpl understands
     transform = ccrs.PlateCarree()._as_mpl_transform(ax)
@@ -281,7 +283,7 @@ def yticklabels(
         x = _determine_intersection(boundary_pc, [lonmin, y], [lonmax, y])
 
         if x.size > 0:
-            x = x[0, 0]
+            x = x[:, 0].min()
             lp = labelpad[0] + labelpad[1] * np.abs(y) / 90
 
             ax.annotate(
@@ -295,7 +297,7 @@ def yticklabels(
                 xytext=(-lp, 0),
                 textcoords="offset points",
                 bbox=bbox_props,
-                **kwargs
+                **kwargs,
             )
 
 
@@ -308,7 +310,7 @@ def xticklabels(
     ha="center",
     va="top",
     bbox_props=dict(ec="none", fc="none"),
-    **kwargs
+    **kwargs,
 ):
 
     """
@@ -340,11 +342,11 @@ def xticklabels(
 
     """
 
-    plt.draw()
-
     # get ax if necessary
     if ax is None:
         ax = plt.gca()
+
+    ax.figure.canvas.draw()
 
     labelpad, size, weight = _get_label_attr(labelpad, size, weight)
 
@@ -361,7 +363,7 @@ def xticklabels(
             "WARN: no points found for xlabel\n"
             "x_lim is: {:0.2f} to {:0.2f}".format(x_lim[0], x_lim[1])
         )
-        print(msg)
+        warnings.warn(msg)
 
     # get a transform instance that mpl understands
     transform = ccrs.PlateCarree()._as_mpl_transform(ax)
@@ -373,7 +375,7 @@ def xticklabels(
 
         y = _determine_intersection(boundary_pc, [x, -90], [x, 90])
         if y.size > 0:
-            y = y[0, 1]
+            y = y[:, 1].min()
 
             ax.annotate(
                 msg,
@@ -386,7 +388,7 @@ def xticklabels(
                 xytext=(0, -labelpad),
                 textcoords="offset points",
                 bbox=bbox_props,
-                **kwargs
+                **kwargs,
             )
 
 
@@ -394,17 +396,35 @@ def _get_boundary_platecarree(ax):
     # get the bounding box of the map in lat/ lon coordinates
     # after ax._get_extent_geom
     proj = ccrs.PlateCarree()
-    boundary_poly = sgeom.Polygon(ax.outline_patch.get_path().vertices)
+    boundary_poly = shapely.geometry.Polygon(ax.spines["geo"].get_path().vertices)
     eroded_boundary = boundary_poly.buffer(-ax.projection.threshold / 100)
     boundary_pc = proj.project_geometry(eroded_boundary, ax.projection)
+
+    # boundary_pc = proj.project_geometry(boundary_poly, ax.projection)
 
     return boundary_pc
 
 
 def _determine_intersection(polygon, xy1, xy2):
 
-    p1 = sgeom.Point(xy1)
-    p2 = sgeom.Point(xy2)
-    ls = sgeom.LineString([p1, p2])
+    p1 = shapely.geometry.Point(xy1)
+    p2 = shapely.geometry.Point(xy2)
+    ls = shapely.geometry.LineString([p1, p2])
 
-    return np.asarray(polygon.boundary.intersection(ls))
+    intersection = polygon.boundary.intersection(ls)
+
+    if isinstance(intersection, shapely.geometry.MultiPoint):
+        arr = np.array([x.coords for x in intersection.geoms]).squeeze()
+    elif isinstance(intersection, shapely.geometry.Point):
+        arr = np.array([intersection.coords]).squeeze()
+        arr = np.atleast_2d(arr)
+    elif isinstance(intersection, shapely.geometry.LineString):
+        if intersection.is_empty:
+            return np.array([])
+        else:
+            return np.array(intersection.coords)
+            # raise ValueError("Found non-empyt LinearRing")
+    else:
+        raise TypeError(f"Unexpected type {type(intersection)=}")
+
+    return arr
