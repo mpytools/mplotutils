@@ -16,7 +16,8 @@
 ### Bug fixes
 
  * Fixed compatibility of `mpu.colorbar` with `bbox_inches="tight"` for matplotlib 3.4 and
-   newer ([#26](https://github.com/mathause/mplotutils/pull/26)).
+   newer and refactor and extend tests ([#26](https://github.com/mathause/mplotutils/pull/26)
+   and [#40](https://github.com/mathause/mplotutils/pull/40)).
 
 ### Internal changes
 
