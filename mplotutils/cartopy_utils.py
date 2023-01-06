@@ -4,7 +4,7 @@ import numpy as np
 import shapely.geometry as sgeom
 from cartopy.mpl.gridliner import LATITUDE_FORMATTER, LONGITUDE_FORMATTER
 
-from .mpl_utils import _get_label_attr
+from .colormaps import _get_label_attr
 
 # =============================================================================
 
@@ -399,6 +399,9 @@ def _get_boundary_platecarree(ax):
     boundary_pc = proj.project_geometry(eroded_boundary, ax.projection)
 
     return boundary_pc
+
+
+""
 
 
 def _determine_intersection(polygon, xy1, xy2):

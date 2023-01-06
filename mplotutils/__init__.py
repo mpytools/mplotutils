@@ -1,9 +1,10 @@
 # flake8: noqa
 
-from . import _colorbar, cartopy_utils, mpl_utils
+from . import _colorbar, cartopy_utils, colormaps
 from ._colorbar import *
 from .cartopy_utils import *
-from .mpl_utils import *
+from .colormaps import *
+from .map_layout import set_map_layout
 from .xrcompat import *
 
 try:
