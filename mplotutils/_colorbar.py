@@ -14,7 +14,7 @@ def colorbar(
     pad=None,
     shift="symmetric",
     shrink=None,
-    **kwargs
+    **kwargs,
 ):
     """
     automatically resize colorbars on draw
@@ -389,7 +389,7 @@ def _resize_colorbar_horz(
             height = size_scaled
         else:
             figure_aspect = np.divide(*f.get_size_inches())
-            height = (width * figure_aspect) / (aspect)
+            height = width * (aspect * figure_aspect)
 
         left = posn1.x0 + shift * full_width
         bottom = posn1.y0 - (pad_scaled + height)
