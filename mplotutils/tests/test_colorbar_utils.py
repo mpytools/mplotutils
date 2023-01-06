@@ -355,6 +355,15 @@ def test_colorbar_vertical_two_axes():
         expected = [0.8, 0.0, 0.2 * 0.8, 1]
         assert_position(cbar, expected)
 
+    # use ax instead of ax2
+    with figure_context():
+        h, axs = create_figure_subplots(2, 1)
+
+        cbar = mpu.colorbar(h, axs[0], ax=axs[1], size=0.2, pad=0)
+
+        expected = [0.8, 0.0, 0.2 * 0.8, 1]
+        assert_position(cbar, expected)
+
     # only use one of the two axes
     with figure_context():
         h, axs = create_figure_subplots(2, 1)
@@ -399,6 +408,18 @@ def test_colorbar_horizontal_two_axes():
         # exchange the axes
         cbar = mpu.colorbar(
             h, axs[1], axs[0], size=0.2, pad=0, orientation="horizontal"
+        )
+
+        height = 0.2 * 0.8
+        expected = [0.0, 0.2 - height, 1, height]
+        assert_position(cbar, expected)
+
+    # use ax instead of ax2
+    with figure_context():
+        h, axs = create_figure_subplots(1, 2, orientation="horizontal")
+
+        cbar = mpu.colorbar(
+            h, axs[0], ax=axs[1], size=0.2, pad=0, orientation="horizontal"
         )
 
         height = 0.2 * 0.8
