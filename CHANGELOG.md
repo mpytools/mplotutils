@@ -17,6 +17,7 @@ mplotutils now uses the MIT license instead of GPL-3.0 ([#51](https://github.com
  * Allow passing list of axes to ``set_map_layout``, renamed the files and extended
    the test coverage ([#42](https://github.com/mathause/mplotutils/pull/42)
    and [#43](https://github.com/mathause/mplotutils/pull/43)).
+ * Add function to create `xr.DataArray` sample data ([#53](https://github.com/mathause/mplotutils/pull/53)).
 
 ### Bug fixes
 
