@@ -1,3 +1,5 @@
+import sys
+
 import cartopy.crs as ccrs
 import numpy as np
 
@@ -20,7 +22,10 @@ def test_yticklabels_robinson():
 
         # two elements are not added because they are beyond the map limits
         lat = lat[1:-1]
-        for t, y_pos in zip(ax.texts, lat, strict=True):
+
+        # remove when dropping py 3.9
+        strict = {"strict": True} if sys.version_info >= (3, 10) else {}
+        for t, y_pos in zip(ax.texts, lat, **strict):
 
             np.testing.assert_allclose((x_pos, y_pos), t.xy, atol=0.01)
 
@@ -43,7 +48,10 @@ def test_yticklabels_robinson_180():
 
         # two elements are not added because they are beyond the map limits
         lat = lat[1:-1]
-        for t, y_pos in zip(ax.texts, lat, strict=True):
+
+        # remove when dropping py 3.9
+        strict = {"strict": True} if sys.version_info >= (3, 10) else {}
+        for t, y_pos in zip(ax.texts, lat, **strict):
 
             np.testing.assert_allclose((x_pos, y_pos), t.xy, atol=0.01)
 
@@ -65,7 +73,11 @@ def test_xticklabels_robinson():
 
         # two elements are not added because they are beyond the map limits
         lon = lon[1:-1]
-        for t, x_pos in zip(ax.texts, lon, strict=True):
+
+        # remove when dropping py 3.9
+        strict = {"strict": True} if sys.version_info >= (3, 10) else {}
+
+        for t, x_pos in zip(ax.texts, lon, **strict):
 
             np.testing.assert_allclose((x_pos, y_pos), t.xy, atol=0.01)
 
