@@ -1,7 +1,10 @@
 # Changelog
 
 
-## v0.3.0 (unreleased)
+## v0.3.0 (15.01.2023)
+
+Version 0.3.0 includes some long-overdue bug fixes, modernization of the code, much better
+test coverage and some enhancements.
 
 mplotutils now uses the MIT license instead of GPL-3.0 ([#51](https://github.com/mathause/mplotutils/pull/51))
 
