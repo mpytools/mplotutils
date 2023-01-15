@@ -9,6 +9,8 @@ mplotutils now uses the MIT license instead of GPL-3.0 ([#51](https://github.com
 
  * Deprecated `mpu.infer_interval_breaks` as this is no longer necessary with matplotlib v3.2
    and cartopy v0.21 ([#32](https://github.com/mathause/mplotutils/pull/32)).
+ * Deprecated a number of positional arguments, these are now keyword only, e.g. in
+   `mpu.colorbar` ([#54](https://github.com/mathause/mplotutils/pull/54)).
 
 ### Enhancements
 
