@@ -1,8 +1,11 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+from mplotutils._deprecate import _deprecate_positional_args
 
-def set_map_layout(axes, width=17.0, nrow=None, ncol=None):
+
+@_deprecate_positional_args("0.3")
+def set_map_layout(axes, width=17.0, *, nrow=None, ncol=None):
     """set figure height, given width, taking axes' aspect ratio into account
 
     Needs to be called after all plotting is done.

@@ -6,9 +6,9 @@ import numpy as np
 import shapely.geometry
 from cartopy.mpl.gridliner import LATITUDE_FORMATTER, LONGITUDE_FORMATTER
 
-from .colormaps import _get_label_attr
+from mplotutils._deprecate import _deprecate_positional_args
 
-# =============================================================================
+from .colormaps import _get_label_attr
 
 
 def sample_data_map(nlons, nlats):
@@ -115,7 +115,8 @@ def cyclic_dataarray(obj, coord="lon"):
     return obj.pad({coord: (0, 1)}, mode="wrap")
 
 
-def ylabel_map(s, labelpad=None, size=None, weight=None, y=0.5, ax=None, **kwargs):
+@_deprecate_positional_args("0.3")
+def ylabel_map(s, *, labelpad=None, size=None, weight=None, y=0.5, ax=None, **kwargs):
     """
     add ylabel to cartopy plot
 
@@ -180,7 +181,8 @@ def ylabel_map(s, labelpad=None, size=None, weight=None, y=0.5, ax=None, **kwarg
 # =============================================================================
 
 
-def xlabel_map(s, labelpad=None, size=None, weight=None, x=0.5, ax=None, **kwargs):
+@_deprecate_positional_args("0.3")
+def xlabel_map(s, *, labelpad=None, size=None, weight=None, x=0.5, ax=None, **kwargs):
     """
     add xlabel to cartopy plot
 
@@ -245,8 +247,10 @@ def xlabel_map(s, labelpad=None, size=None, weight=None, x=0.5, ax=None, **kwarg
 # =============================================================================
 
 
+@_deprecate_positional_args("0.3")
 def yticklabels(
     y_ticks,
+    *,
     labelpad=None,
     size=None,
     weight=None,
@@ -347,8 +351,10 @@ def yticklabels(
             )
 
 
+@_deprecate_positional_args("0.3")
 def xticklabels(
     x_ticks,
+    *,
     labelpad=None,
     size=None,
     weight=None,

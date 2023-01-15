@@ -3,11 +3,15 @@ import warnings
 import matplotlib.pyplot as plt
 import numpy as np
 
+from mplotutils._deprecate import _deprecate_positional_args
 
+
+@_deprecate_positional_args("0.3")
 def colorbar(
     mappable,
     ax1,
     ax2=None,
+    *,
     orientation="vertical",
     aspect=None,
     size=None,
