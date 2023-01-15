@@ -5,12 +5,12 @@
 - Python (3.7 or later)
 - [numpy](http://www.numpy.org/) (1.17 or later)
 - [matplotlib](http://matplotlib.org/) (3.4 or later)
-- [cartopy](http://scitools.org.uk/cartopy/) (0.17 or later)
+- [cartopy](http://scitools.org.uk/cartopy/) (0.18 or later)
 
 ## Optional dependencies
 
 -   [seaborn](https://seaborn.pydata.org/) (0.11 or later)
--   [xarray](http://xarray.pydata.org/) (0.15 or later)
+-   [xarray](http://xarray.pydata.org/) (0.18 or later)
 
 ## Instructions
 
