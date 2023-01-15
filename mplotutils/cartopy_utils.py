@@ -14,6 +14,24 @@ from .colormaps import _get_label_attr
 def sample_data_map(nlons, nlats):
     """Returns `lons`, `lats`, and fake `data`
 
+    Parameters
+    ----------
+    nlons : int
+        Number of longitude grid cells.
+    nlats : int
+        Number of latitude grid cells.
+
+    Returns
+    -------
+    lon : ndarray
+        Array of the longitude coordiantes.
+    lat : ndarray
+        Array of the latitude coordiantes.
+    data : ndarray
+        Sample data.
+
+    Notes
+    -----
     adapted from:
     http://scitools.org.uk/cartopy/docs/v0.15/examples/axes_grid_basic.html
     """
@@ -30,6 +48,34 @@ def sample_data_map(nlons, nlats):
     data = wave + mean
 
     return lon, lat, data
+
+
+def sample_dataarray(nlon, nlat):
+    """Returns `lons`, `lats`, and fake `data`
+
+    Parameters
+    ----------
+    nlons : int
+        Number of longitude grid cells.
+    nlats : int
+        Number of latitude grid cells.
+
+    Returns
+    -------
+    data : xr.DataArray
+        Sample data with coordiantes.
+
+    Notes
+    -----
+    adapted from:
+    http://scitools.org.uk/cartopy/docs/v0.15/examples/axes_grid_basic.html
+    """
+
+    import xarray as xr
+
+    lon, lat, data = sample_data_map(nlons=nlon, nlats=nlat)
+
+    return xr.DataArray(data, dims=("lat", "lon"), coords={"lon": lon, "lat": lat})
 
 
 def cyclic_dataarray(obj, coord="lon"):

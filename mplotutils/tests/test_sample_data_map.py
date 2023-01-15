@@ -1,22 +1,13 @@
 import numpy as np
+import pytest
+import xarray as xr
 
-from mplotutils import sample_data_map
+from mplotutils import sample_data_map, sample_dataarray
 
 
-def test_data_shape():
-
-    nlons = 10
-    nlats = 20
-
-    lon, lat, data = sample_data_map(nlons, nlats)
-
-    assert len(lon) == nlons
-    assert len(lat) == nlats
-
-    assert data.shape == (nlats, nlons)
-
-    nlons = 5
-    nlats = 10
+@pytest.mark.parametrize("nlons", [5, 10])
+@pytest.mark.parametrize("nlats", [10, 20])
+def test_data_shape(nlons, nlats):
 
     lon, lat, data = sample_data_map(nlons, nlats)
 
@@ -40,3 +31,13 @@ def test_lon():
 
     expected_lon = np.arange(0, 351, 10)
     assert np.allclose(lon, expected_lon)
+
+
+@pytest.mark.parametrize("nlon", [5, 10])
+@pytest.mark.parametrize("nlat", [10, 20])
+def test_sample_dataarray(nlon, nlat):
+
+    data = sample_dataarray(nlon, nlat)
+
+    assert isinstance(data, xr.DataArray)
+    assert data.shape == (nlat, nlon)
