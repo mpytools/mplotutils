@@ -2,7 +2,7 @@
 # it exists to let GitHub build the repository dependency graph
 # https://help.github.com/en/github/visualizing-repository-data-with-graphs/listing-the-packages-that-a-repository-depends-on
 
-cartopy >= 0.17
+cartopy >= 0.18
 matplotlib >= 3.4
 numpy >= 1.17
 setuptools >= 40.4  # for pkg_resources

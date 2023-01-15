@@ -4,12 +4,12 @@ channels:
   - nodefaults
 dependencies:
   - python=3.7
-  - cartopy=0.17
+  - cartopy=0.18
   - matplotlib-base=3.4
   - numpy=1.17
   - seaborn=0.11
   - setuptools=40.4
-  - xarray=0.15
+  - xarray=0.18
 # for testing
   - pytest
   - pytest-cov
