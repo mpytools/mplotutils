@@ -3,6 +3,8 @@
 
 ## v0.3.0 (unreleased)
 
+mplotutils now uses the MIT license instead of GPL-3.0 ([#51](https://github.com/mathause/mplotutils/pull/51))
+
 ### Deprecations
 
  * Deprecated `mpu.infer_interval_breaks` as this is no longer necessary with matplotlib v3.2
