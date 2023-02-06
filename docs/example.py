@@ -56,7 +56,6 @@ def plot_map_mpu():
 
 
 if __name__ == "__main__":
-
     opt = {"dpi": 200, "facecolor": "0.9", "transparent": False}
 
     plot_map_no_mpu()

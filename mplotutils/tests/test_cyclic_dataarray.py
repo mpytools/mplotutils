@@ -6,7 +6,6 @@ from mplotutils import cyclic_dataarray
 
 @pytest.mark.parametrize("as_dataset", (True, False))
 def test_cyclic_dataarray_missing_coord(as_dataset):
-
     da = xr.DataArray([1, 2, 3], dims=("x"), coords={"x": [0, 1, 2]}, name="data")
     data = da.to_dataset() if as_dataset else da
 
@@ -19,7 +18,6 @@ def test_cyclic_dataarray_missing_coord(as_dataset):
 
 @pytest.mark.parametrize("as_dataset", (True, False))
 def test_cyclic_dataarray_not_equally_spaced(as_dataset):
-
     da = xr.DataArray([1, 2, 3], dims=("x"), coords={"x": [0, 1, 2.1]}, name="data")
     data = da.to_dataset() if as_dataset else da
 
@@ -29,7 +27,6 @@ def test_cyclic_dataarray_not_equally_spaced(as_dataset):
 
 @pytest.mark.parametrize("as_dataset", (True, False))
 def test_cyclic_dataarray(as_dataset):
-
     data = [[1, 2, 3], [4, 5, 6]]
     da = xr.DataArray(
         data, dims=("y", "x"), coords={"y": [1, 2], "x": [0, 1, 2]}, name="data"

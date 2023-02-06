@@ -7,13 +7,11 @@ import mplotutils as mpu
 
 
 def test_from_levels_and_cmap_not_list():
-
     with pytest.raises(ValueError, match="'levels' must be a list of levels"):
         mpu.from_levels_and_cmap(3, "Greys")
 
 
 def assert_cmap_norm(cmap, norm, levels, extend):
-
     zeros = np.zeros(4)
 
     assert isinstance(cmap, matplotlib.colors.ListedColormap)
@@ -37,7 +35,6 @@ def assert_cmap_norm(cmap, norm, levels, extend):
 
 
 def test_from_levels_and_cmap():
-
     levels = [1, 2, 3]
     extend = "neither"
     cmap, norm = mpu.from_levels_and_cmap(levels, "viridis", extend=extend)
@@ -46,21 +43,18 @@ def test_from_levels_and_cmap():
 
 @pytest.mark.parametrize("extend", ("neither", "min", "max", "both"))
 def test_from_levels_and_cmap_extend(extend):
-
     levels = [1, 2, 3]
     cmap, norm = mpu.from_levels_and_cmap(levels, "viridis", extend=extend)
     assert_cmap_norm(cmap, norm, levels, extend)
 
 
 def test_from_levels_and_cmap_levels():
-
     levels = np.arange(-0.35, 0.2, 0.36)
     cmap, norm = mpu.from_levels_and_cmap(levels, "viridis")
     assert_cmap_norm(cmap, norm, levels, extend="neither")
 
 
 def test_from_levels_and_cmap_color_list():
-
     cmap = plt.get_cmap("viridis").colors
     levels = [1, 2, 3]
     cmap, norm = mpu.from_levels_and_cmap(levels, cmap)
@@ -68,7 +62,6 @@ def test_from_levels_and_cmap_color_list():
 
 
 def test_from_levels_and_cmap_LinearSegmentedColormap():
-
     cmap = plt.cm.RdYlGn
     levels = [1, 2, 3]
     cmap, norm = mpu.from_levels_and_cmap(levels, cmap)
@@ -76,7 +69,6 @@ def test_from_levels_and_cmap_LinearSegmentedColormap():
 
 
 def test_from_levels_and_cmap_seaborn_cmap():
-
     pytest.importorskip("seaborn")
 
     levels = [1, 2, 3]
@@ -85,7 +77,6 @@ def test_from_levels_and_cmap_seaborn_cmap():
 
 
 def test_from_levels_and_cmap_colorstring():
-
     pytest.importorskip("seaborn")
 
     levels = [1, 2, 3]

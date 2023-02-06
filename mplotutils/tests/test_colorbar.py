@@ -9,7 +9,6 @@ from . import figure_context, subplots_context
 
 
 def assert_position(cbar, expected):
-
     pos = cbar.ax.get_position()
     result = [pos.x0, pos.y0, pos.width, pos.height]
 
@@ -17,14 +16,12 @@ def assert_position(cbar, expected):
 
 
 def assert_aspect(cbar, expected):
-
     assert cbar.ax.get_box_aspect() == expected
     # the aspect is given in pixel space (i.e. the size of the figure matters)
     np.testing.assert_allclose(cbar.ax.bbox.height / cbar.ax.bbox.width, expected)
 
 
 def test_parse_shift_shrink():
-
     # test code for _parse_shift_shrink
     assert _parse_shift_shrink("symmetric", None) == (0.0, 0.0)
 
@@ -84,9 +81,7 @@ def test_parse_size_aspect_pad():
 
 @pytest.mark.parametrize("orientation", ["vertical", "horizontal"])
 def test_colorbar_deprecate_positional(orientation):
-
     with subplots_context(1, 2) as (f, axs):
-
         h = axs[0].pcolormesh([[0, 1]])
 
         with pytest.warns(
@@ -96,7 +91,6 @@ def test_colorbar_deprecate_positional(orientation):
 
 
 def test_colorbar_different_figures():
-
     with figure_context() as f1, figure_context() as f2:
         ax1 = f1.subplots()
         ax2 = f2.subplots()
@@ -108,7 +102,6 @@ def test_colorbar_different_figures():
 
 
 def test_colorbar_ax_and_ax2_error():
-
     with figure_context() as f:
         ax1, ax2, ax3 = f.subplots(3, 1)
         h = ax1.pcolormesh([[0, 1]])
@@ -118,7 +111,6 @@ def test_colorbar_ax_and_ax2_error():
 
 
 def create_figure_subplots(nrows=1, ncols=1, orientation="vertical"):
-
     f = plt.gcf()
 
     axs = f.subplots(nrows=nrows, ncols=ncols, squeeze=False)
@@ -143,23 +135,19 @@ def create_figure_subplots(nrows=1, ncols=1, orientation="vertical"):
 
 
 def colorbar_one_ax_vertical(**kwargs):
-
     h, ax = create_figure_subplots()
     cbar = mpu.colorbar(h, ax, **kwargs)
     return cbar
 
 
 def colorbar_one_ax_horizontal(**kwargs):
-
     h, ax = create_figure_subplots(orientation="horizontal")
     cbar = mpu.colorbar(h, ax, orientation="horizontal", **kwargs)
     return cbar
 
 
 def test_colorbar_vertical_aspect():
-
     with figure_context(figsize=(5, 5)):
-
         # test pad=0, aspect=5
         cbar = colorbar_one_ax_vertical(aspect=5, pad=0)
 
@@ -170,7 +158,6 @@ def test_colorbar_vertical_aspect():
         assert_aspect(cbar, 5)
 
     with figure_context(figsize=(4, 2)):
-
         cbar = colorbar_one_ax_vertical(aspect=20, pad=0)
 
         expected = [0.8, 0.0, 0.025, 1]
@@ -178,7 +165,6 @@ def test_colorbar_vertical_aspect():
         assert_aspect(cbar, 20)
 
     with figure_context(figsize=(2, 4)):
-
         cbar = colorbar_one_ax_vertical(aspect=20, pad=0)
 
         expected = [0.8, 0.0, 0.1, 1]
@@ -186,7 +172,6 @@ def test_colorbar_vertical_aspect():
         assert_aspect(cbar, 20)
 
     with figure_context(figsize=(5, 5)):
-
         # test pad=0, aspect=default (=20)
         cbar = colorbar_one_ax_vertical(pad=0)
 
@@ -196,9 +181,7 @@ def test_colorbar_vertical_aspect():
 
 
 def test_colorbar_vertical_size():
-
     with figure_context() as f:
-
         # test pad=0, size=0.2
         cbar = colorbar_one_ax_vertical(size=0.2, pad=0)
 
@@ -213,7 +196,6 @@ def test_colorbar_vertical_size():
         assert_position(cbar, expected)
 
     with figure_context():
-
         # pad=0.05, size=0.1
 
         cbar = colorbar_one_ax_vertical(size=0.1, pad=0.05)
@@ -222,7 +204,6 @@ def test_colorbar_vertical_size():
         assert_position(cbar, expected)
 
     with figure_context():
-
         # shift='symmetric', shrink=0.1
         # --> colorbar is 10 % smaller, and centered
 
@@ -251,9 +232,7 @@ def test_colorbar_vertical_size():
 
 
 def test_colorbar_horizontal_aspect():
-
     with figure_context(figsize=(5, 5)):
-
         # test pad=0, aspect=5
         cbar = colorbar_one_ax_horizontal(aspect=5, pad=0)
 
@@ -262,7 +241,6 @@ def test_colorbar_horizontal_aspect():
         assert_aspect(cbar, 1 / 5)
 
     with figure_context(figsize=(4, 2)):
-
         # test pad=0, aspect=5
         cbar = colorbar_one_ax_horizontal(aspect=20, pad=0)
 
@@ -271,7 +249,6 @@ def test_colorbar_horizontal_aspect():
         assert_aspect(cbar, 1 / 20)
 
     with figure_context(figsize=(2, 4)):
-
         # test pad=0, aspect=5
         cbar = colorbar_one_ax_horizontal(aspect=20, pad=0)
 
@@ -292,7 +269,6 @@ def test_colorbar_horizontal_aspect():
 
 
 def test_colorbar_horizontal_size():
-
     with figure_context() as f:
         # test pad=0, size=0.2
         cbar = colorbar_one_ax_horizontal(size=0.2, pad=0)
@@ -344,7 +320,6 @@ def test_colorbar_horizontal_size():
 
 
 def test_colorbar_vertical_two_axes():
-
     # use two horizontal axes
     with figure_context():
         h, axs = create_figure_subplots(1, 2)
@@ -393,7 +368,6 @@ def test_colorbar_vertical_two_axes():
 
 
 def test_colorbar_horizontal_two_axes():
-
     # use two horizontal axes
     with figure_context():
         h, axs = create_figure_subplots(2, 1, orientation="horizontal")
@@ -457,9 +431,7 @@ def test_colorbar_horizontal_two_axes():
 
 
 def test_colorbar_errors():
-
     with subplots_context() as (f, ax):
-
         h = ax.pcolormesh([[0, 1]])
 
         with pytest.raises(
@@ -478,9 +450,7 @@ def test_colorbar_errors():
 
 
 def test_get_cbax():
-
     with subplots_context() as (f, ax):
-
         cbax = _get_cbax(f)
 
         assert isinstance(cbax, plt.Axes)

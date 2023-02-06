@@ -9,9 +9,7 @@ from . import subplots_context
 
 
 def test_yticklabels_robinson():
-
     with subplots_context(subplot_kw=dict(projection=ccrs.Robinson())) as (f, ax):
-
         ax.set_global()
 
         lat = np.arange(-90, 91, 20)
@@ -26,7 +24,6 @@ def test_yticklabels_robinson():
         # remove when dropping py 3.9
         strict = {"strict": True} if sys.version_info >= (3, 10) else {}
         for t, y_pos in zip(ax.texts, lat, **strict):
-
             np.testing.assert_allclose((x_pos, y_pos), t.xy, atol=0.01)
 
         assert ax.texts[0].get_text() == "70°S"
@@ -34,10 +31,8 @@ def test_yticklabels_robinson():
 
 
 def test_yticklabels_robinson_180():
-
     proj = ccrs.Robinson(central_longitude=180)
     with subplots_context(subplot_kw=dict(projection=proj)) as (f, ax):
-
         ax.set_global()
 
         lat = np.arange(-90, 91, 20)
@@ -52,7 +47,6 @@ def test_yticklabels_robinson_180():
         # remove when dropping py 3.9
         strict = {"strict": True} if sys.version_info >= (3, 10) else {}
         for t, y_pos in zip(ax.texts, lat, **strict):
-
             np.testing.assert_allclose((x_pos, y_pos), t.xy, atol=0.01)
 
         assert ax.texts[0].get_text() == "70°S"
@@ -60,9 +54,7 @@ def test_yticklabels_robinson_180():
 
 
 def test_xticklabels_robinson():
-
     with subplots_context(subplot_kw=dict(projection=ccrs.Robinson())) as (f, ax):
-
         ax.set_global()
 
         lon = np.arange(-180, 181, 60)
@@ -78,7 +70,6 @@ def test_xticklabels_robinson():
         strict = {"strict": True} if sys.version_info >= (3, 10) else {}
 
         for t, x_pos in zip(ax.texts, lon, **strict):
-
             np.testing.assert_allclose((x_pos, y_pos), t.xy, atol=0.01)
 
         assert ax.texts[0].get_text() == "120°W"

@@ -7,7 +7,6 @@ from . import subplots_context
 
 
 def test_set_map_layout_default_width():
-
     with subplots_context() as (f, ax):
         set_map_layout(ax)
 
@@ -18,7 +17,6 @@ def test_set_map_layout_default_width():
     "nrow_ncol", [{"nrow": None, "ncol": None}, {"nrow": 1, "ncol": 1}]
 )
 def test_set_map_layout_no_borders(nrow_ncol):
-
     # width:height = 1:1
     with subplots_context() as (f, ax):
         ax.set_aspect("equal")
@@ -52,7 +50,6 @@ def test_set_map_layout_no_borders(nrow_ncol):
 
 @pytest.mark.parametrize("ax_to_arr", (lambda ax: [ax], lambda ax: np.array(ax)))
 def test_set_map_layout_ax_arr(ax_to_arr):
-
     # width:height = 1:1
     with subplots_context() as (f, ax):
         ax.set_aspect("equal")
@@ -65,7 +62,6 @@ def test_set_map_layout_ax_arr(ax_to_arr):
 
 
 def test_set_map_layout_vert_borders():
-
     # width:height = 1:1
     with subplots_context() as (f, ax):
         ax.set_aspect("equal")
@@ -104,7 +100,6 @@ def test_set_map_layout_vert_borders():
 
 
 def test_set_map_layout_horz_borders():
-
     # width:height = 1:1
     with subplots_context() as (f, ax):
         ax.set_aspect("equal")
@@ -131,7 +126,6 @@ def test_set_map_layout_horz_borders():
 
 
 def test_set_map_layout_two_axes_vert():
-
     # width:height = 1:1
     with subplots_context(2, 1) as (f, axs):
         for ax in axs:
@@ -160,7 +154,6 @@ def test_set_map_layout_two_axes_vert():
 
 
 def test_set_map_layout_two_axes_horz():
-
     # width:height = 1:1
     with subplots_context(1, 2) as (f, axs):
         for ax in axs:
@@ -189,7 +182,6 @@ def test_set_map_layout_two_axes_horz():
 
 
 def test_set_map_layout_nrow_ncol_only_one_raises():
-
     with pytest.raises(ValueError, match="Must set none or both of 'nrow' and 'ncol'"):
         set_map_layout(None, width=17.0, nrow=1, ncol=None)
 

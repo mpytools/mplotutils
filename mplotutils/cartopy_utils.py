@@ -275,7 +275,6 @@ def yticklabels(
     bbox_props=dict(ec="none", fc="none"),
     **kwargs,
 ):
-
     """
     draw yticklabels on map plots - may or may not work
 
@@ -342,7 +341,6 @@ def yticklabels(
 
     # loop through points
     for y in y_label_points:
-
         msg = LATITUDE_FORMATTER(y)
 
         x = _determine_intersection(boundary_pc, [lonmin, y], [lonmax, y])
@@ -379,7 +377,6 @@ def xticklabels(
     bbox_props=dict(ec="none", fc="none"),
     **kwargs,
 ):
-
     """
     draw xticklabels on map plots - may or may not work
 
@@ -442,7 +439,6 @@ def xticklabels(
 
     # loop through points
     for x in x_label_points:
-
         msg = LONGITUDE_FORMATTER(x)
 
         y = _determine_intersection(boundary_pc, [x, -90], [x, 90])
@@ -478,7 +474,6 @@ def _get_boundary_platecarree(ax):
 
 
 def _determine_intersection(polygon, xy1, xy2):
-
     p1 = shapely.geometry.Point(xy1)
     p2 = shapely.geometry.Point(xy2)
     ls = shapely.geometry.LineString([p1, p2])

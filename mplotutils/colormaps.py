@@ -81,7 +81,6 @@ def _color_palette(cmap, n_colors):
 
 
 def _get_label_attr(labelpad, size, weight):
-
     if labelpad is None:
         labelpad = mpl.rcParams["axes.labelpad"]
 

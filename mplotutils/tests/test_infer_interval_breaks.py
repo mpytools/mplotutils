@@ -6,7 +6,6 @@ from mplotutils.xrcompat import _infer_interval_breaks, infer_interval_breaks
 
 
 def test_infer_interval_breaks_warns():
-
     with pytest.warns(FutureWarning):
         infer_interval_breaks(np.array([1, 2, 3]), np.array([1, 2, 3]))
 
@@ -35,7 +34,6 @@ def test__infer_interval_breaks():
 
 @pytest.mark.filterwarnings("ignore:It's no longer necessary")
 def test_infer_interval_breaks():
-
     # 1D
     lon = np.arange(5, 356, 10)
     lat = np.arange(-85, 86, 10)
@@ -62,7 +60,6 @@ def test_infer_interval_breaks():
 
 @pytest.mark.filterwarnings("ignore:It's no longer necessary")
 def test_infer_interval_breaks_clip():
-
     # no clip
     lon = np.arange(5, 356, 10)
     lat = np.arange(-90, 91, 10)
