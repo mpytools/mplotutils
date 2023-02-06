@@ -8,6 +8,10 @@
 
 ### Bug fixes
 
+- Fix a regression introduced in [#33](https://github.com/mathause/mplotutils/pull/33):
+  `cyclic_dataarray` now correctly extrapolates the coordinates
+  ([#58](https://github.com/mathause/mplotutils/pull/58)).
+
 ### Internal changes
 
 
