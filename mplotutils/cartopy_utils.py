@@ -112,7 +112,22 @@ def cyclic_dataarray(obj, coord="lon"):
 
     """
 
-    return obj.pad({coord: (0, 1)}, mode="wrap")
+    if coord not in obj.coords:
+        raise KeyError(f"Did not find '{coord}' in obj")
+
+    obj = obj.pad({coord: (0, 1)}, mode="wrap")
+
+    # extrapolate the coords
+    lon = obj[coord]
+
+    diff = lon.isel({coord: slice(None, -1)}).diff(coord)
+
+    if not np.allclose(diff, diff[0]):
+        raise ValueError(f"The coordinate '{coord}' must be equally spaced")
+
+    lon.data[-1] = lon[-2] + diff[0]
+
+    return obj.assign_coords({coord: lon})
 
 
 @_deprecate_positional_args("0.3")

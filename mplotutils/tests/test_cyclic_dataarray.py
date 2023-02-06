@@ -5,6 +5,29 @@ from mplotutils import cyclic_dataarray
 
 
 @pytest.mark.parametrize("as_dataset", (True, False))
+def test_cyclic_dataarray_missing_coord(as_dataset):
+
+    da = xr.DataArray([1, 2, 3], dims=("x"), coords={"x": [0, 1, 2]}, name="data")
+    data = da.to_dataset() if as_dataset else da
+
+    with pytest.raises(KeyError, match="Did not find 'lon' in obj"):
+        cyclic_dataarray(data)
+
+    with pytest.raises(KeyError, match="Did not find 'longitude' in obj"):
+        cyclic_dataarray(data, "longitude")
+
+
+@pytest.mark.parametrize("as_dataset", (True, False))
+def test_cyclic_dataarray_not_equally_spaced(as_dataset):
+
+    da = xr.DataArray([1, 2, 3], dims=("x"), coords={"x": [0, 1, 2.1]}, name="data")
+    data = da.to_dataset() if as_dataset else da
+
+    with pytest.raises(ValueError, match=".*must be equally spaced"):
+        cyclic_dataarray(data, coord="x")
+
+
+@pytest.mark.parametrize("as_dataset", (True, False))
 def test_cyclic_dataarray(as_dataset):
 
     data = [[1, 2, 3], [4, 5, 6]]
@@ -14,7 +37,7 @@ def test_cyclic_dataarray(as_dataset):
 
     expected = [[1, 2, 3, 1], [4, 5, 6, 4]]
     da_expected = xr.DataArray(
-        expected, dims=("y", "x"), coords={"y": [1, 2], "x": [0, 1, 2, 0]}, name="data"
+        expected, dims=("y", "x"), coords={"y": [1, 2], "x": [0, 1, 2, 3]}, name="data"
     )
 
     data = da.to_dataset() if as_dataset else da
