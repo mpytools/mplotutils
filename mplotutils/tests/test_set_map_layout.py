@@ -195,3 +195,20 @@ def test_set_map_layout_nrow_ncol_only_one_raises():
 
     with pytest.raises(ValueError, match="Must set none or both of 'nrow' and 'ncol'"):
         set_map_layout(None, width=17.0, nrow=None, ncol=1)
+
+
+def test_set_map_layout_cartopy_2_2():
+
+    import cartopy.crs as ccrs
+
+    subplot_kw = {"projection": ccrs.PlateCarree()}
+    with subplots_context(2, 2, subplot_kw=subplot_kw) as (f, axs):
+
+        f.subplots_adjust(hspace=0, wspace=0, top=1, bottom=0, left=0, right=1)
+
+        set_map_layout(axs, width=17)  # width is in cm
+
+        result = f.get_size_inches() * 2.54
+        expected = (17, 8.5)
+
+        np.testing.assert_allclose(result, expected)
