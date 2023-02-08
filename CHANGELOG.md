@@ -8,6 +8,8 @@
 
 ### Bug fixes
 
+- Fixed a bug in `set_map_layout`: the data ratio of a cartopy `GeoAxesSubplot` requires
+  a `draw` to be correct ([#61](https://github.com/mathause/mplotutils/pull/61)).
 - Fix a regression introduced in [#33](https://github.com/mathause/mplotutils/pull/33):
   `cyclic_dataarray` now correctly extrapolates the coordinates
   ([#58](https://github.com/mathause/mplotutils/pull/58)).
