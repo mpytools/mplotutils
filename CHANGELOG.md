@@ -2,7 +2,7 @@
 
 ## v0.3.1 (09.02.2023)
 
-Version v0.3.1 fixes a regression and an additional but not caught in from v0.3.0. It's
+Version v0.3.1 fixes a regression and an additional bug not caught in from v0.3.0. It's
 recommended to use this version.
 
 ### Bug fixes
