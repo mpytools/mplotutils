@@ -40,6 +40,9 @@ def set_map_layout(axes, width=17.0, *, nrow=None, ncol=None):
     # read figure data
     f = ax.get_figure()
 
+    # getting the correct data ratio of geoaxes requires draw
+    f.canvas.draw()
+
     bottom = f.subplotpars.bottom
     top = f.subplotpars.top
     left = f.subplotpars.left

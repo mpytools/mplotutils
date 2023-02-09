@@ -132,8 +132,7 @@ def cyclic_dataarray(obj, coord="lon"):
 
 @_deprecate_positional_args("0.3")
 def ylabel_map(s, *, labelpad=None, size=None, weight=None, y=0.5, ax=None, **kwargs):
-    """
-    add ylabel to cartopy plot
+    """add ylabel to cartopy plot
 
     Parameters
     ----------
@@ -193,13 +192,9 @@ def ylabel_map(s, *, labelpad=None, size=None, weight=None, y=0.5, ax=None, **kw
     return h
 
 
-# =============================================================================
-
-
 @_deprecate_positional_args("0.3")
 def xlabel_map(s, *, labelpad=None, size=None, weight=None, x=0.5, ax=None, **kwargs):
-    """
-    add xlabel to cartopy plot
+    """add xlabel to cartopy plot
 
     Parameters
     ----------
@@ -259,9 +254,6 @@ def xlabel_map(s, *, labelpad=None, size=None, weight=None, x=0.5, ax=None, **kw
     return h
 
 
-# =============================================================================
-
-
 @_deprecate_positional_args("0.3")
 def yticklabels(
     y_ticks,
@@ -275,8 +267,7 @@ def yticklabels(
     bbox_props=dict(ec="none", fc="none"),
     **kwargs,
 ):
-    """
-    draw yticklabels on map plots - may or may not work
+    """draw yticklabels on map plots - may or may not work
 
     Parameters
     ----------
@@ -377,8 +368,7 @@ def xticklabels(
     bbox_props=dict(ec="none", fc="none"),
     **kwargs,
 ):
-    """
-    draw xticklabels on map plots - may or may not work
+    """draw xticklabels on map plots - may or may not work
 
     Parameters
     ----------
