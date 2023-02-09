@@ -1,10 +1,9 @@
 # Changelog
 
-## v0.4.0 (unreleased)
+## v0.3.1 (09.02.2023)
 
-### Deprecations
-
-### Enhancements
+Version v0.3.1 fixes a regression and an additional but not caught in from v0.3.0. It's
+recommended to use this version.
 
 ### Bug fixes
 
@@ -13,8 +12,6 @@
 - Fix a regression introduced in [#33](https://github.com/mathause/mplotutils/pull/33):
   `cyclic_dataarray` now correctly extrapolates the coordinates
   ([#58](https://github.com/mathause/mplotutils/pull/58)).
-
-### Internal changes
 
 
 ## v0.3.0 (15.01.2023)
