@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.4.0 (unreleased)
+
+### Deprecations
+
+### Enhancements
+
+### Bug fixes
+
+### Internal changes
+
+
 ## v0.3.1 (09.02.2023)
 
 Version v0.3.1 fixes a regression and an additional but not caught in from v0.3.0. It's
