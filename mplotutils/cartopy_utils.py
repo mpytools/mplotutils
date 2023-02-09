@@ -132,8 +132,7 @@ def cyclic_dataarray(obj, coord="lon"):
 
 @_deprecate_positional_args("0.3")
 def ylabel_map(s, *, labelpad=None, size=None, weight=None, y=0.5, ax=None, **kwargs):
-    """
-    add ylabel to cartopy plot
+    """add ylabel to cartopy plot
 
     Parameters
     ----------
@@ -198,8 +197,7 @@ def ylabel_map(s, *, labelpad=None, size=None, weight=None, y=0.5, ax=None, **kw
 
 @_deprecate_positional_args("0.3")
 def xlabel_map(s, *, labelpad=None, size=None, weight=None, x=0.5, ax=None, **kwargs):
-    """
-    add xlabel to cartopy plot
+    """add xlabel to cartopy plot
 
     Parameters
     ----------
@@ -275,9 +273,7 @@ def yticklabels(
     bbox_props=dict(ec="none", fc="none"),
     **kwargs,
 ):
-
-    """
-    draw yticklabels on map plots - may or may not work
+    """draw yticklabels on map plots - may or may not work
 
     Parameters
     ----------
@@ -342,7 +338,6 @@ def yticklabels(
 
     # loop through points
     for y in y_label_points:
-
         msg = LATITUDE_FORMATTER(y)
 
         x = _determine_intersection(boundary_pc, [lonmin, y], [lonmax, y])
@@ -379,9 +374,7 @@ def xticklabels(
     bbox_props=dict(ec="none", fc="none"),
     **kwargs,
 ):
-
-    """
-    draw xticklabels on map plots - may or may not work
+    """draw xticklabels on map plots - may or may not work
 
     Parameters
     ----------
@@ -442,7 +435,6 @@ def xticklabels(
 
     # loop through points
     for x in x_label_points:
-
         msg = LONGITUDE_FORMATTER(x)
 
         y = _determine_intersection(boundary_pc, [x, -90], [x, 90])
@@ -478,7 +470,6 @@ def _get_boundary_platecarree(ax):
 
 
 def _determine_intersection(polygon, xy1, xy2):
-
     p1 = shapely.geometry.Point(xy1)
     p2 = shapely.geometry.Point(xy2)
     ls = shapely.geometry.LineString([p1, p2])

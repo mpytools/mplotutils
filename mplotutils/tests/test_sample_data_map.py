@@ -8,7 +8,6 @@ from mplotutils import sample_data_map, sample_dataarray
 @pytest.mark.parametrize("nlons", [5, 10])
 @pytest.mark.parametrize("nlats", [10, 20])
 def test_data_shape(nlons, nlats):
-
     lon, lat, data = sample_data_map(nlons, nlats)
 
     assert len(lon) == nlons
@@ -18,7 +17,6 @@ def test_data_shape(nlons, nlats):
 
 
 def test_lat():
-
     __, lat, __ = sample_data_map(36, 9)
 
     expected_lat = np.arange(-80, 81, 20)
@@ -26,7 +24,6 @@ def test_lat():
 
 
 def test_lon():
-
     lon, __, __ = sample_data_map(36, 9)
 
     expected_lon = np.arange(0, 351, 10)
@@ -36,7 +33,6 @@ def test_lon():
 @pytest.mark.parametrize("nlon", [5, 10])
 @pytest.mark.parametrize("nlat", [10, 20])
 def test_sample_dataarray(nlon, nlat):
-
     data = sample_dataarray(nlon, nlat)
 
     assert isinstance(data, xr.DataArray)

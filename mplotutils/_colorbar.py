@@ -208,7 +208,6 @@ def colorbar(
 
 
 def _get_cbax(f):
-
     # when using f.add_axes(rect) with the same rect twice
     # it is the same axes, so we have to change rect
     # slightly each time this func is called
@@ -280,7 +279,6 @@ def _resize_colorbar_vert(
 
     # inner function is called by event handler
     def inner(event=None):
-
         pos1 = ax1.get_position()
 
         # determine total height of all axes
@@ -375,7 +373,6 @@ def _resize_colorbar_horz(
         cbax.set_box_aspect(aspect)
 
     def inner(event=None):
-
         posn1 = ax1.get_position()
 
         if ax2 is None:
@@ -409,7 +406,6 @@ def _resize_colorbar_horz(
 
 
 def _parse_shift_shrink(shift, shrink):
-
     if shift == "symmetric":
         if shrink is None:
             shrink = 0
@@ -438,7 +434,6 @@ def _parse_shift_shrink(shift, shrink):
 
 
 def _parse_size_aspect_pad(size, aspect, pad, orientation):
-
     if (size is not None) and (aspect is not None):
         raise ValueError("Can only pass one of 'aspect' and 'size'")
 
