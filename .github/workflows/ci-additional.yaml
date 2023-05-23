@@ -37,13 +37,12 @@ jobs:
             PY=${PY//./}
             echo "CONDA_ENV_FILE=ci/requirements/py${PY}-${{ matrix.env }}.yml" >> $GITHUB_ENV
       - name: Create conda environment
-        uses: mamba-org/provision-with-micromamba@main
+        uses: mamba-org/setup-micromamba@v1
         with:
-          cache-downloads: true
-          cache-downloads-key: "${{runner.os}}-${{runner.arch}}-py${{matrix.python-version}}-${{hashFiles(env.CONDA_ENV_FILE)}}"
-          micromamba-version: 'latest'
           environment-file: ${{ env.CONDA_ENV_FILE }}
-          extra-specs: |
+          cache-downloads: true
+          cache-downloads-key: "${{runner.os}}-${{runner.arch}}-py${{matrix.python-version}}"
+          create-args: >-
             python=${{ matrix.python-version }}
       - name: Install mplotutils
         run: |
@@ -83,12 +82,12 @@ jobs:
           fetch-depth: 0 # Fetch all history for all branches and tags.
 
       - name: Create conda environment
-        uses: mamba-org/provision-with-micromamba@v15
+        uses: mamba-org/setup-micromamba@v1
         with:
           environment-name: min-version-policy
           environment-file: false
           micromamba-version: 'latest'
-          extra-specs: |
+          create-args: >-
             python="3.10"
             pyyaml
             conda
