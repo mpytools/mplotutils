@@ -85,7 +85,6 @@ jobs:
         uses: mamba-org/setup-micromamba@v1
         with:
           environment-name: min-version-policy
-          environment-file: false
           micromamba-version: 'latest'
           create-args: >-
             python="3.10"
