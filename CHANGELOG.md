@@ -23,6 +23,8 @@
 
 ### Enhancements
 
+- Add python 3.12 to list of supported versions ([#89](https://github.com/mathause/mplotutils/pull/89)).
+
 ### Bug fixes
 
 ### Internal changes
