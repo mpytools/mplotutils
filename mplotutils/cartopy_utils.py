@@ -37,10 +37,10 @@ def sample_data_map(nlons, nlats):
     """
 
     dlat = 180.0 / nlats / 2
-    dlon = 360.0 / nlons
+    dlon = 360.0 / nlons / 2
 
     lat = np.linspace(-90 + dlat, 90 - dlat, nlats)
-    lon = np.linspace(0, 360 - dlon, nlons)
+    lon = np.linspace(dlon, 360 - dlon, nlons)
 
     lons, lats = np.meshgrid(np.deg2rad(lon), np.deg2rad(lat))
     wave = 0.75 * (np.sin(2 * lats) ** 8) * np.cos(4 * lons)
