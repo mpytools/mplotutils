@@ -4,6 +4,11 @@
 
 ### Deprecations
 
+### Breaking changes
+
+- `sample_data_map` now offsets the lon data such that the first grid cell does not wrap
+  around ([#87](https://github.com/mathause/mplotutils/pull/87)).
+
 ### Enhancements
 
 ### Bug fixes
