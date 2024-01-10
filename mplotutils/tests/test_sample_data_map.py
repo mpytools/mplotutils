@@ -20,14 +20,14 @@ def test_lat():
     __, lat, __ = sample_data_map(36, 9)
 
     expected_lat = np.arange(-80, 81, 20)
-    assert np.allclose(lat, expected_lat)
+    np.testing.assert_allclose(lat, expected_lat)
 
 
 def test_lon():
     lon, __, __ = sample_data_map(36, 9)
 
-    expected_lon = np.arange(0, 351, 10)
-    assert np.allclose(lon, expected_lon)
+    expected_lon = np.arange(5, 356, 10)
+    np.testing.assert_allclose(lon, expected_lon)
 
 
 @pytest.mark.parametrize("nlon", [5, 10])
