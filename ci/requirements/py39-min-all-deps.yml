@@ -8,7 +8,6 @@ dependencies:
   - matplotlib-base=3.6
   - numpy=1.23
   - seaborn=0.12
-  - setuptools=40.4
   - xarray=2022.12
 # for testing
   - pytest
