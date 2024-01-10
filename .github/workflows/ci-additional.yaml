@@ -24,7 +24,7 @@ jobs:
       matrix:
         include:
           - env: "min-all-deps"
-            python-version: "3.7"
+            python-version: "3.9"
     steps:
       - uses: actions/checkout@v4
         with:

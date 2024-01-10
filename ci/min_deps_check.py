@@ -9,8 +9,9 @@ policy on obsolete dependencies is being followed. Print a pretty report :)
 
 import itertools
 import sys
+from collections.abc import Iterator
 from datetime import datetime
-from typing import Dict, Iterator, Optional, Tuple
+from typing import Optional
 
 import conda.api  # type: ignore[import]
 import yaml
@@ -56,7 +57,7 @@ def warning(msg: str) -> None:
     print("WARNING:", msg)
 
 
-def parse_requirements(fname) -> Iterator[Tuple[str, int, int, Optional[int]]]:
+def parse_requirements(fname) -> Iterator[tuple[str, int, int, Optional[int]]]:
     """Load requirements/py*-min-all-deps.yml
 
     Yield (package name, major version, minor version, [patch version])
@@ -88,7 +89,7 @@ def parse_requirements(fname) -> Iterator[Tuple[str, int, int, Optional[int]]]:
             raise ValueError("expected major.minor or major.minor.patch: " + row)
 
 
-def query_conda(pkg: str) -> Dict[Tuple[int, int], datetime]:
+def query_conda(pkg: str) -> dict[tuple[int, int], datetime]:
     """Query the conda repository for a specific package
 
     Return map of {(major version, minor version): publication date}
@@ -128,7 +129,7 @@ def query_conda(pkg: str) -> Dict[Tuple[int, int], datetime]:
 
 def process_pkg(
     pkg: str, req_major: int, req_minor: int, req_patch: Optional[int]
-) -> Tuple[str, str, str, str, str, str]:
+) -> tuple[str, str, str, str, str, str]:
     """Compare package version from requirements file to available versions in conda.
     Return row to build pandas dataframe:
 
