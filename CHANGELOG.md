@@ -7,7 +7,7 @@
 ### Breaking changes
 
 - Removed support for python 3.7 and python 3.8 ([#88](https://github.com/mathause/mplotutils/pull/88)).
-- The minimum versions of some dependencies were changed ([#88](https://github.com/mathause/mplotutils/pull/88)).
+- The minimum versions of some dependencies were changed ([#88](https://github.com/mathause/mplotutils/pull/88) and [#91](https://github.com/mathause/mplotutils/pull/91)).
 
   | Package      | Old   | New     |
   | ------------ | ----- | -----   |
