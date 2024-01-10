@@ -6,6 +6,18 @@
 
 ### Breaking changes
 
+- Removed support for python 3.7 and python 3.8 ([#88](https://github.com/mathause/mplotutils/pull/88)).
+- The minimum versions of some dependencies were changed ([#88](https://github.com/mathause/mplotutils/pull/88)).
+
+  | Package      | Old   | New     |
+  | ------------ | ----- | -----   |
+  | cartopy      | 0.18  | 0.20    |
+  | matplotlib*  | 3.4   | 3.5     |
+  | numpy        | 1.17  | 1.23    |
+  | seaborn      | 1.2   | 1.3     |
+  | xarray       | 0.15  | 2022.12 |
+
+
 - `sample_data_map` now offsets the lon data such that the first grid cell does not wrap
   around ([#87](https://github.com/mathause/mplotutils/pull/87)).
 
