@@ -11,10 +11,10 @@
 
   | Package      | Old   | New     |
   | ------------ | ----- | -----   |
-  | cartopy      | 0.18  | 0.20    |
-  | matplotlib*  | 3.4   | 3.5     |
-  | numpy        | 1.17  | 1.23    |
-  | seaborn      | 1.2   | 1.3     |
+  | cartopy      | 0.18  | 0.21    |
+  | matplotlib*  | 3.4   | 3.6     |
+  | numpy        | 1.17  | 1.22    |
+  | seaborn      | 0.11  | 0.12    |
   | xarray       | 0.15  | 2022.12 |
 
 

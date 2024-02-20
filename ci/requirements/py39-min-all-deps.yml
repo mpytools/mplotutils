@@ -6,7 +6,7 @@ dependencies:
   - python=3.9
   - cartopy=0.21
   - matplotlib-base=3.6
-  - numpy=1.23
+  - numpy=1.22
   - seaborn=0.12
   - xarray=2022.12
 # for testing
