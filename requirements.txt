@@ -5,3 +5,4 @@
 cartopy >= 0.21
 matplotlib >= 3.6
 numpy >= 1.22
+xarray >= 2022.12
