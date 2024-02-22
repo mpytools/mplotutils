@@ -251,8 +251,6 @@ def test_colorbar_horizontal_aspect():
         # test pad=0, aspect=5
         cbar = colorbar_one_ax_horizontal(aspect=20, pad=0)
 
-        # # f.canvas.draw()
-
         expected = [0.0, 0.175, 1.0, 0.025]
         assert_position(cbar, expected)
         assert_aspect(cbar, 1 / 20)
