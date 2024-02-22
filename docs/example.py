@@ -49,9 +49,6 @@ def plot_map_mpu():
     # ensure the figure has the correct size
     mpu.set_map_layout(axs)
 
-    # call a draw to ensure the colorbar is correct
-    f.canvas.draw()
-
     f.suptitle("With mplotutils")
 
 

@@ -23,6 +23,8 @@
 
 ### Enhancements
 
+- Calling `f.canvas.draw()` before `plt.savefig` is no longer necessary. This now happens
+  automatically ([#98](https://github.com/mathause/mplotutils/pull/98)).
 - Add python 3.12 to list of supported versions ([#89](https://github.com/mathause/mplotutils/pull/89)).
 
 ### Bug fixes
