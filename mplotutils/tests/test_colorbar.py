@@ -152,7 +152,6 @@ def test_colorbar_vertical_aspect():
         cbar = colorbar_one_ax_vertical(aspect=5, pad=0)
 
         expected = [0.8, 0, 0.2, 1.0]
-        plt.gcf().canvas.draw()
 
         assert_position(cbar, expected)
         assert_aspect(cbar, 5)
@@ -252,7 +251,7 @@ def test_colorbar_horizontal_aspect():
         # test pad=0, aspect=5
         cbar = colorbar_one_ax_horizontal(aspect=20, pad=0)
 
-        # f.canvas.draw()
+        # # f.canvas.draw()
 
         expected = [0.0, 0.175, 1.0, 0.025]
         assert_position(cbar, expected)
@@ -428,6 +427,57 @@ def test_colorbar_horizontal_two_axes():
         height = 0.2 * 0.8
         expected = [0.5, 0.2 - height, 0.5, height]
         assert_position(cbar, expected)
+
+
+def create_fig_aspect(aspect, orientation):
+
+    f = plt.gcf()
+
+    ax = f.subplots()
+
+    h = ax.contourf([[0, 1], [0, 1]], levels=[0, 1])
+
+    cbar = mpu.colorbar(h, ax, orientation=orientation)
+
+    ax.set_aspect(aspect)
+
+    return ax, cbar
+
+
+def test_colorbar_vertical_draw_required():
+
+    with figure_context() as f:
+        ax, cbar = create_fig_aspect(aspect=0.5, orientation="vertical")
+
+        pos = cbar.ax.get_position()
+        result = [pos.y0, pos.height]
+
+        pos = ax.get_position()
+        expected = [pos.y0, pos.height]
+
+        assert result != expected
+
+        f.canvas.draw()
+        result = [pos.y0, pos.height]
+        assert result == expected
+
+
+def test_colorbar_horizontal_draw_required():
+
+    with figure_context() as f:
+        ax, cbar = create_fig_aspect(aspect=2, orientation="horizontal")
+
+        pos = cbar.ax.get_position()
+        result = [pos.x0, pos.width]
+
+        pos = ax.get_position()
+        expected = [pos.x0, pos.width]
+
+        assert result != expected
+
+        f.canvas.draw()
+        result = [pos.x0, pos.width]
+        assert result == expected
 
 
 def test_colorbar_errors():
