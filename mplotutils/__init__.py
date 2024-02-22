@@ -4,10 +4,13 @@ from importlib.metadata import version as _get_version
 
 from . import _colorbar, cartopy_utils, colormaps
 from ._colorbar import *
+from ._savefig import autodraw
 from .cartopy_utils import *
 from .colormaps import *
 from .map_layout import set_map_layout
 from .xrcompat import *
+
+autodraw(True)
 
 try:
     __version__ = _get_version("mplotutils")
