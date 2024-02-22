@@ -103,12 +103,12 @@ def cyclic_dataarray(obj, coord="lon"):
     ... )
     >>> data_cyclic = cyclic_dataarray(data, 'y')
     >>> data_cyclic
-    <xarray.DataArray (x: 2, y: 4)>
+    <xarray.DataArray (x: 2, y: 4)> Size: 64B
     array([[1, 2, 3, 1],
            [4, 5, 6, 4]])
     Coordinates:
-      * x        (x) int64 1 2
-      * y        (y) int64 0 1 2 3
+      * x        (x) int64 16B 1 2
+      * y        (y) int64 32B 0 1 2 3
 
     """
 
