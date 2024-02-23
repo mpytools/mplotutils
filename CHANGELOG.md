@@ -1,8 +1,9 @@
 # Changelog
 
-## v0.4.0 (unreleased)
+## v0.4.0 (23.02.2024)
 
-### Deprecations
+Version 0.4.0 simplifies the way figures with a `mpu.colorbar` have to be saved  and
+bumps the supported versions.
 
 ### Breaking changes
 
@@ -26,11 +27,6 @@
 - Calling `f.canvas.draw()` before `plt.savefig` is no longer necessary. This now happens
   automatically ([#98](https://github.com/mathause/mplotutils/pull/98)).
 - Add python 3.12 to list of supported versions ([#89](https://github.com/mathause/mplotutils/pull/89)).
-
-### Bug fixes
-
-### Internal changes
-
 
 ## v0.3.1 (09.02.2023)
 
