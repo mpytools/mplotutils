@@ -41,7 +41,7 @@ def plot_map_mpu():
         ax.coastlines()
 
     # add colorbar using mplotutils
-    mpu.colorbar(mappable=mappable, ax1=axs[1], ax2=axs[3])
+    mpu.colorbar(mappable=mappable, ax=axs)
 
     # adjust the margins manually
     f.subplots_adjust(left=0.025, right=0.85, top=0.9, bottom=0.05)
