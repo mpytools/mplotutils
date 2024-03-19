@@ -79,7 +79,8 @@ def test_parse_size_aspect_pad():
 # =============================================================================
 
 
-@pytest.mark.parametrize("orientation", ["vertical", "horizontal"])
+@pytest.mark.parametrize("orientation", ("vertical", "horizontal"))
+@pytest.mark.filterwarnings("ignore:Passing axes individually")
 def test_colorbar_deprecate_positional(orientation):
     with subplots_context(1, 2) as (f, axs):
         h = axs[0].pcolormesh([[0, 1]])
@@ -90,6 +91,80 @@ def test_colorbar_deprecate_positional(orientation):
             mpu.colorbar(h, axs[0], axs[0], orientation)
 
 
+def test_colorbar_deprecate_ax1_ax2_errors():
+
+    h = None
+    ax = object()  # we want something that is not None
+
+    with pytest.raises(
+        TypeError, match=r"colorbar\(\) missing 1 required positional argument: 'ax'"
+    ):
+        mpu.colorbar(h)
+
+    with pytest.raises(TypeError, match="Cannot pass `ax`, and `ax2`"):
+        mpu.colorbar(h, ax, ax, ax1=ax)
+
+    with pytest.raises(TypeError, match="Cannot pass `ax`, and `ax2`"):
+        mpu.colorbar(h, ax, ax1=ax, ax2=ax)
+
+    with pytest.raises(TypeError, match="Cannot pass `ax`, and `ax2`"):
+        mpu.colorbar(h, ax=ax, ax1=ax, ax2=ax)
+
+    with pytest.raises(
+        TypeError, match="Cannot pass ax2 in addition to a list of axes"
+    ):
+        mpu.colorbar(h, [], ax)
+
+
+@pytest.mark.filterwarnings("ignore:Passing axes individually")
+@pytest.mark.parametrize("orientation", ("vertical", "horizontal"))
+@pytest.mark.parametrize("nrows, ncols", ((2, 1), (1, 2)))
+def test_colorbar_deprecate_ax1_ax2_ensure_same(orientation, nrows, ncols):
+
+    with figure_context():
+        h, axs = create_figure_subplots(nrows, ncols)
+
+        cbar = mpu.colorbar(h, axs[0], axs[1], orientation=orientation, size=0.2, pad=0)
+
+        pos = mpu.colorbar(
+            h, axs, orientation=orientation, size=0.2, pad=0
+        ).ax.get_position()
+        expected = [pos.x0, pos.y0, pos.width, pos.height]
+
+        assert_position(cbar, expected)
+
+
+@pytest.mark.parametrize("nrows, ncols", ((2, 1), (1, 2)))
+def test_colorbar_deprecate_ax1_ax2(nrows, ncols):
+
+    with figure_context():
+        h, axs = create_figure_subplots(nrows, ncols)
+
+        with pytest.warns(match="Passing axes individually"):
+            mpu.colorbar(h, axs[0], axs[1])
+
+        with pytest.warns(match="`ax1` and `ax2` has been deprecated in favor of `ax`"):
+            mpu.colorbar(h, ax1=axs[0], ax2=axs[1])
+
+
+def test_colorbar_deprecate_ax1():
+
+    with figure_context():
+        h, ax = create_figure_subplots(1, 1)
+
+        with pytest.warns(match="`ax1` has been deprecated in favor of `ax`"):
+            mpu.colorbar(h, ax1=ax)
+
+    # create_figure_subplots
+
+    # # with pytest.warns(match=""):
+    # mpu.colorbar(h, ax, ax)
+
+    # mpu.colorbar(h, ax, ax2=ax, orientation=orientation)
+
+    # mpu.colorbar(h, ax1=ax, ax2=ax, orientation=orientation)
+
+
 def test_colorbar_different_figures():
     with figure_context() as f1, figure_context() as f2:
         ax1 = f1.subplots()
@@ -97,8 +172,8 @@ def test_colorbar_different_figures():
 
         h = ax1.pcolormesh([[0, 1]])
 
-        with pytest.raises(ValueError, match="must belong to the same figure"):
-            mpu.colorbar(h, ax1, ax2)
+        with pytest.raises(TypeError, match="must belong to the same figure"):
+            mpu.colorbar(h, [ax1, ax2])
 
 
 def test_colorbar_ax_and_ax2_error():
@@ -106,8 +181,8 @@ def test_colorbar_ax_and_ax2_error():
         ax1, ax2, ax3 = f.subplots(3, 1)
         h = ax1.pcolormesh([[0, 1]])
 
-        with pytest.raises(ValueError, match="Cannot pass `ax`, and `ax2`"):
-            mpu.colorbar(h, ax1, ax2, ax=ax3)
+        with pytest.raises(TypeError, match="Cannot pass `ax`, and `ax2`"):
+            mpu.colorbar(h, ax1, ax2, ax1=ax3)
 
 
 def create_figure_subplots(nrows=1, ncols=1, orientation="vertical"):
@@ -321,7 +396,15 @@ def test_colorbar_vertical_two_axes():
     with figure_context():
         h, axs = create_figure_subplots(1, 2)
 
-        cbar = mpu.colorbar(h, axs[0], axs[1], size=0.2, pad=0)
+        cbar = mpu.colorbar(h, [axs[0], axs[1]], size=0.2, pad=0)
+        expected = [0.8, 0, 0.2 * 0.8, 1.0]
+        assert_position(cbar, expected)
+
+    # use two horizontal axes
+    with figure_context():
+        h, axs = create_figure_subplots(1, 2)
+
+        cbar = mpu.colorbar(h, axs[1], size=0.2, pad=0)
         expected = [0.8, 0, 0.2 * 0.8 * 0.5, 1.0]
         assert_position(cbar, expected)
 
@@ -329,22 +412,22 @@ def test_colorbar_vertical_two_axes():
     with figure_context():
         h, axs = create_figure_subplots(2, 1)
 
-        cbar = mpu.colorbar(h, axs[0], axs[1], size=0.2, pad=0)
+        cbar = mpu.colorbar(h, [axs[0], axs[1]], size=0.2, pad=0)
 
         expected = [0.8, 0.0, 0.2 * 0.8, 1]
         assert_position(cbar, expected)
 
         # exchange the axes
-        cbar = mpu.colorbar(h, axs[1], axs[0], size=0.2, pad=0)
+        cbar = mpu.colorbar(h, [axs[1], axs[0]], size=0.2, pad=0)
 
         expected = [0.8, 0.0, 0.2 * 0.8, 1]
         assert_position(cbar, expected)
 
-    # use ax instead of ax2
+    # pass as ax list
     with figure_context():
         h, axs = create_figure_subplots(2, 1)
 
-        cbar = mpu.colorbar(h, axs[0], ax=axs[1], size=0.2, pad=0)
+        cbar = mpu.colorbar(h, [axs[0], axs[1]], size=0.2, pad=0)
 
         expected = [0.8, 0.0, 0.2 * 0.8, 1]
         assert_position(cbar, expected)
@@ -365,24 +448,35 @@ def test_colorbar_vertical_two_axes():
 
 
 def test_colorbar_horizontal_two_axes():
+
     # use two horizontal axes
     with figure_context():
         h, axs = create_figure_subplots(2, 1, orientation="horizontal")
 
         cbar = mpu.colorbar(
-            h, axs[0], axs[1], size=0.2, pad=0, orientation="horizontal"
+            h, [axs[0], axs[1]], size=0.2, pad=0, orientation="horizontal"
         )
 
-        height = 0.2 * 0.8 * 0.5
+        height = 0.2 * 0.8
         expected = [0.0, 0.2 - height, 1.0, height]
         assert_position(cbar, expected)
 
     # use two horizontal axes
     with figure_context():
+        h, axs = create_figure_subplots(2, 1, orientation="horizontal")
+
+        cbar = mpu.colorbar(h, axs[1], size=0.2, pad=0, orientation="horizontal")
+
+        height = 0.2 * 0.8 * 0.5
+        expected = [0.0, 0.2 - height, 1.0, height]
+        assert_position(cbar, expected)
+
+    # ensure they can be passed in any order
+    with figure_context():
         h, axs = create_figure_subplots(1, 2, orientation="horizontal")
 
         cbar = mpu.colorbar(
-            h, axs[0], axs[1], size=0.2, pad=0, orientation="horizontal"
+            h, [axs[0], axs[1]], size=0.2, pad=0, orientation="horizontal"
         )
 
         height = 0.2 * 0.8
@@ -391,19 +485,26 @@ def test_colorbar_horizontal_two_axes():
 
         # exchange the axes
         cbar = mpu.colorbar(
-            h, axs[1], axs[0], size=0.2, pad=0, orientation="horizontal"
+            h, [axs[1], axs[0]], size=0.2, pad=0, orientation="horizontal"
         )
 
         height = 0.2 * 0.8
         expected = [0.0, 0.2 - height, 1, height]
         assert_position(cbar, expected)
 
-    # use ax instead of ax2
+        # pass axs
+        cbar = mpu.colorbar(h, axs, size=0.2, pad=0, orientation="horizontal")
+
+        height = 0.2 * 0.8
+        expected = [0.0, 0.2 - height, 1, height]
+        assert_position(cbar, expected)
+
+    # pass ax as list
     with figure_context():
         h, axs = create_figure_subplots(1, 2, orientation="horizontal")
 
         cbar = mpu.colorbar(
-            h, axs[0], ax=axs[1], size=0.2, pad=0, orientation="horizontal"
+            h, [axs[0], axs[1]], size=0.2, pad=0, orientation="horizontal"
         )
 
         height = 0.2 * 0.8

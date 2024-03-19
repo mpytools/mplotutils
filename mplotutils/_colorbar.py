@@ -1,15 +1,59 @@
 import warnings
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
+import matplotlib.transforms as mtransforms
 import numpy as np
 
 from mplotutils._deprecate import _deprecate_positional_args
 
 
+def _deprecate_ax1_ax2(ax, ax2, ax1):
+    if ax is None:
+        if ax1 is None:
+            raise TypeError("colorbar() missing 1 required positional argument: 'ax'")
+
+        if ax2 is None:
+            ax = ax1
+            warnings.warn(
+                "`ax1` has been deprecated in favor of `ax`",
+                FutureWarning,
+                stacklevel=4,
+            )
+
+        else:
+            ax = [ax1, ax2]
+            warnings.warn(
+                "`ax1` and `ax2` has been deprecated in favor of `ax`, i.e. pass ax=[ax1, ax2]",
+                FutureWarning,
+                stacklevel=4,
+            )
+
+    else:
+
+        if ax1 is not None and ax2 is not None:
+            raise TypeError("Cannot pass `ax`, and `ax2`")
+
+        if ax2 is not None and np.ndim(ax) != 0:
+            raise TypeError("Cannot pass ax2 in addition to a list of axes")
+
+        if ax2 is not None:
+            ax = [ax, ax2]
+
+            warnings.warn(
+                "Passing axes individually has been deprecated in favor of passing them"
+                " as list, i.e. pass ``ax=[ax1, ax2]``, or ``ax=axs``",
+                FutureWarning,
+                stacklevel=4,
+            )
+
+    return ax
+
+
 @_deprecate_positional_args("0.3")
 def colorbar(
     mappable,
-    ax1,
+    ax=None,
     ax2=None,
     *,
     orientation="vertical",
@@ -20,8 +64,7 @@ def colorbar(
     shrink=None,
     **kwargs,
 ):
-    """
-    automatically resize colorbars on draw
+    """colorbar that adjusts to the axes height (and automatically resizes)
 
     See below for Example
 
@@ -29,23 +72,21 @@ def colorbar(
     ----------
     mappable : handle
         The `matplotlib.cm.ScalarMappable` described by this colorbar.
-    ax1 : `matplotlib.axes.Axes`
-        The axes to adjust the colorbar to.
-    ax2 : `~matplotlib.axes.Axes`, default: None.
-        If the colorbar should span more than one axes.
+    ax : `~matplotlib.axes.Axes` or iterable or `numpy.ndarray` of Axes
+        One or more parent Axes of the colorbar.
     orientation : 'vertical' | 'horizontal'. Default: 'vertical'.
         Orientation of the colorbar.
     aspect : float, default 20.
-        The ratio of long to short dimensions of the colorbar Mutually exclusive with
+        The ratio of long to short dimensions of the colorbar. Mutually exclusive with
         `size`.
     size : float, default: None
-        Width of the colorbar as fraction of the axes width (vertical) or
+        Width of the colorbar as fraction of all parent axes width (vertical) or
         height (horizontal). Mutually exclusive with `aspect`.
     pad : float, default: None.
         Distance of the colorbar to the axes in Figure coordinates.
-         Default: 0.05 (vertical) or 0.15 (horizontal).
+        Default: 0.05 (vertical) or 0.15 (horizontal).
     shift : 'symmetric' or float in 0..1, default: 'symmetric'
-        Fraction of the total height that the colorbar is shifted upwards. See Note.
+        Fraction of the total height that the colorbar is shifted up/ right. See Note.
     shrink : None or float in 0..1, default: None.
         Fraction of the total height that the colorbar is shrunk. See Note.
     **kwargs : keyword arguments
@@ -119,7 +160,7 @@ def colorbar(
         ax.set_global()
         h = ax.pcolormesh([[0, 1]])
 
-    cbar = mpu.colorbar(h, axs[0], axs[1])
+    cbar = mpu.colorbar(h, axs)
 
     # =========================
     # example with 3 axes & 2 colorbars
@@ -134,7 +175,7 @@ def colorbar(
     h1 = ax.pcolormesh([[0, 1]])
     h2 = ax.pcolormesh([[0, 1]], cmap='Blues')
 
-    cbar = mpu.colorbar(h, axs[0], axs[1], size=0.05)
+    cbar = mpu.colorbar(h, [axs[0], axs[1]], size=0.05)
     cbar = mpu.colorbar(h, axs[2], size=0.05)
 
     plt.draw()
@@ -151,6 +192,10 @@ def colorbar(
     plt.colorbar
     """
 
+    ax = _deprecate_ax1_ax2(ax, ax2, kwargs.pop("ax1", None))
+
+    axs = [ax] if np.ndim(ax) == 0 else ax
+
     if orientation not in ("vertical", "horizontal"):
         raise ValueError("orientation must be 'vertical' or 'horizontal'")
 
@@ -159,17 +204,13 @@ def colorbar(
         msg = "'anchor' and 'panchor' keywords not supported, use 'shrink' and 'shift'"
         raise ValueError(msg)
 
-    # ensure 'ax' does not end up in plt.colorbar(**kwargs)
-    if "ax" in k:
-        if ax2 is not None:
-            raise ValueError("Cannot pass `ax`, and `ax2`")
-        # assume it is ax2 (it can't be ax1)
-        ax2 = kwargs.pop("ax")
+    if not all(isinstance(ax, mpl.axes.Axes) for ax in axs):
+        raise TypeError("ax must be of Type mpl.axes.Axes")
 
-    f = ax1.get_figure()
+    f = axs[0].get_figure()
 
-    if ax2 is not None and f != ax2.get_figure():
-        raise ValueError("'ax1' and 'ax2' must belong to the same figure")
+    if not all(f == ax.get_figure() for ax in axs):
+        raise TypeError("All passed axes must belong to the same figure")
 
     cbax = _get_cbax(f)
 
@@ -178,8 +219,8 @@ def colorbar(
     if orientation == "vertical":
         func = _resize_colorbar_vert(
             cbax,
-            ax1,
-            ax2=ax2,
+            f,
+            axs,
             aspect=aspect,
             size=size,
             pad=pad,
@@ -189,8 +230,8 @@ def colorbar(
     else:
         func = _resize_colorbar_horz(
             cbax,
-            ax1,
-            ax2=ax2,
+            f,
+            axs,
             aspect=aspect,
             size=size,
             pad=pad,
@@ -219,8 +260,8 @@ def _get_cbax(f):
 
 def _resize_colorbar_vert(
     cbax,
-    ax1,
-    ax2=None,
+    f,
+    axs,
     aspect=None,
     size=None,
     pad=None,
@@ -263,15 +304,6 @@ def _resize_colorbar_vert(
 
     size, aspect, pad = _parse_size_aspect_pad(size, aspect, pad, "vertical")
 
-    f = ax1.get_figure()
-
-    # swap axes if ax1 is above ax2
-    if ax2 is not None:
-        posn1 = ax1.get_position()
-        posn2 = ax2.get_position()
-
-        ax1, ax2 = (ax1, ax2) if posn1.y0 < posn2.y0 else (ax2, ax1)
-
     if aspect is not None:
         anchor = (0, 0.5)
         cbax.set_anchor(anchor)
@@ -279,24 +311,24 @@ def _resize_colorbar_vert(
 
     # inner function is called by event handler
     def inner(event=None):
-        pos1 = ax1.get_position()
+
+        # from mpl.colorbar (but not using ax.get_position(original=True).frozen())
+        parents_bbox = mtransforms.Bbox.union([ax.get_position() for ax in axs])
 
         # determine total height of all axes
-        if ax2 is None:
-            full_height = pos1.height
-        else:
-            pos2 = ax2.get_position()
-            full_height = pos2.y0 - pos1.y0 + pos2.height
+        full_height = parents_bbox.height
 
-        pad_scaled = pad * pos1.width
+        pad_scaled = pad * parents_bbox.width
 
         # calculate position of cbax
-        left = pos1.x0 + pos1.width + pad_scaled
-        bottom = pos1.y0 + shift * full_height
+        left = parents_bbox.x1 + pad_scaled
+
+        bottom = parents_bbox.y0 + shift * full_height
+
         height = (1 - shrink) * full_height
 
         if aspect is None:
-            size_scaled = size * pos1.width
+            size_scaled = size * parents_bbox.width
             width = size_scaled
         else:
             figure_aspect = np.divide(*f.get_size_inches())
@@ -314,8 +346,8 @@ def _resize_colorbar_vert(
 
 def _resize_colorbar_horz(
     cbax,
-    ax1,
-    ax2=None,
+    f,
+    axs,
     aspect=None,
     size=None,
     pad=None,
@@ -357,15 +389,6 @@ def _resize_colorbar_horz(
 
     size, aspect, pad = _parse_size_aspect_pad(size, aspect, pad, "horizontal")
 
-    f = ax1.get_figure()
-
-    if ax2 is not None:
-        posn1 = ax1.get_position()
-        posn2 = ax2.get_position()
-
-        # swap axes if ax1 is right of ax2
-        ax1, ax2 = (ax1, ax2) if posn1.x0 < posn2.x0 else (ax2, ax1)
-
     if aspect is not None:
         aspect = 1 / aspect
         anchor = (0.5, 1.0)
@@ -373,27 +396,25 @@ def _resize_colorbar_horz(
         cbax.set_box_aspect(aspect)
 
     def inner(event=None):
-        posn1 = ax1.get_position()
 
-        if ax2 is None:
-            full_width = posn1.width
-        else:
-            posn2 = ax2.get_position()
-            full_width = posn2.x0 - posn1.x0 + posn2.width
+        # from mpl.colorbar (but not using ax.get_position(original=True).frozen())
+        parents_bbox = mtransforms.Bbox.union([ax.get_position() for ax in axs])
 
-        pad_scaled = pad * posn1.height
+        full_width = parents_bbox.width
 
-        width = full_width - shrink * full_width
+        pad_scaled = pad * parents_bbox.height
+
+        width = (1 - shrink) * full_width
 
         if aspect is None:
-            size_scaled = size * posn1.height
+            size_scaled = size * parents_bbox.height
             height = size_scaled
         else:
             figure_aspect = np.divide(*f.get_size_inches())
             height = width * (aspect * figure_aspect)
 
-        left = posn1.x0 + shift * full_width
-        bottom = posn1.y0 - (pad_scaled + height)
+        left = parents_bbox.x0 + shift * full_width
+        bottom = parents_bbox.y0 - (pad_scaled + height)
 
         pos = [left, bottom, width, height]
 
