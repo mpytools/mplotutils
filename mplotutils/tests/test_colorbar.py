@@ -155,15 +155,6 @@ def test_colorbar_deprecate_ax1():
         with pytest.warns(match="`ax1` has been deprecated in favor of `ax`"):
             mpu.colorbar(h, ax1=ax)
 
-    # create_figure_subplots
-
-    # # with pytest.warns(match=""):
-    # mpu.colorbar(h, ax, ax)
-
-    # mpu.colorbar(h, ax, ax2=ax, orientation=orientation)
-
-    # mpu.colorbar(h, ax1=ax, ax2=ax, orientation=orientation)
-
 
 def test_colorbar_different_figures():
     with figure_context() as f1, figure_context() as f2:
@@ -219,6 +210,29 @@ def colorbar_one_ax_horizontal(**kwargs):
     h, ax = create_figure_subplots(orientation="horizontal")
     cbar = mpu.colorbar(h, ax, orientation="horizontal", **kwargs)
     return cbar
+
+
+def test_colorbar_2d_array():
+    # ensure passing a 2x2 numpy array of axes works
+
+    with figure_context():
+        h, axs = create_figure_subplots(2, 2)
+
+        cbar = mpu.colorbar(h, axs, size=0.2, pad=0)
+
+        expected = [0.8, 0, 0.2 * 0.8, 1.0]
+        assert_position(cbar, expected)
+
+    with figure_context():
+        h, axs = create_figure_subplots(2, 2, orientation="horizontal")
+
+        cbar = mpu.colorbar(
+            h, [axs[0], axs[1]], size=0.2, pad=0, orientation="horizontal"
+        )
+
+        height = 0.2 * 0.8
+        expected = [0.0, 0.2 - height, 1.0, height]
+        assert_position(cbar, expected)
 
 
 def test_colorbar_vertical_aspect():

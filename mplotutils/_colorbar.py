@@ -193,8 +193,7 @@ def colorbar(
     """
 
     ax = _deprecate_ax1_ax2(ax, ax2, kwargs.pop("ax1", None))
-
-    axs = [ax] if np.ndim(ax) == 0 else ax
+    axs = np.asarray(ax).flatten()
 
     if orientation not in ("vertical", "horizontal"):
         raise ValueError("orientation must be 'vertical' or 'horizontal'")
