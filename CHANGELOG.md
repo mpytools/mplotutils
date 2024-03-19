@@ -1,5 +1,26 @@
 # Changelog
 
+
+## v0.5.0 (unreleased)
+
+### Breaking changes
+
+- The `ax1` and `ax2` arguments of `mpu.colorbar` have been renamed and combined into `ax` ([#107](https://github.com/mathause/mplotutils/pull/107))
+  To update
+
+   ```diff
+   - mpu.colorbar(h, axs[0], axs[1])
+   + mpu.colorbar(h, [axs[0], axs[1]])
+   ```
+   or
+   ```diff
+   - mpu.colorbar(h, axs[0], axs[1])
+   + mpu.colorbar(h, axs)
+   ```
+- When passing `size` to `mpu.colorbar` it now uses the height/ width of _all_ passed axes to scale the colorbar. This is consistent with `plt.colorbar` but may change the height/ width the colorbar compared to the previous version ([#107](https://github.com/mathause/mplotutils/pull/107)).
+
+
+
 ## v0.4.0 (23.02.2024)
 
 Version 0.4.0 simplifies the way figures with a `mpu.colorbar` have to be saved  and
