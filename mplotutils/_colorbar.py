@@ -83,7 +83,7 @@ def colorbar(
         Width of the colorbar as fraction of all parent axes width (vertical) or
         height (horizontal). Mutually exclusive with `aspect`.
     pad : float, default: None.
-        Distance of the colorbar to the axes in Figure coordinates.
+        Distance between axes and colorbar. In fraction of parent axes.
         Default: 0.05 (vertical) or 0.15 (horizontal).
     shift : 'symmetric' or float in 0..1, default: 'symmetric'
         Fraction of the total height that the colorbar is shifted up/ right. See Note.

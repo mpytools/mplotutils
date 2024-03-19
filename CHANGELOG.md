@@ -18,7 +18,7 @@
    + mpu.colorbar(h, axs)
    ```
 - When passing `size` to `mpu.colorbar` it now uses the height/ width of _all_ passed axes to scale the colorbar. This is consistent with `plt.colorbar` but may lead to differences compared to the previous version ([#107](https://github.com/mathause/mplotutils/pull/107)).
-
+- Similarly for `pad`, which is also scaled by the height/ width of _all_ passed axes. This is consistent with `plt.colorbar` but may change the padding of the colorbar compared to the previous version ([#107](https://github.com/mathause/mplotutils/pull/107)).
 
 
 ## v0.4.0 (23.02.2024)
