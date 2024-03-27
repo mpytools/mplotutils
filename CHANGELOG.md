@@ -1,7 +1,9 @@
 # Changelog
 
 
-## v0.5.0 (unreleased)
+## v0.5.0 (27.03.2024)
+
+Version v0.5.0 aligns passing multiple axes to `colorbar` with matplotlib.
 
 ### Breaking changes
 
