@@ -3,7 +3,7 @@ from contextlib import contextmanager
 import matplotlib
 import pytest
 
-from . import figure_context
+from . import figure_context, restore_backend, subplots_context
 
 
 def get_renderer(f):
@@ -18,19 +18,6 @@ def get_renderer(f):
     raise AttributeError(
         f"Could not find a renderer for the '{backend}' backend. Please raise an issue"
     )
-
-
-@contextmanager
-def restore_backend():
-
-    backend = matplotlib.get_backend()
-
-    try:
-        yield
-    except Exception:
-        pass
-
-    matplotlib.use(backend)
 
 
 @pytest.mark.parametrize("backend", matplotlib.rcsetup.all_backends)

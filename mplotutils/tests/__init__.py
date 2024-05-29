@@ -21,3 +21,15 @@ def subplots_context(*args, **kwargs):
         yield fig, axs
     finally:
         plt.close(fig)
+
+
+@contextlib.contextmanager
+def restore_backend():
+
+    backend = plt.get_backend()
+
+    try:
+        yield
+    except Exception:
+        pass
+    plt.switch_backend(backend)
