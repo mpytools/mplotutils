@@ -28,7 +28,9 @@ def restore_backend():
     try:
         yield
     except Exception:
-        matplotlib.use(backend)
+        pass
+
+    matplotlib.use(backend)
 
 
 @pytest.mark.parametrize("backend", matplotlib.rcsetup.all_backends)
