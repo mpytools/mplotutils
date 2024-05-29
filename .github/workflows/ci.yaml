@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   test:
-    name: py${{ matrix.python-version }}
+    name: py${{ matrix.python-version }} - ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     defaults:
       run:
