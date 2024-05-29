@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu-latest"]
+        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
         # Bookend python versions
         python-version: ["3.9", "3.11", "3.12"]
     steps:
@@ -52,7 +52,7 @@ jobs:
           python -c "import mplotutils"
       - name: Run tests
         timeout-minutes: 5
-        run: python -u -m pytest
+        run: python -u -m pytest -vv
           --cov=mplotutils
           --cov-report=xml
           --junitxml=test-results/${{ runner.os }}-${{ matrix.python-version }}.xml
