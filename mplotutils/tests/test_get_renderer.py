@@ -1,6 +1,5 @@
-from contextlib import contextmanager
-
 import matplotlib
+import numpy as np
 import pytest
 
 from . import figure_context, restore_backend, subplots_context
@@ -31,3 +30,16 @@ def test_get_renderer(backend):
 
         with figure_context() as f:
             get_renderer(f)
+
+
+def test_set_size():
+
+    with subplots_context() as (f, ax):
+
+        f.set_size_inches(17, 6)
+        np.testing.assert_allclose(f.get_size_inches(), (17, 6))
+
+    with subplots_context() as (f, ax):
+
+        f.set_size_inches(17 / 2.54, 6 / 2.54)
+        np.testing.assert_allclose(f.get_size_inches() * 2.54, (17, 6))
