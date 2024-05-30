@@ -7,13 +7,6 @@ from mplotutils import set_map_layout
 from . import figure_context, subplots_context
 
 
-def test_set_map_layout_default_width():
-    with subplots_context() as (f, ax):
-        set_map_layout(ax)
-
-        assert f.get_size_inches()[0] * 2.54 == 17.0
-
-
 def get_rtol(f):
     # macosx is only exact up to 1 / dpi
 
@@ -22,6 +15,14 @@ def get_rtol(f):
     else:
         rtol = 1 / f.get_dpi()
     return rtol
+
+
+def test_set_map_layout_default_width():
+    with subplots_context() as (f, ax):
+        set_map_layout(ax)
+
+        width = f.get_size_inches()[0] * 2.54
+        np.testing.assert_allclose(width, 17.0, rtol=get_rtol(f))
 
 
 @pytest.mark.parametrize(
@@ -224,7 +225,7 @@ def test_set_size_inches_macosx(dpi, size):
 
         size = np.array(size)
 
-        f.set_size_inches(size)
+        f.set_size_inches(size / 2.54)
 
         result = f.get_size_inches() * 2.54
 
