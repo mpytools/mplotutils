@@ -213,7 +213,7 @@ def test_set_map_layout_cartopy_2_2():
         result = f.get_size_inches() * 2.54
         expected = (17, 8.5)
 
-        np.testing.assert_allclose(result, expected)
+        np.testing.assert_allclose(result, expected, rtol=get_rtol(f))
 
 
 @pytest.mark.skipif(plt.get_backend().lower() != "macosx", reason="only for macosx")
