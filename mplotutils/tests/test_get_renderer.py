@@ -42,8 +42,30 @@ def test_set_size():
     with subplots_context() as (f, ax):
 
         f.set_size_inches(17 / 2.54, 6 / 2.54)
+
         print(f.get_size_inches().__repr__())
         print(type(f.get_size_inches()))
+        print(f"{f.canvas.device_pixel_ratio=}")
+        print(f"{f.dpi=}")
+
+        scale = f.dpi / f.canvas.device_pixel_ratio
+
+        print(f"{scale=}")
+
+        import inspect
+
+        print()
+        print(inspect.getsource(f.set_size_inches))
+        print()
+
         np.testing.assert_allclose(f.get_size_inches() * 2.54, (17, 6))
 
-        raise ValueError()
+        f.set_dpi(1000)
+
+        f.set_size_inches(17 / 2.54, 6 / 2.54)
+        np.testing.assert_allclose(f.get_size_inches() * 2.54, (17, 6))
+
+        f.set_dpi(10)
+
+        f.set_size_inches(17 / 2.54, 6 / 2.54)
+        np.testing.assert_allclose(f.get_size_inches() * 2.54, (17, 6))
