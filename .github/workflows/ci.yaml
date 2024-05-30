@@ -66,8 +66,12 @@ jobs:
       run: |
         python -m pip install --no-deps -e .
 
+    - name: Unset CI env var
+      run: unset CI
+
     - name: Run tests
       run: python -m pytest
+       -ra -v
        --cov=mplotutils
        --cov-report=xml
 
