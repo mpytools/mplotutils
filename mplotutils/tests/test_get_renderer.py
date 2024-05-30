@@ -41,6 +41,7 @@ def test_set_size():
 
     with subplots_context() as (f, ax):
 
+        f.set_dpi(1000)
         f.set_size_inches(17 / 2.54, 6 / 2.54)
 
         print(f.get_size_inches().__repr__())
@@ -59,8 +60,6 @@ def test_set_size():
         print()
 
         np.testing.assert_allclose(f.get_size_inches() * 2.54, (17, 6))
-
-        f.set_dpi(1000)
 
         f.set_size_inches(17 / 2.54, 6 / 2.54)
         np.testing.assert_allclose(f.get_size_inches() * 2.54, (17, 6))
