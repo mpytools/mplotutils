@@ -11,6 +11,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  FORCE_COLOR: 3
+
 jobs:
   test:
     name: py${{ matrix.python-version }} ${{ matrix.os }} ${{ matrix.env }}
@@ -65,7 +68,7 @@ jobs:
 
     - name: Run tests
       run: python -u -m pytest
-       -r a -v
+       -r a
        --cov=mplotutils
        --cov-report=xml
 
