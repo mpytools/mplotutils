@@ -43,7 +43,7 @@ jobs:
       run: |
 
         if [[ "${{ matrix.env }}" == "" ]]; then
-          echo "CONDA_ENV_FILE=environment.yml" >> $GITHUB_ENV
+          echo "CONDA_ENV_FILE=ci/requirements/environment.yml" >> $GITHUB_ENV
         else
           echo "CONDA_ENV_FILE=ci/requirements/${{ matrix.env }}.yml" >> $GITHUB_ENV
         fi
