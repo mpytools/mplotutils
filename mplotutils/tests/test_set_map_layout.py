@@ -229,5 +229,5 @@ def test_set_size_inches_macosx(dpi, size):
 
         result = f.get_size_inches() * 2.54
 
-        expected_size = np.floor(size * dpi) / dpi
+        expected_size = np.floor(size / 2.54 * dpi) / dpi * 2.54
         np.testing.assert_allclose(result, expected_size)
