@@ -67,8 +67,8 @@ jobs:
         python -m pip install --no-deps -e .
 
     - name: Run tests
-      run: python -u -m pytest
-       -r a
+      run: python -m pytest
+       -r a -v
        --cov=mplotutils
        --cov-report=xml
 
