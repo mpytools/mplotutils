@@ -12,4 +12,3 @@ dependencies:
 # for testing
   - pytest
   - pytest-cov
-  - pytest-env

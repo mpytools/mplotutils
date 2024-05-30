@@ -1,16 +1,28 @@
+import matplotlib.pyplot as plt
 import numpy as np
 import pytest
 
 from mplotutils import set_map_layout
 
-from . import subplots_context
+from . import figure_context, subplots_context
+
+
+def get_rtol(f):
+    # macosx is only exact up to 1 / dpi
+
+    if plt.get_backend().lower() != "macosx":
+        rtol = 1e-07
+    else:
+        rtol = 1 / f.get_dpi()
+    return rtol
 
 
 def test_set_map_layout_default_width():
     with subplots_context() as (f, ax):
         set_map_layout(ax)
 
-        assert f.get_size_inches()[0] * 2.54 == 17.0
+        width = f.get_size_inches()[0] * 2.54
+        np.testing.assert_allclose(width, 17.0, rtol=get_rtol(f))
 
 
 @pytest.mark.parametrize(
@@ -25,7 +37,7 @@ def test_set_map_layout_no_borders(nrow_ncol):
         set_map_layout(ax, 10, **nrow_ncol)
 
         width, height = f.get_size_inches() * 2.54
-        assert np.allclose((width, height), (10, 10))
+        np.testing.assert_allclose((width, height), (10, 10), rtol=get_rtol(f))
 
     # width:height = 2:1
     with subplots_context() as (f, ax):
@@ -35,7 +47,7 @@ def test_set_map_layout_no_borders(nrow_ncol):
         set_map_layout(ax, 10, **nrow_ncol)
 
         width, height = f.get_size_inches() * 2.54
-        assert np.allclose((width, height), (10, 5))
+        np.testing.assert_allclose((width, height), (10, 5), rtol=get_rtol(f))
 
     # width:height = 1:2
     with subplots_context() as (f, ax):
@@ -45,7 +57,7 @@ def test_set_map_layout_no_borders(nrow_ncol):
         set_map_layout(ax, 10, **nrow_ncol)
 
         width, height = f.get_size_inches() * 2.54
-        assert np.allclose((width, height), (10, 20))
+        np.testing.assert_allclose((width, height), (10, 20), rtol=get_rtol(f))
 
 
 @pytest.mark.parametrize("ax_to_arr", (lambda ax: [ax], lambda ax: np.array(ax)))
@@ -58,7 +70,7 @@ def test_set_map_layout_ax_arr(ax_to_arr):
         set_map_layout(ax_to_arr(ax), 10)
 
         width, height = f.get_size_inches() * 2.54
-        assert np.allclose((width, height), (10, 10))
+        np.testing.assert_allclose((width, height), (10, 10), rtol=get_rtol(f))
 
 
 def test_set_map_layout_vert_borders():
@@ -72,7 +84,7 @@ def test_set_map_layout_vert_borders():
         set_map_layout(ax, 10)
 
         width, height = f.get_size_inches() * 2.54
-        assert np.allclose((width, height), (10, 20))
+        np.testing.assert_allclose((width, height), (10, 20), rtol=get_rtol(f))
 
     # width:height = 1:1
     with subplots_context() as (f, ax):
@@ -84,7 +96,7 @@ def test_set_map_layout_vert_borders():
         set_map_layout(ax, 10)
 
         width, height = f.get_size_inches() * 2.54
-        assert np.allclose((width, height), (10, 12.5))
+        np.testing.assert_allclose((width, height), (10, 12.5), rtol=get_rtol(f))
 
     # width:height = 1:1
     with subplots_context() as (f, ax):
@@ -96,7 +108,7 @@ def test_set_map_layout_vert_borders():
         set_map_layout(ax, 10)
 
         width, height = f.get_size_inches() * 2.54
-        assert np.allclose((width, height), (10, 40))
+        np.testing.assert_allclose((width, height), (10, 40), rtol=get_rtol(f))
 
 
 def test_set_map_layout_horz_borders():
@@ -110,7 +122,7 @@ def test_set_map_layout_horz_borders():
         set_map_layout(ax, 10)
 
         width, height = f.get_size_inches() * 2.54
-        assert np.allclose((width, height), (10, 5))
+        np.testing.assert_allclose((width, height), (10, 5), rtol=get_rtol(f))
 
     # width:height = 1:1
     with subplots_context() as (f, ax):
@@ -122,7 +134,7 @@ def test_set_map_layout_horz_borders():
         set_map_layout(ax, 10)
 
         width, height = f.get_size_inches() * 2.54
-        assert np.allclose((width, height), (10, 5))
+        np.testing.assert_allclose((width, height), (10, 5), rtol=get_rtol(f))
 
 
 def test_set_map_layout_two_axes_vert():
@@ -137,7 +149,7 @@ def test_set_map_layout_two_axes_vert():
         set_map_layout(ax, 10)
 
         width, height = f.get_size_inches() * 2.54
-        assert np.allclose((width, height), (10, 20))
+        np.testing.assert_allclose((width, height), (10, 20), rtol=get_rtol(f))
 
     # width:height = 1:1
     with subplots_context(2, 1) as (f, axs):
@@ -150,7 +162,7 @@ def test_set_map_layout_two_axes_vert():
         set_map_layout(ax, 10)
 
         width, height = f.get_size_inches() * 2.54
-        assert np.allclose((width, height), (10, 30))
+        np.testing.assert_allclose((width, height), (10, 30), rtol=get_rtol(f))
 
 
 def test_set_map_layout_two_axes_horz():
@@ -165,7 +177,7 @@ def test_set_map_layout_two_axes_horz():
         set_map_layout(ax, 10)
 
         width, height = f.get_size_inches() * 2.54
-        assert np.allclose((width, height), (10, 5))
+        np.testing.assert_allclose((width, height), (10, 5), rtol=get_rtol(f))
 
     # width:height = 1:1
     with subplots_context(1, 2) as (f, axs):
@@ -178,7 +190,7 @@ def test_set_map_layout_two_axes_horz():
         set_map_layout(ax, 10)
 
         width, height = f.get_size_inches() * 2.54
-        assert np.allclose((width, height), (10, 10 / 3))
+        np.testing.assert_allclose((width, height), (10, 10 / 3), rtol=get_rtol(f))
 
 
 def test_set_map_layout_nrow_ncol_only_one_raises():
@@ -201,4 +213,23 @@ def test_set_map_layout_cartopy_2_2():
         result = f.get_size_inches() * 2.54
         expected = (17, 8.5)
 
-        np.testing.assert_allclose(result, expected)
+        np.testing.assert_allclose(result, expected, rtol=get_rtol(f))
+
+
+@pytest.mark.skipif(plt.get_backend().lower() != "macosx", reason="only for macosx")
+@pytest.mark.parametrize("dpi", (100, 1000))
+@pytest.mark.parametrize("size", ([17, 6], [10, 5]))
+def test_set_size_inches_macosx(dpi, size):
+
+    with figure_context() as f:
+
+        f.set_dpi(dpi)
+
+        size = np.array(size)
+
+        f.set_size_inches(size / 2.54)
+
+        result = f.get_size_inches() * 2.54
+
+        expected_size = np.floor(size / 2.54 * dpi) / dpi * 2.54
+        np.testing.assert_allclose(result, expected_size)
