@@ -230,3 +230,14 @@ def test_set_size_inches_macosx(dpi, size):
 
         expected_size = np.floor(size / 2.54 * dpi) / dpi
         np.testing.assert_allclose(result, expected_size)
+
+
+# test_sample.py
+import pytest
+
+
+def test_answer(pytestconfig):
+    for item_name in dir(pytestconfig.option):
+        if not item_name.startswith("_"):
+            print(f"{item_name}: {getattr(pytestconfig.option,item_name)}")
+    assert 0  # to see what was printed
