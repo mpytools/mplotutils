@@ -223,6 +223,8 @@ def test_set_size_inches_macosx(dpi, size):
 
     with figure_context() as f:
 
+        f.set_dpi(dpi)
+
         size = np.array(size)
 
         f.set_size_inches(size / 2.54)
