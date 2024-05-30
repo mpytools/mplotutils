@@ -30,6 +30,5 @@ def restore_backend():
 
     try:
         yield
-    except Exception:
-        pass
-    plt.switch_backend(backend)
+    finally:
+        plt.switch_backend(backend)
