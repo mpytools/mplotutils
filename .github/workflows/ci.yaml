@@ -31,9 +31,6 @@ jobs:
           - env: ""
             python-version: "3.12"
             os: "macos-latest"
-          - env: ""
-            python-version: "3.12"
-            os: "windows-latest"
     defaults:
       run:
         shell: bash -l {0}
