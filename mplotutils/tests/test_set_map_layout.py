@@ -17,7 +17,7 @@ def test_set_map_layout_default_width():
 def get_rtol(f):
     # macosx is only exact up to 1 / dpi
 
-    if plt.get_backend() != "macosx":
+    if plt.get_backend().lower() != "macosx":
         rtol = 1e-07
     else:
         rtol = 1 / f.get_dpi()
@@ -215,7 +215,7 @@ def test_set_map_layout_cartopy_2_2():
         np.testing.assert_allclose(result, expected)
 
 
-@pytest.mark.skipif(plt.get_backend() != "macosx", reason="only for macosx")
+@pytest.mark.skipif(plt.get_backend().lower() != "macosx", reason="only for macosx")
 @pytest.mark.parametrize("dpi", (100, 1000))
 @pytest.mark.parametrize("size", ([17, 6], [10, 5]))
 def test_set_size_inches_macosx(dpi, size):
