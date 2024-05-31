@@ -8,6 +8,7 @@ from ._savefig import autodraw
 from .cartopy_utils import *
 from .colormaps import *
 from .map_layout import set_map_layout
+from .mpl import _get_renderer
 from .xrcompat import *
 
 autodraw(True)

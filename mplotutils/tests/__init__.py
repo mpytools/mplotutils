@@ -1,6 +1,8 @@
 import contextlib
 
+import matplotlib
 import matplotlib.pyplot as plt
+import pytest
 
 
 @contextlib.contextmanager
@@ -24,11 +26,27 @@ def subplots_context(*args, **kwargs):
 
 
 @contextlib.contextmanager
-def restore_backend():
+def restore_backend(backend):
 
-    backend = plt.get_backend()
+    current_backend = plt.get_backend()
 
     try:
+        _set_backend(backend)
         yield
     finally:
-        plt.switch_backend(backend)
+        plt.switch_backend(current_backend)
+
+
+def _set_backend(backend):
+
+    # WebAgg requires tornado, but this is only checked at runtime
+    if backend == "WebAgg":
+        try:
+            import tornado  # noqa: F401
+        except ImportError:
+            pytest.skip(backend)
+
+    try:
+        matplotlib.use(backend)
+    except ImportError:
+        pytest.skip(backend)
