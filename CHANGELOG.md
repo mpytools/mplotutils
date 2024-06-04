@@ -2,7 +2,9 @@
 
 ## v0.6.0 (unreleased)
 
-- The minimum versions of some dependencies were changed ([#88](https://github.com/mathause/mplotutils/pull/88)).
+### Breaking changes
+
+- The minimum versions of some dependencies were changed ([#117](https://github.com/mathause/mplotutils/pull/117)).
 
   | Package     | Old  | New     |
   | ----------- | ---- | ------- |
