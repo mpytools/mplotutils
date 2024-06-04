@@ -3,6 +3,6 @@
 # https://help.github.com/en/github/visualizing-repository-data-with-graphs/listing-the-packages-that-a-repository-depends-on
 
 cartopy >= 0.21
-matplotlib >= 3.6
+matplotlib >= 3.7
 numpy >= 1.22
 xarray >= 2022.12
