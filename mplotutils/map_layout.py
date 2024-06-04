@@ -1,19 +1,23 @@
+import warnings
+
 import matplotlib.pyplot as plt
 import numpy as np
+from mpl_toolkits.axes_grid1 import AxesGrid
 
 from mplotutils._deprecate import _deprecate_positional_args
+from mplotutils.mpl import _get_renderer
 
 
 @_deprecate_positional_args("0.3")
-def set_map_layout(axes, width=17.0, *, nrow=None, ncol=None):
+def set_map_layout(obj=None, width=17.0, *, nrow=None, ncol=None, axes=None):
     """set figure height, given width, taking axes' aspect ratio into account
 
     Needs to be called after all plotting is done.
 
     Parameters
     ----------
-    axes : (Geo)Axes | iterable of (Geo)Axes
-        Array with all axes of the figure.
+    obj : (Geo)Axes | iterable of (Geo)Axes | AxesGrid
+        Array with all axes of the figure or mpl_toolkits.axes_grid1 AxesGrid.
     width : float, default: 17
         Width of the full figure in cm.
     nrow : integer, default: None
@@ -27,6 +31,26 @@ def set_map_layout(axes, width=17.0, *, nrow=None, ncol=None):
     -----
     Only works if all the axes have the same aspect ratio.
     """
+
+    if axes is not None and obj is not None:
+        raise TypeError("Cannot pass 'obj' and 'axes'")
+
+    if axes is not None:
+        warnings.warn("The 'axes' keyword has been renamed to 'obj'", FutureWarning)
+        obj = axes
+
+    if obj is None:
+        raise TypeError(
+            "set_map_layout() missing 1 required positional argument: 'obj'"
+        )
+
+    if isinstance(obj, AxesGrid):
+        _set_map_layout_axes_grid(obj, width, nrow, ncol)
+    else:
+        _set_map_layout_axes(obj, width, nrow, ncol)
+
+
+def _set_map_layout_axes(axes, width, nrow, ncol):
 
     if (nrow is None and ncol is not None) or (nrow is not None and ncol is None):
         raise ValueError("Must set none or both of 'nrow' and 'ncol'")
@@ -69,3 +93,51 @@ def set_map_layout(axes, width=17.0, *, nrow=None, ncol=None):
 
     f.set_figwidth(width / 2.54)
     f.set_figheight(height / 2.54)
+
+
+def _set_map_layout_axes_grid(axgr, width, nrow, ncol):
+
+    if nrow is not None or ncol is not None:
+        raise TypeError("Cannot pass 'nrow' or 'ncol' for and 'AxesGrid'")
+
+        # assumes the first of the axes is representative for all
+    ax = axgr.axes_all[0]
+
+    f = ax.get_figure()
+
+    # getting the correct data ratio of geoaxes requires draw
+    f.canvas.draw()
+
+    bottom = f.subplotpars.bottom
+    top = f.subplotpars.top
+    left = f.subplotpars.left
+    right = f.subplotpars.right
+
+    width_fraction = right - left
+    height_fraction = top - bottom
+
+    inner_width = width_fraction * width
+
+    renderer = _get_renderer(f)
+
+    # divider get_*_sizes contains the relative and absolute sizes of all plot elements
+    # (subplots, colorbars, pad & colorbar pad)
+
+    divider = axgr.get_divider()
+
+    vertical_sizes = divider.get_vertical_sizes(renderer)
+    vs_rel = vertical_sizes[:, 0].sum()
+    vs_abs = vertical_sizes[:, 1].sum() * 2.54
+
+    horizontal_sizes = divider.get_horizontal_sizes(renderer)
+    hs_rel = horizontal_sizes[:, 0].sum()
+    hs_abs = horizontal_sizes[:, 1].sum() * 2.54
+
+    inner_height = (inner_width - hs_abs) / hs_rel * vs_rel + vs_abs
+
+    if inner_height <= 0:
+        raise ValueError("Not enough space on figure")
+
+    height = inner_height / height_fraction
+
+    f.set_size_inches(width / 2.54, height / 2.54)

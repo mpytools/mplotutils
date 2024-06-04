@@ -50,3 +50,13 @@ def _set_backend(backend):
         matplotlib.use(backend)
     except ImportError:
         pytest.skip(backend)
+
+
+def get_rtol(f):
+    # macosx is only exact up to 1 / dpi
+
+    if plt.get_backend().lower() != "macosx":
+        rtol = 1e-07
+    else:
+        rtol = 1 / f.get_dpi()
+    return rtol

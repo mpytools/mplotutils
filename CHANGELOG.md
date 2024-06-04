@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.6.0 (unreleased)
+
+### Enhancements
+
+- Enable passing `AxesGrid` (from `mpl_toolkits.axes_grid1`) to `set_map_layout`
+
 
 ## v0.5.0 (27.03.2024)
 

@@ -4,17 +4,25 @@ import pytest
 
 from mplotutils import set_map_layout
 
-from . import figure_context, subplots_context
+from . import figure_context, get_rtol, subplots_context
 
 
-def get_rtol(f):
-    # macosx is only exact up to 1 / dpi
+def test_set_map_layout_deprecated_kwarg():
 
-    if plt.get_backend().lower() != "macosx":
-        rtol = 1e-07
-    else:
-        rtol = 1 / f.get_dpi()
-    return rtol
+    with subplots_context() as (__, ax):
+        with pytest.warns(
+            FutureWarning, match="The 'axes' keyword has been renamed to 'obj'"
+        ):
+            set_map_layout(axes=ax)
+
+    with pytest.raises(
+        TypeError,
+        match=r"set_map_layout\(\) missing 1 required positional argument: 'obj'",
+    ):
+        set_map_layout()
+
+    with pytest.raises(TypeError, match="Cannot pass 'obj' and 'axes'"):
+        set_map_layout(object, axes=object)
 
 
 def test_set_map_layout_default_width():
@@ -195,10 +203,10 @@ def test_set_map_layout_two_axes_horz():
 
 def test_set_map_layout_nrow_ncol_only_one_raises():
     with pytest.raises(ValueError, match="Must set none or both of 'nrow' and 'ncol'"):
-        set_map_layout(None, width=17.0, nrow=1, ncol=None)
+        set_map_layout(object, width=17.0, nrow=1, ncol=None)
 
     with pytest.raises(ValueError, match="Must set none or both of 'nrow' and 'ncol'"):
-        set_map_layout(None, width=17.0, nrow=None, ncol=1)
+        set_map_layout(object, width=17.0, nrow=None, ncol=1)
 
 
 def test_set_map_layout_cartopy_2_2():
