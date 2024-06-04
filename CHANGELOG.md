@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.6.0 (unreleased)
+
+- The minimum versions of some dependencies were changed ([#88](https://github.com/mathause/mplotutils/pull/88)).
+
+  | Package     | Old  | New     |
+  | ----------- | ---- | ------- |
+  | matplotlib* | 3.6  | 3.7     |
+
+
 
 ## v0.5.0 (27.03.2024)
 

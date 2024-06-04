@@ -4,7 +4,7 @@
 
 - Python (3.9 or later)
 - [cartopy](http://scitools.org.uk/cartopy/) (0.21 or later)
-- [matplotlib](http://matplotlib.org/) (3.6 or later)
+- [matplotlib](http://matplotlib.org/) (3.7 or later)
 - [numpy](http://www.numpy.org/) (1.22 or later)
 
 ## Optional dependencies
