@@ -4,7 +4,7 @@
 
 ### Breaking changes
 
-- The minimum versions of some dependencies were changed ([#117](https://github.com/mathause/mplotutils/pull/117)).
+- The minimum versions of some dependencies were changed ([#117](https://github.com/mathause/mplotutils/pull/117) and [#118](https://github.com/mathause/mplotutils/pull/118)).
 
   | Package     | Old  | New     |
   | ----------- | ---- | ------- |
