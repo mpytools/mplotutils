@@ -12,7 +12,7 @@
 
 ### Enhancements
 
-- Enable passing `AxesGrid` (from `mpl_toolkits.axes_grid1`) to `set_map_layout`.
+- Enable passing `AxesGrid` (from `mpl_toolkits.axes_grid1`) to `set_map_layout` ([#116](https://github.com/mathause/mplotutils/pull/116)).
 
 ## v0.5.0 (27.03.2024)
 
