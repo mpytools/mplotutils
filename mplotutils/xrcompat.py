@@ -45,11 +45,11 @@ def _infer_interval_breaks(coord, axis=0):
     if not _is_monotonic(coord, axis=axis):
         raise ValueError(
             "The input coordinate is not sorted in increasing "
-            "order along axis %d. This can lead to unexpected "
+            f"order along axis {axis}. This can lead to unexpected "
             "results. Consider calling the `sortby` method on "
             "the input DataArray. To plot data with categorical "
             "axes, consider using the `heatmap` function from "
-            "the `seaborn` statistical plotting library." % axis
+            "the `seaborn` statistical plotting library."
         )
 
     coord = np.asarray(coord)
@@ -67,11 +67,11 @@ def _infer_interval_breaks(coord, axis=0):
 def _is_monotonic(coord, axis=0):
     """
     >>> _is_monotonic(np.array([0, 1, 2]))
-    True
+    np.True_
     >>> _is_monotonic(np.array([2, 1, 0]))
-    True
+    np.True_
     >>> _is_monotonic(np.array([0, 2, 1]))
-    False
+    np.False_
     """
     coord = np.asarray(coord)
 
