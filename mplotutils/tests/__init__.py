@@ -40,7 +40,7 @@ def restore_backend(backend):
 def _set_backend(backend):
 
     # WebAgg requires tornado, but this is only checked at runtime
-    if backend == "WebAgg":
+    if backend.lower() == "webagg":
         try:
             import tornado  # noqa: F401
         except ImportError:
