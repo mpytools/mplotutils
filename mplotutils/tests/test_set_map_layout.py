@@ -25,6 +25,29 @@ def test_set_map_layout_deprecated_kwarg():
         set_map_layout(object, axes=object)
 
 
+def test_map_layout_not_axes_error():
+
+    with figure_context() as f:
+        with pytest.raises(TypeError, match="Expected axes or an array of axes"):
+            set_map_layout(f)
+
+    with pytest.raises(TypeError, match="Expected axes or an array of axes"):
+        set_map_layout(object)
+
+
+def test_map_layout_subfigures_error():
+
+    with figure_context() as f:
+        sf = f.subfigures(1, 1)
+        axs = sf.subplots(1, 2)
+
+        with pytest.raises(RuntimeError, match="matplotlib SubFigure not supported"):
+            set_map_layout(f.axes)
+
+        with pytest.raises(RuntimeError, match="matplotlib SubFigure not supported"):
+            set_map_layout(axs)
+
+
 def test_set_map_layout_default_width():
     with subplots_context() as (f, ax):
         set_map_layout(ax)

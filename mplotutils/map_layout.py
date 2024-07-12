@@ -1,5 +1,6 @@
 import warnings
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.axes_grid1 import AxesGrid
@@ -50,19 +51,22 @@ def set_map_layout(obj=None, width=17.0, *, nrow=None, ncol=None, axes=None):
         _set_map_layout_axes(obj, width, nrow, ncol)
 
 
-def _set_map_layout_axes(axes, width, nrow, ncol):
+def _set_map_layout_axes(axs, width, nrow, ncol):
 
     if (nrow is None and ncol is not None) or (nrow is not None and ncol is None):
         raise ValueError("Must set none or both of 'nrow' and 'ncol'")
 
-    if isinstance(axes, plt.Axes):
-        ax = axes
-    else:
-        # assumes the first of the axes is representative for all
-        ax = np.asarray(axes).flat[0]
+    # assumes the first of the axes is representative for all
+    ax = np.asarray(axs).flat[0]
+
+    if not isinstance(ax, plt.Axes):
+        raise TypeError(f"Expected axes or an array of axes, got {type(ax)}")
 
     # read figure data
     f = ax.get_figure()
+
+    if isinstance(f, mpl.figure.SubFigure) or f.subfigs:
+        raise RuntimeError("matplotlib SubFigure not supported")
 
     # getting the correct data ratio of geoaxes requires draw
     f.canvas.draw()
