@@ -13,6 +13,8 @@
 ### Enhancements
 
 - Enable passing `AxesGrid` (from `mpl_toolkits.axes_grid1`) to `set_map_layout` ([#116](https://github.com/mathause/mplotutils/pull/116)).
+- Raise more informative error when a wrong type is passed to `set_map_layout` ([#121](https://github.com/mathause/mplotutils/pull/121)).
+- `set_map_layout` now raises an explicit error when the figure contains SubFigure ([#121](https://github.com/mathause/mplotutils/pull/121)).
 
 ## v0.5.0 (27.03.2024)
 
