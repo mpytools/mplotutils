@@ -49,7 +49,7 @@ jobs:
         fi
 
     - name: Create conda environment
-      uses: mamba-org/setup-micromamba@v1
+      uses: mamba-org/setup-micromamba@v2
       with:
         environment-name: mplotutils-tests
         cache-downloads: true
