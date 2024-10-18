@@ -57,7 +57,7 @@ def hatch(da, hatch, *, ax=None, label=None, linewidth=None, color="0.1"):
     )
 
 
-def hatch_regional_map(
+def hatch_map(
     da, hatch, *, ax=None, label=None, linewidth=None, color="0.1", transform=None
 ):
     """add hatch pattern to a regional cartopy map
@@ -108,7 +108,7 @@ def hatch_regional_map(
     )
 
 
-def hatch_global_map(
+def hatch_map_global(
     da, hatch, *, ax=None, label=None, linewidth=None, color="0.1", transform=None
 ):
     """add hatch pattern to a global cartopy map - adds a cyclic data point

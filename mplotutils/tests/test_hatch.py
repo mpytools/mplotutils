@@ -10,8 +10,8 @@ from . import assert_no_warnings, subplots_context
 
 HATCH_FUNCTIONS = (
     pytest.param(mpu.hatch, id="hatch"),
-    pytest.param(mpu.hatch_global_map, id="hatch_global_map"),
-    pytest.param(mpu.hatch_regional_map, id="hatch_regional_map"),
+    pytest.param(mpu.hatch_map, id="hatch_map"),
+    pytest.param(mpu.hatch_map_global, id="hatch_map_global"),
 )
 
 
@@ -194,7 +194,7 @@ def test_hatch_bbox():
 
     # test hatch
     with subplots_context(1, 1, subplot_kw=subplot_kw) as (__, ax):
-        h = mpu.hatch_regional_map(da, "*", ax=ax)
+        h = mpu.hatch_map(da, "*", ax=ax)
 
         bbox = h.get_datalim(ax.transData)
 
@@ -205,7 +205,7 @@ def test_hatch_bbox():
 
     # test hatch_global_map
     with subplots_context(1, 1, subplot_kw=subplot_kw) as (__, ax):
-        h = mpu.hatch_global_map(da, "*", ax=ax)
+        h = mpu.hatch_map_global(da, "*", ax=ax)
 
         bbox = h.get_datalim(ax.transData)
 
