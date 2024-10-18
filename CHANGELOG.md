@@ -17,7 +17,7 @@
 
 ### Enhancements
 
-- Added convinience functions to draw hatches and add stippling to an axes:
+- Added convinience functions to draw hatches and add stippling:
 
   1. `mpu.hatch`: for regular axes
   2. `mpu.hatch_map`: for cartopy GeoAxes
