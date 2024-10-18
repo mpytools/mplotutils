@@ -22,11 +22,11 @@ jobs:
       fail-fast: false
       matrix:
         os: ["ubuntu-latest"]
-        python-version: ["3.9", "3.11", "3.12"]
+        python-version: ["3.10", "3.12"]
         env: [""]
         include:
           - env: "min-all-deps"
-            python-version: "3.9"
+            python-version: "3.10"
             os: "ubuntu-latest"
           - env: ""
             python-version: "3.12"
@@ -71,6 +71,8 @@ jobs:
 
     - name: Upload code coverage to Codecov
       uses: codecov/codecov-action@v4
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:
           file: ./coverage.xml
           flags: unittests

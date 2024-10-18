@@ -2,7 +2,7 @@
 # it exists to let GitHub build the repository dependency graph
 # https://help.github.com/en/github/visualizing-repository-data-with-graphs/listing-the-packages-that-a-repository-depends-on
 
-cartopy >= 0.21
-matplotlib >= 3.7
-numpy >= 1.22
-xarray >= 2022.12
+cartopy >= 0.22
+matplotlib >= 3.8
+numpy >= 1.24
+xarray >= 2023.9

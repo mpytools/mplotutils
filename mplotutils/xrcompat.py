@@ -9,7 +9,7 @@ import numpy as np
 def infer_interval_breaks(x, y, clip=False):
     """find edges of gridcells, given their centers"""
 
-    # TODO: require cartopy >= 0.21 when removing this function
+    # TODO: require cartopy >= 0.21 before removing this function
     warnings.warn(
         "It's no longer necessary to compute the edges of the array. This is now done "
         "in matplotlib. This function will be removed from mplotutils in a future "
