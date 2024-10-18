@@ -17,6 +17,14 @@
 
 ### Enhancements
 
+- Added convinience functions to draw hatches and add stippling to an axes:
+
+  1. `mpu.hatch`: for regular axes
+  2. `mpu.hatch_map`: for cartopy GeoAxes
+  3. `mpu.hatch_map_global`: as 2. but also adds a cyclic point to the array
+
+  all three functions expect a 2D boolean `xr.DataArray` and a hatch pattern. Values that are `True` are hatched.
+
 - Enable passing `AxesGrid` (from `mpl_toolkits.axes_grid1`) to `set_map_layout` ([#116](https://github.com/mathause/mplotutils/pull/116)).
 - Raise more informative error when a wrong type is passed to `set_map_layout` ([#121](https://github.com/mathause/mplotutils/pull/121)).
 - `set_map_layout` now raises an explicit error when the figure contains SubFigure ([#121](https://github.com/mathause/mplotutils/pull/121)).
