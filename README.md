@@ -2,8 +2,11 @@
 
 > *helper functions for cartopy and matplotlib*
 
+## fix layout for cartopy axes and colorbars
+
 This package solves two main problems for plots with maps created with cartopy. Because these plots have a fixed aspect ratio (1) colorbars will extend beyond the visible axes and (2) the distance between individual subplots will seemingly be random.
 
+**subplots**
 
 Without mplotutils         |  With mplotutils
 :-------------------------:|:-------------------------:
@@ -22,6 +25,13 @@ Matplotlib's [axes_grid](https://matplotlib.org/stable/users/explain/toolkits/ax
 
 The code to create the example can be found in [docs/example_axes_grid.py](docs/example_axes_grid.py).
 
+## hatching
+
+mplotutils (from version 0.6) includes helper functions to draw hatches and add stippling:
+
+<img src="docs/example_hatch.png" alt="mplotutils hatching" width="350"/>
+
+The code to create the example can be found in [docs/example_hatch.py](docs/example_hatch.py).
 
 ## Installation
 
