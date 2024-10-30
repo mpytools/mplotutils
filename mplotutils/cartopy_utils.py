@@ -118,18 +118,18 @@ def cyclic_dataarray(obj, coord="lon"):
     obj = obj.pad({coord: (0, 1)}, mode="wrap")
 
     # extrapolate the coords
-    lon = obj[coord]
-
-    diff = lon.isel({coord: slice(None, -1)}).diff(coord)
+    diff = obj[coord].isel({coord: slice(None, -1)}).diff(coord)
 
     if not np.allclose(diff, diff[0]):
         raise ValueError(f"The coordinate '{coord}' must be equally spaced")
 
     # the data is not writable (pandas 3) - a copy is required
+    lon = obj[coord].variable
+
     arr = np.array(lon.data)
     arr[-1] = arr[-2] + diff[0]
 
-    lon = type(lon.variable)(lon.dims, arr, attrs=lon.attrs)
+    lon = type(lon)(lon.dims, arr, attrs=lon.attrs, encoding=lon.encoding)
 
     return obj.assign_coords({coord: lon})
 
