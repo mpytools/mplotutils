@@ -125,7 +125,11 @@ def cyclic_dataarray(obj, coord="lon"):
     if not np.allclose(diff, diff[0]):
         raise ValueError(f"The coordinate '{coord}' must be equally spaced")
 
-    lon.data[-1] = lon[-2] + diff[0]
+    # the data is not writable (pandas 3) - a copy is required
+    arr = np.array(lon.data)
+    arr[-1] = arr[-2] + diff[0]
+
+    lon = type(lon.variable)(lon.dims, arr, attrs=lon.attrs)
 
     return obj.assign_coords({coord: lon})
 

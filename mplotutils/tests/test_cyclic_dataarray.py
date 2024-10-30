@@ -28,13 +28,15 @@ def test_cyclic_dataarray_not_equally_spaced(as_dataset):
 @pytest.mark.parametrize("as_dataset", (True, False))
 def test_cyclic_dataarray(as_dataset):
     data = [[1, 2, 3], [4, 5, 6]]
-    da = xr.DataArray(
-        data, dims=("y", "x"), coords={"y": [1, 2], "x": [0, 1, 2]}, name="data"
-    )
+
+    y = xr.Variable("y", [1, 2], attrs={"foo": "bar"})
+    x = xr.Variable("x", [0, 1, 2], attrs={"foo": "bar"})
+    da = xr.DataArray(data, dims=("y", "x"), coords={"y": y, "x": x}, name="data")
 
     expected = [[1, 2, 3, 1], [4, 5, 6, 4]]
+    x = xr.Variable("x", [0, 1, 2, 3], attrs={"foo": "bar"})
     da_expected = xr.DataArray(
-        expected, dims=("y", "x"), coords={"y": [1, 2], "x": [0, 1, 2, 3]}, name="data"
+        expected, dims=("y", "x"), coords={"y": y, "x": x}, name="data"
     )
 
     data = da.to_dataset() if as_dataset else da
