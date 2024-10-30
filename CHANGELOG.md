@@ -17,7 +17,7 @@
 
 ### Enhancements
 
-- Added convinience functions to draw hatches and add stippling:
+- Added convenience functions to draw hatches and add stippling:
 
   1. `mpu.hatch`: for regular axes
   2. `mpu.hatch_map`: for cartopy GeoAxes
@@ -28,6 +28,7 @@
 - Enable passing `AxesGrid` (from `mpl_toolkits.axes_grid1`) to `set_map_layout` ([#116](https://github.com/mathause/mplotutils/pull/116)).
 - Raise more informative error when a wrong type is passed to `set_map_layout` ([#121](https://github.com/mathause/mplotutils/pull/121)).
 - `set_map_layout` now raises an explicit error when the figure contains SubFigure ([#121](https://github.com/mathause/mplotutils/pull/121)).
+- Test upstream dependencies and fix compatibility with the upcoming pandas v3  ([#133](https://github.com/mathause/mplotutils/pull/133)).
 
 ## v0.5.0 (27.03.2024)
 
