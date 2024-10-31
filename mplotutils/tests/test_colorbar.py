@@ -235,6 +235,23 @@ def test_colorbar_2d_array():
         assert_position(cbar, expected)
 
 
+def test_gca_is_same():
+
+    with figure_context():
+        h, ax = create_figure_subplots(1, 1)
+        mpu.colorbar(h, ax, size=0.2, pad=0)
+
+        gca = plt.gca()
+        assert gca is ax
+
+    with figure_context():
+        h, axs = create_figure_subplots(1, 2)
+        mpu.colorbar(h, axs, size=0.2, pad=0, orientation="horizontal")
+
+        gca = plt.gca()
+        assert gca is axs[1]
+
+
 def test_colorbar_vertical_aspect():
     with figure_context(figsize=(5, 5)):
         # test pad=0, aspect=5
