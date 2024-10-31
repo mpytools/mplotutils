@@ -170,14 +170,20 @@ def colorbar(
     >>> import mplotutils as mpu
     >>> import cartopy.crs as ccrs
 
+    >>> # example data
+    >>> da = mpu.sample_dataarray(36, 18)
+    >>> # plotting options
+    >>> opt = {"add_colorbar": False, "transform": ccrs.PlateCarree()}
+
     >>> # =========================
     >>> # example with 1 axes
 
     >>> f, ax = plt.subplots(subplot_kw={"projection": ccrs.PlateCarree()})
-    >>> h = ax.pcolormesh([[0, 1]])
-    >>> ax.coastlines()
-    >>> mpu.colorbar(h, ax)
+    >>> ax.coastlines() # doctest: +SKIP
     >>> ax.set_global()
+    >>> h = da.plot(ax=ax, **opt)
+
+    >>> cbar = mpu.colorbar(h, ax)
 
     >>> # =========================
     >>> # example with 2 axes
@@ -185,9 +191,11 @@ def colorbar(
     >>> f, axs = plt.subplots(2, 1, subplot_kw={"projection": ccrs.PlateCarree()})
 
     >>> for ax in axs:
-    >>>     ax.coastlines()
-    >>>     ax.set_global()
-    >>>     h = ax.pcolormesh([[0, 1]])
+    ...     ax.coastlines() # doctest: +SKIP
+    ...     ax.set_global()
+
+    >>> h = da.plot(ax=axs[0], **opt)
+    >>> h = da.plot(ax=axs[1], **opt)
 
     >>> cbar = mpu.colorbar(h, axs)
 
@@ -197,15 +205,15 @@ def colorbar(
     >>> f, axs = plt.subplots(3, 1, subplot_kw={"projection": ccrs.PlateCarree()})
 
     >>> for ax in axs:
-    >>>     ax.coastlines()
-    >>>     ax.set_global()
+    ...     ax.coastlines() # doctest: +SKIP
+    ...     ax.set_global()
 
-    >>> h0 = ax.pcolormesh([[0, 1]])
-    >>> h1 = ax.pcolormesh([[0, 1]])
-    >>> h2 = ax.pcolormesh([[0, 1]], cmap='Blues')
+    >>> h0 = da.plot(ax=axs[0], **opt)
+    >>> h1 = da.plot(ax=axs[1], **opt)
+    >>> h2 = da.plot(ax=axs[2], cmap='Blues', **opt)
 
-    >>> cbar = mpu.colorbar(h, [axs[0], axs[1]], size=0.05)
-    >>> cbar = mpu.colorbar(h, axs[2], size=0.05)
+    >>> cbar = mpu.colorbar(h0, [axs[0], axs[1]], size=0.05)
+    >>> cbar = mpu.colorbar(h2, axs[2], size=0.05)
 
     Notes
     -----
@@ -244,7 +252,7 @@ def colorbar(
     # ensure mpu.colorbar does not change the current axes
     plt.sca(gca)
 
-    cbar = plt.colorbar(mappable, orientation=orientation, cax=cbax, **kwargs)
+    cbar = f.colorbar(mappable, orientation=orientation, cax=cbax, **kwargs)
 
     if orientation == "vertical":
         func = _resize_colorbar_vert(
@@ -298,37 +306,6 @@ def _resize_colorbar_vert(
     shift="symmetric",
     shrink=None,
 ):
-    """
-    automatically resize colorbars on draw
-
-    see 'colorbar'
-
-    Examples
-    --------
-    >>> import matplotlib.pyplot as plt
-    >>> import mplotutils as mpu
-    >>> import cartopy.crs as ccrs
-
-    >>> f = plt.figure()
-    >>> ax = plt.axes(projection=ccrs.PlateCarree())
-    >>> h = ax.pcolormesh([[0, 1]])
-
-    >>> ax.coastlines()
-
-    >>> cbax = f.add_axes([0, 0, 0.1, 0.1])
-    >>> cbar = plt.colorbar(h, orientation='vertical', cax=cbax)
-
-    >>> func = mpu._resize_colorbar_vert(cbax, ax)
-    >>> f.canvas.mpl_connect('draw_event', func)
-
-    >>> ax.set_global()
-
-    >>> plt.draw()
-
-    See Also
-    --------
-    _resize_colorbar_horz
-    """
 
     shift, shrink = _parse_shift_shrink(shift, shrink)
 
@@ -384,36 +361,6 @@ def _resize_colorbar_horz(
     shift="symmetric",
     shrink=None,
 ):
-    """
-    automatically resize colorbars on draw
-
-    see 'colorbar'
-
-    Examples
-    --------
-    >>> import matplotlib.pyplot as plt
-    >>> import mplotutils as mpu
-    >>> import cartopy.crs as ccrs
-
-    >>> f = plt.figure()
-    >>> ax = plt.axes(projection=ccrs.PlateCarree())
-
-    >>> ax.coastlines()
-
-    >>> cbax = f.add_axes([0, 0, 0.1, 0.1])
-    >>> cbar = plt.colorbar(h, orientation='horizontal', cax=cbax)
-
-    >>> func = mpu._resize_colorbar_horz(cbax, ax)
-    >>> f.canvas.mpl_connect('draw_event', func)
-
-    >>> ax.set_global()
-
-    >>> plt.draw()
-
-    See Also
-    --------
-    _resize_colorbar_vert
-    """
 
     shift, shrink = _parse_shift_shrink(shift, shrink)
 
