@@ -31,4 +31,4 @@ pip install git+https://github.com/mathause/mplotutils
 
 ### Install latest released version
 
-Go to the [newest release on github](https://github.com/mathause/mplotutils/releases/latest), copy the URL of the `*.tar.gz` source file at the botton and then use pip to install it (i.e. `pip install ...`).
+Go to the [newest release on github](https://github.com/mathause/mplotutils/releases/latest), copy the URL of the `*.tar.gz` source file at the bottom and then use pip to install it (i.e. `pip install ...`).

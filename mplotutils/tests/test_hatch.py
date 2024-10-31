@@ -121,7 +121,7 @@ def test_hatch_linewidth(function):
 
         assert mpl.rcParams["hatch.linewidth"] == 0.25
 
-    # chaning away from the default linewidth does not raise a warning
+    # changing away from the default linewidth does not raise a warning
     with subplots_context(1, 1, subplot_kw=subplot_kw) as (__, ax):
 
         function(da, "*", ax=ax)
@@ -132,7 +132,7 @@ def test_hatch_linewidth(function):
 
         assert mpl.rcParams["hatch.linewidth"] == 1
 
-    # chaning away from the default linewidth does not raise a warning
+    # changing away from the default linewidth does not raise a warning
     with subplots_context(1, 1, subplot_kw=subplot_kw) as (__, ax):
 
         function(da, "*", ax=ax, linewidth=2)

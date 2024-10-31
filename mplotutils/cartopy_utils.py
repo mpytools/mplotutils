@@ -24,9 +24,9 @@ def sample_data_map(nlons, nlats):
     Returns
     -------
     lon : ndarray
-        Array of the longitude coordiantes.
+        Array of the longitude coordinates.
     lat : ndarray
-        Array of the latitude coordiantes.
+        Array of the latitude coordinates.
     data : ndarray
         Sample data.
 
@@ -63,7 +63,7 @@ def sample_dataarray(nlon, nlat):
     Returns
     -------
     data : xr.DataArray
-        Sample data with coordiantes.
+        Sample data with coordinates.
 
     Notes
     -----

@@ -43,4 +43,4 @@ See [CHANGELOG.md](CHANGELOG.md).
 
 ## History
 
-This package bases on functions developped for the [python visualisation workshop at C2SM](https://github.com/C2SM/pyvis/).
+This package bases on functions developed for the [python visualisation workshop at C2SM](https://github.com/C2SM/pyvis/).
