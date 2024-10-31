@@ -30,6 +30,10 @@
 - `set_map_layout` now raises an explicit error when the figure contains SubFigure ([#121](https://github.com/mathause/mplotutils/pull/121)).
 - Test upstream dependencies and fix compatibility with the upcoming pandas v3  ([#133](https://github.com/mathause/mplotutils/pull/133)).
 
+### Bug fixes
+
+- Ensure the current axes (`plt.gca()`) is not changed by calling `mpu.colorbar(...)` ([#136](https://github.com/mathause/mplotutils/pull/136)).
+
 ## v0.5.0 (27.03.2024)
 
 Version v0.5.0 aligns passing multiple axes to `colorbar` with matplotlib.
