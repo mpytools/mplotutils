@@ -90,95 +90,122 @@ def colorbar(
     shrink : None or float in 0..1, default: None.
         Fraction of the total height that the colorbar is shrunk. See Note.
     **kwargs : keyword arguments
-        colorbar properties
-        ============  ====================================================
-        Property      Description
-        ============  ====================================================
-        *extend*      [ 'neither' | 'both' | 'min' | 'max' ]
-                    If not 'neither', make pointed end(s) for out-of-
-                    range values.  These are set for a given colormap
-                    using the colormap set_under and set_over methods.
-        *extendfrac*  [ *None* | 'auto' | length | lengths ]
-                    If set to *None*, both the minimum and maximum
-                    triangular colorbar extensions with have a length of
-                    5% of the interior colorbar length (this is the
-                    default setting). If set to 'auto', makes the
-                    triangular colorbar extensions the same lengths as
-                    the interior boxes (when *spacing* is set to
-                    'uniform') or the same lengths as the respective
-                    adjacent interior boxes (when *spacing* is set to
-                    'proportional'). If a scalar, indicates the length
-                    of both the minimum and maximum triangular colorbar
-                    extensions as a fraction of the interior colorbar
-                    length. A two-element sequence of fractions may also
-                    be given, indicating the lengths of the minimum and
-                    maximum colorbar extensions respectively as a
-                    fraction of the interior colorbar length.
-        *extendrect*  [ *False* | *True* ]
-                    If *False* the minimum and maximum colorbar extensions
-                    will be triangular (the default). If *True* the
-                    extensions will be rectangular.
-        *spacing*     [ 'uniform' | 'proportional' ]
-                    Uniform spacing gives each discrete color the same
-                    space; proportional makes the space proportional to
-                    the data interval.
-        *ticks*       [ None | list of ticks | Locator object ]
-                    If None, ticks are determined automatically from the
-                    input.
-        *format*      [ None | format string | Formatter object ]
-                    If None, the
-                    :class:`~matplotlib.ticker.ScalarFormatter` is used.
-                    If a format string is given, e.g., '%.3f', that is
-                    used. An alternative
-                    :class:`~matplotlib.ticker.Formatter` object may be
-                    given instead.
-        *drawedges*   [ False | True ] If true, draw lines at color
-                    boundaries.
-        ============  ====================================================
+        See Other Parameters.
+
+    Other Parameters
+    ----------------
+    location : None or {'left', 'right', 'top', 'bottom'}
+        The location, relative to the parent Axes, where the colorbar Axes
+        is created.  It also determines the *orientation* of the colorbar
+        (colorbars on the left and right are vertical, colorbars at the top
+        and bottom are horizontal).  If None, the location will come from the
+        *orientation* if it is set (vertical colorbars on the right, horizontal
+        ones at the bottom), or default to 'right' if *orientation* is unset.
+
+    orientation : None or {'vertical', 'horizontal'}
+        The orientation of the colorbar.  It is preferable to set the *location*
+        of the colorbar, as that also determines the *orientation*; passing
+        incompatible values for *location* and *orientation* raises an exception.
+
+    fraction : float, default: 0.15
+        Fraction of original Axes to use for colorbar.
+
+    shrink : float, default: 1.0
+        Fraction by which to multiply the size of the colorbar.
+
+    extend : {'neither', 'both', 'min', 'max'}
+        Make pointed end(s) for out-of-range values (unless 'neither').  These are
+        set for a given colormap using the colormap set_under and set_over methods.
+
+    extendfrac : {*None*, 'auto', length, lengths}
+        If set to *None*, both the minimum and maximum triangular colorbar
+        extensions will have a length of 5% of the interior colorbar length (this
+        is the default setting).
+
+        If set to 'auto', makes the triangular colorbar extensions the same lengths
+        as the interior boxes (when *spacing* is set to 'uniform') or the same
+        lengths as the respective adjacent interior boxes (when *spacing* is set to
+        'proportional').
+
+        If a scalar, indicates the length of both the minimum and maximum
+        triangular colorbar extensions as a fraction of the interior colorbar
+        length.  A two-element sequence of fractions may also be given, indicating
+        the lengths of the minimum and maximum colorbar extensions respectively as
+        a fraction of the interior colorbar length.
+
+    extendrect : bool, default: False
+        If *False* the minimum and maximum colorbar extensions will be triangular
+        (the default).  If *True* the extensions will be rectangular.
+
+    spacing : {'uniform', 'proportional'}
+        For discrete colorbars (`.BoundaryNorm` or contours), 'uniform' gives each
+        color the same space; 'proportional' makes the space proportional to the
+        data interval.
+
+    ticks : None or list of ticks or Locator
+        If None, ticks are determined automatically from the input.
+
+    format : None or str or Formatter
+        If None, `~.ticker.ScalarFormatter` is used.
+        Format strings, e.g., ``"%4.2e"`` or ``"{x:.2e}"``, are supported.
+        An alternative `~.ticker.Formatter` may be given instead.
+
+    drawedges : bool
+        Whether to draw lines at color boundaries.
+
+    label : str
+        The label on the colorbar's long axis.
+
+    boundaries, values : None or a sequence
+        If unset, the colormap will be displayed on a 0-1 scale.
+        If sequences, *values* must have a length 1 less than *boundaries*.  For
+        each region delimited by adjacent entries in *boundaries*, the color mapped
+        to the corresponding value in values will be used.
+        Normally only useful for indexed colors (i.e. ``norm=NoNorm()``) or other
+        unusual circumstances.
 
     Examples
     --------
-    import matplotlib.pyplot as plt
-    import mplotutils as mpu
-    import cartopy.crs as ccrs
+    >>> import matplotlib.pyplot as plt
+    >>> import mplotutils as mpu
+    >>> import cartopy.crs as ccrs
 
-    # example with 1 axes
+    >>> # =========================
+    >>> # example with 1 axes
 
-    f, ax = plt.subplots(subplot_kw={"projection": ccrs.PlateCarree()})
-    h = ax.pcolormesh([[0, 1]])
-    ax.coastlines()
-    mpu.colorbar(h, ax)
-    ax.set_global()
+    >>> f, ax = plt.subplots(subplot_kw={"projection": ccrs.PlateCarree()})
+    >>> h = ax.pcolormesh([[0, 1]])
+    >>> ax.coastlines()
+    >>> mpu.colorbar(h, ax)
+    >>> ax.set_global()
 
-    # =========================
-    # example with 2 axes
+    >>> # =========================
+    >>> # example with 2 axes
 
-    f, axs = plt.subplots(2, 1, subplot_kw={"projection": ccrs.PlateCarree()})
+    >>> f, axs = plt.subplots(2, 1, subplot_kw={"projection": ccrs.PlateCarree()})
 
-    for ax in axs:
-        ax.coastlines()
-        ax.set_global()
-        h = ax.pcolormesh([[0, 1]])
+    >>> for ax in axs:
+    >>>     ax.coastlines()
+    >>>     ax.set_global()
+    >>>     h = ax.pcolormesh([[0, 1]])
 
-    cbar = mpu.colorbar(h, axs)
+    >>> cbar = mpu.colorbar(h, axs)
 
-    # =========================
-    # example with 3 axes & 2 colorbars
+    >>> # =========================
+    >>> # example with 3 axes & 2 colorbars
 
-    f, axs = plt.subplots(3, 1, subplot_kw={"projection": ccrs.PlateCarree()})
+    >>> f, axs = plt.subplots(3, 1, subplot_kw={"projection": ccrs.PlateCarree()})
 
-    for ax in axs:
-        ax.coastlines()
-        ax.set_global()
+    >>> for ax in axs:
+    >>>     ax.coastlines()
+    >>>     ax.set_global()
 
-    h0 = ax.pcolormesh([[0, 1]])
-    h1 = ax.pcolormesh([[0, 1]])
-    h2 = ax.pcolormesh([[0, 1]], cmap='Blues')
+    >>> h0 = ax.pcolormesh([[0, 1]])
+    >>> h1 = ax.pcolormesh([[0, 1]])
+    >>> h2 = ax.pcolormesh([[0, 1]], cmap='Blues')
 
-    cbar = mpu.colorbar(h, [axs[0], axs[1]], size=0.05)
-    cbar = mpu.colorbar(h, axs[2], size=0.05)
-
-    plt.draw()
+    >>> cbar = mpu.colorbar(h, [axs[0], axs[1]], size=0.05)
+    >>> cbar = mpu.colorbar(h, axs[2], size=0.05)
 
     Notes
     -----
@@ -186,6 +213,7 @@ def colorbar(
     - ``shift='symmetric', shrink=0.1`` -> colorbar is 10 % smaller, and centered
     - ``shift=0., shrink=0.1`` -> colorbar is 10 % smaller, and aligned with the bottom
     - ``shift=0.1, shrink=None`` -> colorbar is 10 % smaller, and aligned with the top
+    - the ``anchor`` and ``panchor`` keywords are not supported
 
     See Also
     --------
@@ -277,25 +305,25 @@ def _resize_colorbar_vert(
 
     Examples
     --------
-    import matplotlib.pyplot as plt
-    import mplotutils as mpu
-    import cartopy.crs as ccrs
+    >>> import matplotlib.pyplot as plt
+    >>> import mplotutils as mpu
+    >>> import cartopy.crs as ccrs
 
-    f = plt.figure()
-    ax = plt.axes(projection=ccrs.PlateCarree())
-    h = ax.pcolormesh([[0, 1]])
+    >>> f = plt.figure()
+    >>> ax = plt.axes(projection=ccrs.PlateCarree())
+    >>> h = ax.pcolormesh([[0, 1]])
 
-    ax.coastlines()
+    >>> ax.coastlines()
 
-    cbax = f.add_axes([0, 0, 0.1, 0.1])
-    cbar = plt.colorbar(h, orientation='vertical', cax=cbax)
+    >>> cbax = f.add_axes([0, 0, 0.1, 0.1])
+    >>> cbar = plt.colorbar(h, orientation='vertical', cax=cbax)
 
-    func = mpu._resize_colorbar_vert(cbax, ax)
-    f.canvas.mpl_connect('draw_event', func)
+    >>> func = mpu._resize_colorbar_vert(cbax, ax)
+    >>> f.canvas.mpl_connect('draw_event', func)
 
-    ax.set_global()
+    >>> ax.set_global()
 
-    plt.draw()
+    >>> plt.draw()
 
     See Also
     --------
@@ -363,24 +391,24 @@ def _resize_colorbar_horz(
 
     Examples
     --------
-    import matplotlib.pyplot as plt
-    import mplotutils as mpu
-    import cartopy.crs as ccrs
+    >>> import matplotlib.pyplot as plt
+    >>> import mplotutils as mpu
+    >>> import cartopy.crs as ccrs
 
-    f = plt.figure()
-    ax = plt.axes(projection=ccrs.PlateCarree())
+    >>> f = plt.figure()
+    >>> ax = plt.axes(projection=ccrs.PlateCarree())
 
-    ax.coastlines()
+    >>> ax.coastlines()
 
-    cbax = f.add_axes([0, 0, 0.1, 0.1])
-    cbar = plt.colorbar(h, orientation='horizontal', cax=cbax)
+    >>> cbax = f.add_axes([0, 0, 0.1, 0.1])
+    >>> cbar = plt.colorbar(h, orientation='horizontal', cax=cbax)
 
-    func = mpu._resize_colorbar_horz(cbax, ax)
-    f.canvas.mpl_connect('draw_event', func)
+    >>> func = mpu._resize_colorbar_horz(cbax, ax)
+    >>> f.canvas.mpl_connect('draw_event', func)
 
-    ax.set_global()
+    >>> ax.set_global()
 
-    plt.draw()
+    >>> plt.draw()
 
     See Also
     --------

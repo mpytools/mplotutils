@@ -51,6 +51,3 @@ def monkeypatch():
 
 def undo():
     Figure.savefig = savefig_orig
-
-
-# mpu.savefig.autodraw()

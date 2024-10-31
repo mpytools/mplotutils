@@ -55,9 +55,9 @@ def sample_dataarray(nlon, nlat):
 
     Parameters
     ----------
-    nlons : int
+    nlon : int
         Number of longitude grid cells.
-    nlats : int
+    nlat : int
         Number of latitude grid cells.
 
     Returns
@@ -162,7 +162,9 @@ def ylabel_map(s, *, labelpad=None, size=None, weight=None, y=0.5, ax=None, **kw
     -------
     h : handle
         text handle of the created text field
-    ..note::
+
+    Notes
+    -----
     http://stackoverflow.com/questions/35479508/cartopy-set-xlabel-set-ylabel-not-ticklabels
 
     """
@@ -224,7 +226,9 @@ def xlabel_map(s, *, labelpad=None, size=None, weight=None, x=0.5, ax=None, **kw
     -------
     h : handle
         text handle of the created text field
-    ..note::
+
+    Notes
+    -----
     http://stackoverflow.com/questions/35479508/cartopy-set-xlabel-set-ylabel-not-ticklabels
 
     """
