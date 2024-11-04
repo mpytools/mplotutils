@@ -4,6 +4,7 @@ import cartopy.crs as ccrs
 import matplotlib as mpl
 import numpy as np
 import xarray as xr
+from packaging.version import Version
 
 import mplotutils as mpu
 
@@ -11,6 +12,8 @@ _HATCHES_PER_FIGURE = {}
 
 
 from mplotutils._mpl import _maybe_gca
+
+MPL_GE_310 = Version(Version(mpl.__version__).base_version) >= Version("3.10")
 
 
 def hatch(da, hatch, *, ax=None, label=None, linewidth=None, color="0.1"):
@@ -185,22 +188,29 @@ def _hatch(
 
     fig = ax.figure
 
-    # only one linewidth is possible per figure (actually it is just read before
-    # saving the figure, so the above is not 100 % correct)
-    if linewidth is None:
-        # only set linewidth if not yet set
-        if not _HATCHES_PER_FIGURE.get(fig):
-            mpl.rcParams["hatch.linewidth"] = 0.25
+    if not MPL_GE_310:
+        # only one linewidth is possible per figure (actually it is just read before
+        # saving the figure, so the above is not 100 % correct)
+        if linewidth is None:
+            # only set linewidth if not yet set
+            if not _HATCHES_PER_FIGURE.get(fig):
+                mpl.rcParams["hatch.linewidth"] = 0.25
+        else:
+            if _HATCHES_PER_FIGURE.get(fig):
+                warnings.warn(
+                    "Setting more than one hatch `linewidth` per figure requires"
+                    " matplotlib v3.10 or later Overwriting previous value of"
+                    f" {_HATCHES_PER_FIGURE[fig]}."
+                )
+
+            mpl.rcParams["hatch.linewidth"] = linewidth
+
+            _HATCHES_PER_FIGURE[fig] = linewidth
     else:
-        if _HATCHES_PER_FIGURE.get(fig):
-            warnings.warn(
-                "Can only set one `linewidth` per figure. Overwriting previous value of"
-                f" {_HATCHES_PER_FIGURE[fig]}."
-            )
-
-        mpl.rcParams["hatch.linewidth"] = linewidth
-
-        _HATCHES_PER_FIGURE[fig] = linewidth
+        if linewidth is None:
+            mpl.rcParams["hatch.linewidth"] = 0.25
+        else:
+            mpl.rcParams["hatch.linewidth"] = linewidth
 
     mpl.rcParams["hatch.color"] = color
 

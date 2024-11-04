@@ -3,10 +3,15 @@ import matplotlib as mpl
 import numpy as np
 import pytest
 import xarray as xr
+from packaging.version import Version
 
 import mplotutils as mpu
 
 from . import assert_no_warnings, subplots_context
+
+MPL_GE_310 = Version(Version(mpl.__version__).base_version) >= Version("3.10")
+requires_mpl_ge_310 = pytest.mark.skipif(not MPL_GE_310, reason="requires mpl >= 3.10")
+
 
 HATCH_FUNCTIONS = (
     pytest.param(mpu.hatch, id="hatch"),
@@ -104,8 +109,9 @@ def test_hatch_label(function):
             assert mpl.colors.to_rgba("#2ca25f") == rect._hatch_color
 
 
+@pytest.mark.skipif(MPL_GE_310, reason="only for mpl < 3.10")
 @pytest.mark.parametrize("function", HATCH_FUNCTIONS)
-def test_hatch_linewidth(function):
+def test_hatch_linewidth_mpl_lt_310(function):
 
     da = xr.DataArray(
         np.ones([3, 3], dtype=bool),
@@ -132,15 +138,64 @@ def test_hatch_linewidth(function):
 
         assert mpl.rcParams["hatch.linewidth"] == 1
 
-    # changing away from the default linewidth does not raise a warning
+    # changing away from the linewidth does raise a warning
     with subplots_context(1, 1, subplot_kw=subplot_kw) as (__, ax):
 
         function(da, "*", ax=ax, linewidth=2)
         assert mpl.rcParams["hatch.linewidth"] == 2
 
-        with pytest.warns(match="Can only set one `linewidth` per figure"):
+        with pytest.warns(match="Setting more than one hatch `linewidth`"):
             function(da, "*", ax=ax, linewidth=1)
 
+        assert mpl.rcParams["hatch.linewidth"] == 1
+
+
+@requires_mpl_ge_310
+@pytest.mark.parametrize("function", HATCH_FUNCTIONS)
+def test_hatch_linewidth_mpl_ge_310(function):
+
+    da = xr.DataArray(
+        np.ones([3, 3], dtype=bool),
+        dims=("lat", "lon"),
+        coords={"lat": [0, 1, 2], "lon": [1, 2, 3]},
+    )
+
+    subplot_kw = {"projection": ccrs.PlateCarree()}
+
+    # test linewidth default width
+    with subplots_context(1, 1, subplot_kw=subplot_kw) as (__, ax):
+        q = function(da, "*", ax=ax)
+        assert q.get_hatch_linewidth() == 0.25
+        assert mpl.rcParams["hatch.linewidth"] == 0.25
+
+    # changing away from the default linewidth does not raise a warning
+    with subplots_context(1, 1, subplot_kw=subplot_kw) as (__, ax):
+
+        q = function(da, "*", ax=ax)
+        assert q.get_hatch_linewidth() == 0.25
+        assert mpl.rcParams["hatch.linewidth"] == 0.25
+
+        with assert_no_warnings():
+            q = function(da, "*", ax=ax, linewidth=1)
+
+        assert q.get_hatch_linewidth() == 1
+        assert mpl.rcParams["hatch.linewidth"] == 1
+
+        q = function(da, "*", ax=ax)
+        assert q.get_hatch_linewidth() == 0.25
+        assert mpl.rcParams["hatch.linewidth"] == 0.25
+
+    # changing away from the linewidth does NOT raise a warning
+    with subplots_context(1, 1, subplot_kw=subplot_kw) as (__, ax):
+
+        q = function(da, "*", ax=ax, linewidth=2)
+        assert q.get_hatch_linewidth() == 2
+        assert mpl.rcParams["hatch.linewidth"] == 2
+
+        with assert_no_warnings():
+            q = function(da, "*", ax=ax, linewidth=1)
+
+        assert q.get_hatch_linewidth() == 1
         assert mpl.rcParams["hatch.linewidth"] == 1
 
 
