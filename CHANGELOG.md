@@ -15,7 +15,9 @@
   | seaborn     | 0.12   | 0.13    |
   | xarray      | 2022.12| 2023.9  |
 
-- The modules ``cartopy_utils``, ``colormaps``, ``map_layout``, ``mpl``, and ``xrcompat`` were renamed (added a leading underscore) to indicate that they are private ([#141](https://github.com/mathause/mplotutils/pull/141)).
+- The modules ``cartopy_utils``, ``colormaps``, ``map_layout``, ``mpl``, and ``xrcompat``
+  were renamed (added a leading underscore) to indicate that they are private
+  ([#141](https://github.com/mathause/mplotutils/pull/141) and [#142](https://github.com/mathause/mplotutils/pull/142)).
 
 ### Enhancements
 
