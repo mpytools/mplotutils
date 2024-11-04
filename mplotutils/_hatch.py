@@ -10,7 +10,7 @@ import mplotutils as mpu
 _HATCHES_PER_FIGURE = {}
 
 
-from mplotutils.mpl import _maybe_gca
+from mplotutils._mpl import _maybe_gca
 
 
 def hatch(da, hatch, *, ax=None, label=None, linewidth=None, color="0.1"):

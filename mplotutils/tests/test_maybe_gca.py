@@ -1,7 +1,7 @@
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
-from mplotutils.mpl import _maybe_gca
+from mplotutils._mpl import _maybe_gca
 
 from . import figure_context
 

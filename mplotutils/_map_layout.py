@@ -6,7 +6,7 @@ import numpy as np
 from mpl_toolkits.axes_grid1 import AxesGrid
 
 from mplotutils._deprecate import _deprecate_positional_args
-from mplotutils.mpl import _get_renderer
+from mplotutils._mpl import _get_renderer
 
 
 @_deprecate_positional_args("0.3")

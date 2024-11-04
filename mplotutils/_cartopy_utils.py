@@ -6,8 +6,8 @@ import numpy as np
 import shapely.geometry
 from cartopy.mpl.gridliner import LATITUDE_FORMATTER, LONGITUDE_FORMATTER
 
+from mplotutils._colormaps import _get_label_attr
 from mplotutils._deprecate import _deprecate_positional_args
-from mplotutils.colormaps import _get_label_attr
 
 
 def sample_data_map(nlons, nlats):
