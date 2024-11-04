@@ -14,7 +14,6 @@ from mplotutils._cartopy_utils import (
 )
 from mplotutils._colorbar import colorbar
 from mplotutils._colormaps import from_levels_and_cmap
-from mplotutils._deprecate import _module_renamed_warning_init
 from mplotutils._hatch import hatch, hatch_map, hatch_map_global
 from mplotutils._map_layout import set_map_layout
 from mplotutils._mpl import _get_renderer
