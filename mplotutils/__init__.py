@@ -14,6 +14,7 @@ from mplotutils._cartopy_utils import (
 )
 from mplotutils._colorbar import colorbar
 from mplotutils._colormaps import from_levels_and_cmap
+from mplotutils._deprecate import _module_renamed_warning_init
 from mplotutils._hatch import hatch, hatch_map, hatch_map_global
 from mplotutils._map_layout import set_map_layout
 from mplotutils._mpl import _get_renderer
@@ -51,3 +52,29 @@ except Exception:
     # Local copy or not installed with setuptools.
     # Disable minimum version checks on downstream libraries.
     __version__ = "999"
+
+
+def __getattr__(attr):
+
+    m = (
+        "cartopy_utils",
+        "colormaps",
+        "map_layout",
+        "mpl",
+        "xrcompat",
+    )
+
+    import mplotutils
+
+    if attr in m:
+
+        _module_renamed_warning_init(attr)
+
+        # NOTE: could use importlib.import_module() but it registers the function in
+        # sys.modules such that the warning is only called once
+        # return importlib.import_module(f".{attr}", "mplotutils")
+
+        return getattr(mplotutils, f"_{attr}")
+
+    # required for ipython tab completion
+    raise AttributeError(f"module {__name__!r} has no attribute {attr!r}")
