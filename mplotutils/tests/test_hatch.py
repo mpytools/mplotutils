@@ -151,6 +151,7 @@ def test_hatch_linewidth_mpl_lt_310(function):
 
 
 @requires_mpl_ge_310
+@pytest.mark.filterwarnings("ignore:Passing 'N' to ListedColormap is deprecated")
 @pytest.mark.parametrize("function", HATCH_FUNCTIONS)
 def test_hatch_linewidth_mpl_ge_310(function):
 
