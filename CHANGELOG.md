@@ -40,6 +40,11 @@
 
 - Ensure the current axes (`plt.gca()`) is not changed by calling `mpu.colorbar(...)` ([#136](https://github.com/mathause/mplotutils/pull/136)).
 
+### Internal changes
+
+- Align internal usage of `ListedColormaps` with changes in [matplotlib/matplotlib#29135](https://github.com/matplotlib/matplotlib/pull/29135)
+  ([#145](https://github.com/mathause/mplotutils/pull/145), and [#147](https://github.com/mathause/mplotutils/pull/147)).
+
 ## v0.5.0 (27.03.2024)
 
 Version v0.5.0 aligns passing multiple axes to `colorbar` with matplotlib.
