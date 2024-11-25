@@ -77,8 +77,25 @@ def test_from_levels_and_cmap_seaborn_cmap():
 
 
 def test_from_levels_and_cmap_colorstring():
-    pytest.importorskip("seaborn")
 
     levels = [1, 2, 3]
     cmap, norm = mpu.from_levels_and_cmap(levels, "0.1")
     assert_cmap_norm(cmap, norm, levels, extend="neither")
+
+    np.testing.assert_equal(cmap.colors[0], np.array([0.1, 0.1, 0.1, 1.0]))
+    np.testing.assert_equal(cmap.colors[1], np.array([0.1, 0.1, 0.1, 1.0]))
+
+
+def test_from_levels_and_cmap_color_list_explicit():
+
+    levels = [1, 2, 3, 4, 5]
+
+    # ensure colors are repeated (although that can also be unexpected)
+    cmap, norm = mpu.from_levels_and_cmap(levels, ["b", "k"])
+
+    assert_cmap_norm(cmap, norm, levels, extend="neither")
+
+    np.testing.assert_equal(cmap.colors[0], np.array([0.0, 0.0, 1.0, 1.0]))  # blue
+    np.testing.assert_equal(cmap.colors[1], np.array([0.0, 0.0, 0.0, 1.0]))  # black
+    np.testing.assert_equal(cmap.colors[2], np.array([0.0, 0.0, 1.0, 1.0]))  # blue
+    np.testing.assert_equal(cmap.colors[3], np.array([0.0, 0.0, 0.0, 1.0]))  # black

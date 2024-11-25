@@ -1,3 +1,5 @@
+import itertools
+
 import matplotlib as mpl
 import numpy as np
 from matplotlib.colors import from_levels_and_colors
@@ -54,7 +56,8 @@ def _color_palette(cmap, n_colors):
 
     colors_i = np.linspace(0, 1.0, n_colors)
     if isinstance(cmap, (list, tuple)):
-        # we have a list of colors
+        # expand or truncate the list of colors to n_colors
+        cmap = list(itertools.islice(itertools.cycle(cmap), n_colors))
         cmap = ListedColormap(cmap)
         pal = cmap(colors_i)
     elif isinstance(cmap, str):
