@@ -26,9 +26,9 @@ mplotutils is not available from pypi or conda-forge, therefore it needs to be i
 ### Install development version
 
 ```bash
-pip install git+https://github.com/mathause/mplotutils
+pip install git+https://github.com/mpytools/mplotutils
 ```
 
 ### Install latest released version
 
-Go to the [newest release on github](https://github.com/mathause/mplotutils/releases/latest), copy the URL of the `*.tar.gz` source file at the bottom and then use pip to install it (i.e. `pip install ...`).
+Go to the [newest release on github](https://github.com/mpytools/mplotutils/releases/latest), copy the URL of the `*.tar.gz` source file at the bottom and then use pip to install it (i.e. `pip install ...`).

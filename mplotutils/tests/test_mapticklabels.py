@@ -67,7 +67,7 @@ def test_xticklabels_robinson():
         assert ax.texts[-1].get_text() == "120°E"
 
 
-# TODO: https://github.com/mathause/mplotutils/issues/48
+# TODO: https://github.com/mpytools/mplotutils/issues/48
 # def test_xticklabels_robinson_180():
 
 #     proj = ccrs.Robinson(central_longitude=180)
