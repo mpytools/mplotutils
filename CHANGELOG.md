@@ -1,6 +1,8 @@
 # Changelog
 
-## v0.6.0 (unreleased)
+## v0.6.0 (04.12.2024)
+
+Version 0.6.0 adds functions to draw hatches and stippling, adds support for `AxesGrid`, fixes some bugs, and bumps the supported versions.
 
 ### Breaking changes
 
