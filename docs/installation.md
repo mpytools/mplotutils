@@ -14,24 +14,21 @@
 
 ## Instructions
 
-mplotutils itself is a pure Python package, but its dependencies are not.
-The easiest way to get them installed is to use [conda](http://conda.io/) or [mamba](https://mamba.readthedocs.io/en/latest/).
-
-```bash
-mamba install -c conda-forge cartopy xarray
-```
-
-mplotutils is not available from pypi or conda-forge, therefore it needs to be installed using pip directly from github.
-
-
 ### Install latest released version
 
-mplotutils is now available on PyPi - install it with `pip`:
+mplotutils is now available on PyPi - and can be installed with `pip`:
 
 ```bash
 python -m pip install mplotutils
 ```
 
+Its not (yet) on conda-forge. To install it into a conda environment, add the required
+dependencies first before using pip to install mplotutils as well:
+
+```bash
+mamba install -c conda-forge cartopy xarray
+python -m pip install mplotutils
+```
 
 ### Install development version
 
