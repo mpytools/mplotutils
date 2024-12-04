@@ -23,12 +23,18 @@ mamba install -c conda-forge cartopy xarray
 
 mplotutils is not available from pypi or conda-forge, therefore it needs to be installed using pip directly from github.
 
+
+### Install latest released version
+
+mplotutils is now available on PyPi - install it with `pip`:
+
+```bash
+python -m pip install mplotutils
+```
+
+
 ### Install development version
 
 ```bash
 pip install git+https://github.com/mpytools/mplotutils
 ```
-
-### Install latest released version
-
-Go to the [newest release on github](https://github.com/mpytools/mplotutils/releases/latest), copy the URL of the `*.tar.gz` source file at the bottom and then use pip to install it (i.e. `pip install ...`).
