@@ -64,8 +64,7 @@ jobs:
       - name: Run Tests
         if: success()
         id: status
-        run: |
-          python -m pytest -rf
+        run: python -m pytest -rf
           --report-log output-${{ matrix.python-version }}-log.jsonl
           --cov=mplotutils
           --cov-report=xml
