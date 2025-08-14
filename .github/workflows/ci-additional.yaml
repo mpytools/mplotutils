@@ -30,7 +30,7 @@ jobs:
           environment-name: min-version-policy
           micromamba-version: 'latest'
           create-args: >-
-            python=3.10
+            python=3.12
             pyyaml
             conda
             python-dateutil

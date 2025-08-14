@@ -2,7 +2,7 @@
 
 ## Required dependencies
 
-- Python (3.10 or later)
+- Python (3.11 or later)
 - [cartopy](http://scitools.org.uk/cartopy/) (0.22 or later)
 - [matplotlib](http://matplotlib.org/) (3.8 or later)
 - [numpy](http://www.numpy.org/) (1.24 or later)
