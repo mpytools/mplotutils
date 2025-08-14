@@ -30,6 +30,7 @@ IGNORE_DEPS = {
     "pytest-cov",
     "pytest-env",
     "pytest-xdist",
+    "ruff",
 }
 
 POLICY_MONTHS = {"python": 24, "numpy": 18, "setuptools": 42}

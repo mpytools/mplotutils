@@ -9,6 +9,32 @@ build-backend = "setuptools.build_meta"
 fallback_version = "999"
 version_scheme = "no-guess-dev"
 
+
+[tool.ruff]
+# also check notebooks
+extend-include = ["*.ipynb"]
+target-version = "py310"
+
+[tool.ruff.lint]
+# E402: module level import not at top of file
+# E501: line too long - let the formatter worry about this
+# E731: do not assign a lambda expression, use a def
+ignore = [
+  "E402",
+  "E501",
+  "E731",
+]
+select = [
+  "F", # Pyflakes
+  "E", # Pycodestyle
+  "W", # warnings
+  "I", # isort
+  "UP", # Pyupgrade
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["mplotutils"]
+
 [tool.pytest.ini_options]
 
 log_cli_level = "INFO"
