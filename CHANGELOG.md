@@ -26,6 +26,7 @@
   versions where they are available ([#161](https://github.com/mpytools/mplotutils/pull/161)).
 - Replace deprecated `matplotlib.rcsetup.all_backends` with `matplotlib.backends.backend_registry.list_builtin()`
   ([#160](https://github.com/mpytools/mplotutils/pull/160)).
+- Also upload coverage report in upstream dev CI ([#162](https://github.com/mpytools/mplotutils/pull/162)).
 
 ## v0.6.0 (04.12.2024)
 

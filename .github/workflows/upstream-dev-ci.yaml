@@ -64,9 +64,21 @@ jobs:
       - name: Run Tests
         if: success()
         id: status
-        run: |
-          python -m pytest -rf \
-            --report-log output-${{ matrix.python-version }}-log.jsonl
+        run: python -m pytest -rf
+          --report-log output-${{ matrix.python-version }}-log.jsonl
+          --cov=mplotutils
+          --cov-report=xml
+
+      - name: Upload code coverage to Codecov
+        uses: codecov/codecov-action@v5
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        with:
+          flags: unittests
+          env_vars: RUNNER_OS,PYTHON_VERSION
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
       - name: Generate and publish the report
         if: |
           failure()
