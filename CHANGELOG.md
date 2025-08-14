@@ -22,6 +22,8 @@
 
 ### Internal changes
 
+- Avoid using the private `_hatch_color` property and use `set_hatchcolor` and `get_hatchcolor` instead in matplotlib
+  versions where they are available ([#161](https://github.com/mpytools/mplotutils/pull/161)).
 - Replace deprecated `matplotlib.rcsetup.all_backends` with `matplotlib.backends.backend_registry.list_builtin()`
   ([#160](https://github.com/mpytools/mplotutils/pull/160)).
 
