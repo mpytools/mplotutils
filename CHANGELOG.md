@@ -8,6 +8,8 @@
 
 ### Enhancements
 
+- Add python 3.13 to list of supported versions ([#158](https://github.com/mpytools/mplotutils/pull/158)).
+
 ### Bug fixes
 
 ### Internal changes
