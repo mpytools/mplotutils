@@ -6,11 +6,11 @@
 - [cartopy](http://scitools.org.uk/cartopy/) (0.23 or later)
 - [matplotlib](http://matplotlib.org/) (3.9 or later)
 - [numpy](http://www.numpy.org/) (1.26 or later)
+- [xarray](http://xarray.pydata.org/) (2024.7 or later)
 
 ## Optional dependencies
 
 - [seaborn](https://seaborn.pydata.org/) (0.13 or later)
-- [xarray](http://xarray.pydata.org/) (2024.7 or later)
 
 ## Instructions
 

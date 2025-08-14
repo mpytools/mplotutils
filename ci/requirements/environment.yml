@@ -10,8 +10,7 @@ dependencies:
   - xarray
 # formatting
   - black
-  - isort
-  - flake8
+  - ruff
 # for testing
   - pytest
   - pytest-cov
