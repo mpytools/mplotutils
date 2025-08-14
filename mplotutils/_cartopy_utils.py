@@ -327,7 +327,7 @@ def yticklabels(
     if not y_label_points:
         msg = (
             "WARN: no points found for ylabel\n"
-            "y_lim is: {:0.2f} to {:0.2f}".format(y_lim[0], y_lim[1])
+            f"y_lim is: {y_lim[0]:0.2f} to {y_lim[1]:0.2f}"
         )
         warnings.warn(msg)
 
@@ -427,7 +427,7 @@ def xticklabels(
     if not x_label_points:
         msg = (
             "WARN: no points found for xlabel\n"
-            "x_lim is: {:0.2f} to {:0.2f}".format(x_lim[0], x_lim[1])
+            f"x_lim is: {x_lim[0]:0.2f} to {x_lim[1]:0.2f}"
         )
         warnings.warn(msg)
 
