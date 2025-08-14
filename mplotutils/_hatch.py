@@ -14,6 +14,7 @@ _HATCHES_PER_FIGURE = {}
 from mplotutils._mpl import _maybe_gca
 
 MPL_GE_310 = Version(Version(mpl.__version__).base_version) >= Version("3.10")
+MPL_GE_311 = Version(Version(mpl.__version__).base_version) >= Version("3.11")
 
 
 def hatch(da, hatch, *, ax=None, label=None, linewidth=None, color="0.1"):
@@ -225,11 +226,16 @@ def _hatch(
             label=label,
         )
 
-        # NOTE: manually overwrites the private _hatch_color property - allows to have
-        # different ec and hatch color (so the box of the legend is black)
-        empty_legend_patch._hatch_color = mpl.colors.to_rgba(
-            mpl.rcParams["hatch.color"]
-        )
+        hatch_color = mpl.colors.to_rgba(mpl.rcParams["hatch.color"])
+
+        if not MPL_GE_311:
+            # NOTE: manually overwrites the private _hatch_color property - allows to
+            # have different ec and hatch color (so the box of the legend is black)
+            empty_legend_patch._hatch_color = hatch_color
+        else:
+            # TODO: is  this still needed in MPL_GE_311?
+            empty_legend_patch.set_hatchcolor(hatch_color)
+
         ax.add_patch(empty_legend_patch)
 
     if cyclic:

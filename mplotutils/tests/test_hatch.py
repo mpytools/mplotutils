@@ -10,6 +10,7 @@ import mplotutils as mpu
 from . import assert_no_warnings, subplots_context
 
 MPL_GE_310 = Version(Version(mpl.__version__).base_version) >= Version("3.10")
+MPL_GE_311 = Version(Version(mpl.__version__).base_version) >= Version("3.11")
 requires_mpl_ge_310 = pytest.mark.skipif(not MPL_GE_310, reason="requires mpl >= 3.10")
 
 
@@ -18,6 +19,13 @@ HATCH_FUNCTIONS = (
     pytest.param(mpu.hatch_map, id="hatch_map"),
     pytest.param(mpu.hatch_map_global, id="hatch_map_global"),
 )
+
+
+def get_hatchcolor(h):
+    if MPL_GE_311:
+        return mpl.colors.to_rgba(h.get_hatchcolor())
+
+    return h._hatch_color
 
 
 @pytest.mark.parametrize("obj", (None, xr.Dataset(), np.array([])))
@@ -91,7 +99,7 @@ def test_hatch_label(function):
         (rect,) = h
 
         assert rect.get_label() == "label"
-        assert mpl.colors.to_rgba("0.1") == rect._hatch_color
+        assert mpl.colors.to_rgba("0.1") == get_hatchcolor(rect)
 
     # test 2 labels with non-default color
     with subplots_context(1, 1, subplot_kw=subplot_kw) as (__, ax):
@@ -106,7 +114,7 @@ def test_hatch_label(function):
 
         for i, rect in enumerate(h):
             assert rect.get_label() == f"label{i}"
-            assert mpl.colors.to_rgba("#2ca25f") == rect._hatch_color
+            assert mpl.colors.to_rgba("#2ca25f") == get_hatchcolor(rect)
 
 
 @pytest.mark.skipif(MPL_GE_310, reason="only for mpl < 3.10")
@@ -215,16 +223,16 @@ def test_hatch_color(function):
     with subplots_context(1, 1, subplot_kw=subplot_kw) as (__, ax):
         h = function(da, "*", ax=ax)
 
-        assert mpl.colors.to_rgba("0.1") == h._hatch_color
+        assert mpl.colors.to_rgba("0.1") == get_hatchcolor(h)
 
     # different colors can be set
     with subplots_context(1, 1, subplot_kw=subplot_kw) as (__, ax):
 
         h = function(da, "*", ax=ax, color="#2ca25f")
-        assert mpl.colors.to_rgba("#2ca25f") == h._hatch_color
+        assert mpl.colors.to_rgba("#2ca25f") == get_hatchcolor(h)
 
         h = function(da, "*", ax=ax, color="#e5f5f9")
-        assert mpl.colors.to_rgba("#e5f5f9") == h._hatch_color
+        assert mpl.colors.to_rgba("#e5f5f9") == get_hatchcolor(h)
 
 
 def test_hatch_bbox():
