@@ -5,6 +5,14 @@
 ### Breaking changes
 
 - Removed support for python 3.10 ([#156](https://github.com/mpytools/mplotutils/pull/156)).
+- The minimum versions of some dependencies were changed ([#159](https://github.com/mpytools/mplotutils/pull/159)).
+
+  | Package    | Old     | New    |
+  | ---------- | ------- | ------ |
+  | cartopy    | 0.22    | 0.23   |
+  | matplotlib | 3.8     | 3.9    |
+  | numpy      | 1.24    | 1.26   |
+  | xarray     | 2023.9  | 2024.7 |
 
 ### Enhancements
 
