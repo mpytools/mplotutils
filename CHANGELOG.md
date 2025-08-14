@@ -4,6 +4,8 @@
 
 ### Breaking changes
 
+- Removed support for python 3.10 ([#156](https://github.com/mpytools/mplotutils/pull/156)).
+
 ### Enhancements
 
 ### Bug fixes
