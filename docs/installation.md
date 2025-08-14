@@ -3,14 +3,14 @@
 ## Required dependencies
 
 - Python (3.11 or later)
-- [cartopy](http://scitools.org.uk/cartopy/) (0.22 or later)
-- [matplotlib](http://matplotlib.org/) (3.8 or later)
-- [numpy](http://www.numpy.org/) (1.24 or later)
+- [cartopy](http://scitools.org.uk/cartopy/) (0.23 or later)
+- [matplotlib](http://matplotlib.org/) (3.9 or later)
+- [numpy](http://www.numpy.org/) (1.26 or later)
 
 ## Optional dependencies
 
 - [seaborn](https://seaborn.pydata.org/) (0.13 or later)
-- [xarray](http://xarray.pydata.org/) (2023.9 or later)
+- [xarray](http://xarray.pydata.org/) (2024.7 or later)
 
 ## Instructions
 
