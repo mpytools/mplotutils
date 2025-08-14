@@ -1,8 +1,0 @@
-# This file is redundant with setup.cfg;
-# it exists to let GitHub build the repository dependency graph
-# https://help.github.com/en/github/visualizing-repository-data-with-graphs/listing-the-packages-that-a-repository-depends-on
-
-cartopy >= 0.23
-matplotlib >= 3.9
-numpy >= 1.26
-xarray >= 2024.7

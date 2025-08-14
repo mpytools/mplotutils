@@ -1,3 +1,68 @@
+[project]
+name = "mplotutils"
+authors = [{name = "mplotutils developers", email = "mathias.hauser@env.ethz.com"}]
+license = "GPL-3.0-only"
+keywords = ['matplotlib cartopy plotting']
+description = "utilities for matplotlib and cartopy"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Atmospheric Science",
+    "Topic :: Scientific/Engineering :: GIS",
+]
+requires-python = ">=3.11"
+dependencies = [
+    "cartopy >=0.23",
+    "matplotlib >=3.9",
+    "packaging >= 23.1",
+    "numpy >=1.26",
+    "xarray >=2024.7",
+]
+dynamic = ["version"]
+
+[project.readme]
+file = "README.md"
+content-type = "text/markdown"
+
+[project.urls]
+Homepage = "https://github.com/mpytools/mplotutils"
+Documentation = "https://github.com/mpytools/mplotutils"
+Source = "https://github.com/mpytools/mplotutils"
+BugReports = "https://github.com/mpytools/mplotutils/issues"
+
+[project.optional-dependencies]
+full = [
+  "seaborn",
+]
+
+[dependency-groups]
+# docs = [
+    # "mplotutils[full]",
+    # dependencies to build the docs
+    # "numpydoc",
+    # "sphinx",
+# ]
+tests = [
+    "pytest-cov",
+    "pytest-xdist",
+    "pytest",
+]
+dev = [
+    "regionmask[full, tests]", # docs
+    "black !=23",
+    "ruff",
+]
+
+[tool.setuptools.packages]
+find = {namespaces = false}  # Disable implicit namespaces
+
 [build-system]
 requires = [
     "setuptools>=42",
@@ -41,4 +106,9 @@ log_cli_level = "INFO"
 
 filterwarnings = [
     "ignore:numpy.ufunc size changed, may indicate binary incompatibility.:RuntimeWarning"
+]
+
+[tool.coverage.run]
+omit = [
+  "*/mplotutils/tests/*",
 ]
