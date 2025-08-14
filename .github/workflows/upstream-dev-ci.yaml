@@ -84,7 +84,7 @@ jobs:
           failure()
           && steps.status.outcome == 'failure'
           && github.event_name == 'schedule'
-          && github.repository_owner == 'regionmask'
+          && github.repository_owner == 'mpytools'
         uses: xarray-contrib/issue-from-pytest-log@v1
         with:
           log-path: output-${{ matrix.python-version }}-log.jsonl
