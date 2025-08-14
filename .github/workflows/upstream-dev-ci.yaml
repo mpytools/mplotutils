@@ -66,9 +66,9 @@ jobs:
         id: status
         run: |
           python -m pytest -rf
-            --report-log output-${{ matrix.python-version }}-log.jsonl
-            --cov=mplotutils
-            --cov-report=xml
+          --report-log output-${{ matrix.python-version }}-log.jsonl
+          --cov=mplotutils
+          --cov-report=xml
 
       - name: Upload code coverage to Codecov
         uses: codecov/codecov-action@v5
