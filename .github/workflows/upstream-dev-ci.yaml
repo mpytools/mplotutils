@@ -22,7 +22,6 @@ jobs:
     name: upstream-dev
     runs-on: ubuntu-latest
     permissions:
-      contents: read
       issues: write
     if: |
         always()
