@@ -71,6 +71,19 @@ def test_xticklabels_robinson(pass_ax):
         assert ax.texts[-1].get_text() == "120°E"
 
 
+def test_xyticklabels_not_on_map():
+
+    with subplots_context(subplot_kw=dict(projection=ccrs.PlateCarree())) as (f, ax):
+        # restrict extent
+        ax.set_extent([0, 180, -90, 0], ccrs.PlateCarree())
+
+        with pytest.warns(match="no points found for xlabel"):
+            mpu.xticklabels([180, 270, 360], ax=ax, size=8)
+
+        with pytest.warns(match="no points found for ylabel"):
+            mpu.yticklabels([0, 45, 90], ax=ax, size=8)
+
+
 # TODO: https://github.com/mpytools/mplotutils/issues/48
 # def test_xticklabels_robinson_180():
 

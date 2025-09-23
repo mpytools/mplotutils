@@ -322,10 +322,10 @@ def yticklabels(
 
     if not y_label_points:
         msg = (
-            "WARN: no points found for ylabel\n"
+            "no points found for ylabel. "
             f"y_lim is: {y_lim[0]:0.2f} to {y_lim[1]:0.2f}"
         )
-        warnings.warn(msg)
+        warnings.warn(msg, stacklevel=2)
 
     # get a transform instance that mpl understands
     transform = ccrs.PlateCarree()._as_mpl_transform(ax)
@@ -421,10 +421,10 @@ def xticklabels(
 
     if not x_label_points:
         msg = (
-            "WARN: no points found for xlabel\n"
+            "no points found for xlabel. "
             f"x_lim is: {x_lim[0]:0.2f} to {x_lim[1]:0.2f}"
         )
-        warnings.warn(msg)
+        warnings.warn(msg, stacklevel=2)
 
     # get a transform instance that mpl understands
     transform = ccrs.PlateCarree()._as_mpl_transform(ax)
