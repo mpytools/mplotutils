@@ -7,6 +7,22 @@ from mplotutils import set_map_layout
 from . import figure_context, get_rtol
 
 
+def test_set_map_layout_error_ncol_nrow():
+    with figure_context() as f:
+
+        axgr = AxesGrid(f, 111, nrows_ncols=(1, 1))
+
+        msg = "Cannot pass 'nrow' or 'ncol' for and 'AxesGrid'"
+        with pytest.raises(TypeError, match=msg):
+            set_map_layout(axgr, ncol=1)
+
+        with pytest.raises(TypeError, match=msg):
+            set_map_layout(axgr, nrow=1)
+
+        with pytest.raises(TypeError, match=msg):
+            set_map_layout(axgr, nrow=1, ncol=1)
+
+
 def test_set_map_layout_default_width():
     with figure_context() as f:
 
