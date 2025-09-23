@@ -16,6 +16,7 @@
 
 
 - Removed `infer_interval_breaks` function deprecated in v0.3.0 ([#177](https://github.com/mpytools/mplotutils/pull/177)).
+- Finish deprecation of positional arguments started in v0.3.0 ([#178](https://github.com/mpytools/mplotutils/pull/178)).
 
 ### Enhancements
 
