@@ -5,8 +5,6 @@ import matplotlib.pyplot as plt
 import matplotlib.transforms as mtransforms
 import numpy as np
 
-from mplotutils._deprecate import _deprecate_positional_args
-
 
 def _deprecate_ax1_ax2(ax, ax2, ax1):
     if ax is None:
@@ -50,7 +48,6 @@ def _deprecate_ax1_ax2(ax, ax2, ax1):
     return ax
 
 
-@_deprecate_positional_args("0.3")
 def colorbar(
     mappable,
     ax=None,

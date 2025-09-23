@@ -79,18 +79,6 @@ def test_parse_size_aspect_pad():
 # =============================================================================
 
 
-@pytest.mark.parametrize("orientation", ("vertical", "horizontal"))
-@pytest.mark.filterwarnings("ignore:Passing axes individually")
-def test_colorbar_deprecate_positional(orientation):
-    with subplots_context(1, 2) as (f, axs):
-        h = axs[0].pcolormesh([[0, 1]])
-
-        with pytest.warns(
-            FutureWarning, match="Passing 'orientation' as positional argument"
-        ):
-            mpu.colorbar(h, axs[0], axs[0], orientation)
-
-
 def test_colorbar_deprecate_ax1_ax2_errors():
 
     h = None
