@@ -9,3 +9,6 @@ def test_works():
     with subplots_context() as (f, ax):
         ylabel_map("ylabel", ax=ax)
         xlabel_map("ylabel", ax=ax)
+
+        ylabel_map("ylabel")
+        xlabel_map("ylabel")

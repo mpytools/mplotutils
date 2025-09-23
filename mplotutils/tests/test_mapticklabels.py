@@ -1,18 +1,21 @@
 import cartopy.crs as ccrs
 import numpy as np
+import pytest
 
 import mplotutils as mpu
 
 from . import subplots_context
 
 
-def test_yticklabels_robinson():
+@pytest.mark.parametrize("pass_ax", (True, False))
+def test_yticklabels_robinson(pass_ax):
     with subplots_context(subplot_kw=dict(projection=ccrs.Robinson())) as (f, ax):
         ax.set_global()
 
         lat = np.arange(-90, 91, 20)
 
-        mpu.yticklabels(lat, ax=ax, size=8)
+        ax_ = ax if pass_ax else None
+        mpu.yticklabels(lat, ax=ax_, size=8)
 
         x_pos = -179.99
 
@@ -26,14 +29,16 @@ def test_yticklabels_robinson():
         assert ax.texts[-1].get_text() == "70°N"
 
 
-def test_yticklabels_robinson_180():
+@pytest.mark.parametrize("pass_ax", (True, False))
+def test_yticklabels_robinson_180(pass_ax):
     proj = ccrs.Robinson(central_longitude=180)
     with subplots_context(subplot_kw=dict(projection=proj)) as (f, ax):
         ax.set_global()
 
         lat = np.arange(-90, 91, 20)
 
-        mpu.yticklabels(lat, ax=ax, size=8)
+        ax_ = ax if pass_ax else None
+        mpu.yticklabels(lat, ax=ax_, size=8)
 
         x_pos = 0.0
 

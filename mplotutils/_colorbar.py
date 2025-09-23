@@ -237,7 +237,7 @@ def colorbar(
         raise ValueError(msg)
 
     if not all(isinstance(ax, mpl.axes.Axes) for ax in axs):
-        raise TypeError("ax must be of Type mpl.axes.Axes")
+        raise TypeError("ax must be of type mpl.axes.Axes")
 
     f = axs[0].get_figure()
 
