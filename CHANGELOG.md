@@ -21,7 +21,8 @@
 ### Enhancements
 
 - Add python 3.13 to list of supported versions ([#158](https://github.com/mpytools/mplotutils/pull/158)).
-- Increased test coverage ([#180](https://github.com/mpytools/mplotutils/pull/180), and [#181](https://github.com/mpytools/mplotutils/pull/181)).
+- Increased test coverage ([#180](https://github.com/mpytools/mplotutils/pull/180), [#181](https://github.com/mpytools/mplotutils/pull/181),
+  and [#182](https://github.com/mpytools/mplotutils/pull/182)).
 
 ### Bug fixes
 
