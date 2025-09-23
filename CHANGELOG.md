@@ -14,6 +14,9 @@
   | numpy      | 1.24    | 1.26   |
   | xarray     | 2023.9  | 2024.7 |
 
+
+- Removed `infer_interval_breaks` function deprecated in v0.3.0 ([#177](https://github.com/mpytools/mplotutils/pull/177)).
+
 ### Enhancements
 
 - Add python 3.13 to list of supported versions ([#158](https://github.com/mpytools/mplotutils/pull/158)).
