@@ -52,11 +52,6 @@ except Exception:  # pragma: no cover
     __version__ = "999"
 
 
-def empty_func_not_testted():
-
-    pass
-
-
 def __getattr__(attr):
 
     m = (

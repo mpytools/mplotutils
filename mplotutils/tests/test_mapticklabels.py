@@ -29,16 +29,14 @@ def test_yticklabels_robinson(pass_ax):
         assert ax.texts[-1].get_text() == "70°N"
 
 
-@pytest.mark.parametrize("pass_ax", (True, False))
-def test_yticklabels_robinson_180(pass_ax):
+def test_yticklabels_robinson_180():
     proj = ccrs.Robinson(central_longitude=180)
     with subplots_context(subplot_kw=dict(projection=proj)) as (f, ax):
         ax.set_global()
 
         lat = np.arange(-90, 91, 20)
 
-        ax_ = ax if pass_ax else None
-        mpu.yticklabels(lat, ax=ax_, size=8)
+        mpu.yticklabels(lat, ax=ax, size=8)
 
         x_pos = 0.0
 
@@ -52,13 +50,14 @@ def test_yticklabels_robinson_180(pass_ax):
         assert ax.texts[-1].get_text() == "70°N"
 
 
-def test_xticklabels_robinson():
+@pytest.mark.parametrize("pass_ax", (True, False))
+def test_xticklabels_robinson(pass_ax):
     with subplots_context(subplot_kw=dict(projection=ccrs.Robinson())) as (f, ax):
         ax.set_global()
 
         lon = np.arange(-180, 181, 60)
-
-        mpu.xticklabels(lon, ax=ax, size=8)
+        ax_ = ax if pass_ax else None
+        mpu.xticklabels(lon, ax=ax_, size=8)
 
         y_pos = -89.99
 
