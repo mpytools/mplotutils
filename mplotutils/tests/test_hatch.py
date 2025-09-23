@@ -14,13 +14,6 @@ MPL_GE_311 = Version(Version(mpl.__version__).base_version) >= Version("3.11")
 requires_mpl_ge_310 = pytest.mark.skipif(not MPL_GE_310, reason="requires mpl >= 3.10")
 
 
-HATCH_FUNCTIONS = (
-    pytest.param(mpu.hatch, id="hatch"),
-    pytest.param(mpu.hatch_map, id="hatch_map"),
-    pytest.param(mpu.hatch_map_global, id="hatch_map_global"),
-)
-
-
 def get_hatchcolor(h):
     if MPL_GE_311:
         return mpl.colors.to_rgba(h.get_hatchcolor())
@@ -28,211 +21,206 @@ def get_hatchcolor(h):
     return h._hatch_color
 
 
-@pytest.mark.parametrize("obj", (None, xr.Dataset(), np.array([])))
-@pytest.mark.parametrize("function", HATCH_FUNCTIONS)
-def test_hatch_not_a_dataarray(obj, function):
+class HatchBase:
 
-    with pytest.raises(TypeError, match="Expected a xr.DataArray"):
-        function(obj, "*")
+    @pytest.mark.parametrize("obj", (None, xr.Dataset(), np.array([])))
+    def test_hatch_not_a_dataarray(self, obj):
+
+        with pytest.raises(TypeError, match="Expected a xr.DataArray"):
+            self.function(obj, "*")
+
+    @pytest.mark.parametrize("dtype", (float, int))
+    def test_hatch_not_bool(self, dtype):
+
+        da = xr.DataArray(np.ones((3, 3), dtype=dtype))
+
+        with pytest.raises(TypeError, match="Expected a boolean array"):
+            self.function(da, "*")
+
+    @pytest.mark.parametrize("ndim", (1, 3))
+    def test_hatch_not_2D(self, ndim):
+
+        da = xr.DataArray(np.ones([3] * ndim, dtype=bool))
+
+        with pytest.raises(ValueError, match="Expected a 2D array"):
+            self.function(da, "*")
+
+    def test_hatch_pattern(self):
+
+        da = xr.DataArray(
+            np.ones([3, 3], dtype=bool),
+            dims=("lat", "lon"),
+            coords={"lat": [0, 1, 2], "lon": [1, 2, 3]},
+        )
+
+        with subplots_context(1, 1, subplot_kw=self.subplot_kw) as (__, ax):
+
+            h = self.function(da, "*", ax=ax)
+            assert h.hatches == ["", "*"]
+            h = self.function(da, "//", ax=ax)
+            assert h.hatches == ["", "//"]
+
+    def test_hatch_label(self):
+
+        da = xr.DataArray(
+            np.ones([3, 3], dtype=bool),
+            dims=("lat", "lon"),
+            coords={"lat": [0, 1, 2], "lon": [1, 2, 3]},
+        )
+
+        # test label with default color
+        with subplots_context(1, 1, subplot_kw=self.subplot_kw) as (__, ax):
+
+            self.function(da, "*", ax=ax, label="label")
+
+            legend = ax.legend()
+            h = legend.legend_handles
+
+            assert len(h) == 1
+
+            (rect,) = h
+
+            assert rect.get_label() == "label"
+            assert mpl.colors.to_rgba("0.1") == get_hatchcolor(rect)
+
+        # test 2 labels with non-default color
+        with subplots_context(1, 1, subplot_kw=self.subplot_kw) as (__, ax):
+
+            self.function(da, "*", ax=ax, label="label0", color="#2ca25f")
+            self.function(da, "*", ax=ax, label="label1", color="#2ca25f")
+
+            legend = ax.legend()
+            h = legend.legend_handles
+
+            assert len(h) == 2
+
+            for i, rect in enumerate(h):
+                assert rect.get_label() == f"label{i}"
+                assert mpl.colors.to_rgba("#2ca25f") == get_hatchcolor(rect)
+
+    @pytest.mark.skipif(MPL_GE_310, reason="only for mpl < 3.10")
+    def test_hatch_linewidth_mpl_lt_310(self):
+
+        da = xr.DataArray(
+            np.ones([3, 3], dtype=bool),
+            dims=("lat", "lon"),
+            coords={"lat": [0, 1, 2], "lon": [1, 2, 3]},
+        )
+
+        # test linewidth default width
+        with subplots_context(1, 1, subplot_kw=self.subplot_kw) as (__, ax):
+            self.function(da, "*", ax=ax)
+
+            assert mpl.rcParams["hatch.linewidth"] == 0.25
+
+        # changing away from the default linewidth does not raise a warning
+        with subplots_context(1, 1, subplot_kw=self.subplot_kw) as (__, ax):
+
+            self.function(da, "*", ax=ax)
+            assert mpl.rcParams["hatch.linewidth"] == 0.25
+
+            with assert_no_warnings():
+                self.function(da, "*", ax=ax, linewidth=1)
+
+            assert mpl.rcParams["hatch.linewidth"] == 1
+
+        # changing away from the linewidth does raise a warning
+        with subplots_context(1, 1, subplot_kw=self.subplot_kw) as (__, ax):
+
+            self.function(da, "*", ax=ax, linewidth=2)
+            assert mpl.rcParams["hatch.linewidth"] == 2
+
+            with pytest.warns(match="Setting more than one hatch `linewidth`"):
+                self.function(da, "*", ax=ax, linewidth=1)
+
+            assert mpl.rcParams["hatch.linewidth"] == 1
+
+    @requires_mpl_ge_310
+    @pytest.mark.filterwarnings("ignore:Passing 'N' to ListedColormap is deprecated")
+    def test_hatch_linewidth_mpl_ge_310(self):
+
+        da = xr.DataArray(
+            np.ones([3, 3], dtype=bool),
+            dims=("lat", "lon"),
+            coords={"lat": [0, 1, 2], "lon": [1, 2, 3]},
+        )
+
+        # test linewidth default width
+        with subplots_context(1, 1, subplot_kw=self.subplot_kw) as (__, ax):
+            q = self.function(da, "*", ax=ax)
+            assert q.get_hatch_linewidth() == 0.25
+            assert mpl.rcParams["hatch.linewidth"] == 0.25
+
+        # changing away from the default linewidth does not raise a warning
+        with subplots_context(1, 1, subplot_kw=self.subplot_kw) as (__, ax):
+
+            q = self.function(da, "*", ax=ax)
+            assert q.get_hatch_linewidth() == 0.25
+            assert mpl.rcParams["hatch.linewidth"] == 0.25
+
+            with assert_no_warnings():
+                q = self.function(da, "*", ax=ax, linewidth=1)
+
+            assert q.get_hatch_linewidth() == 1
+            assert mpl.rcParams["hatch.linewidth"] == 1
+
+            q = self.function(da, "*", ax=ax)
+            assert q.get_hatch_linewidth() == 0.25
+            assert mpl.rcParams["hatch.linewidth"] == 0.25
+
+        # changing away from the linewidth does NOT raise a warning
+        with subplots_context(1, 1, subplot_kw=self.subplot_kw) as (__, ax):
+
+            q = self.function(da, "*", ax=ax, linewidth=2)
+            assert q.get_hatch_linewidth() == 2
+            assert mpl.rcParams["hatch.linewidth"] == 2
+
+            with assert_no_warnings():
+                q = self.function(da, "*", ax=ax, linewidth=1)
+
+            assert q.get_hatch_linewidth() == 1
+            assert mpl.rcParams["hatch.linewidth"] == 1
+
+    def test_hatch_color(self):
+
+        da = xr.DataArray(
+            np.ones([3, 3], dtype=bool),
+            dims=("lat", "lon"),
+            coords={"lat": [0, 1, 2], "lon": [1, 2, 3]},
+        )
+
+        # test default color
+        with subplots_context(1, 1, subplot_kw=self.subplot_kw) as (__, ax):
+            h = self.function(da, "*", ax=ax)
+
+            assert mpl.colors.to_rgba("0.1") == get_hatchcolor(h)
+
+        # different colors can be set
+        with subplots_context(1, 1, subplot_kw=self.subplot_kw) as (__, ax):
+
+            h = self.function(da, "*", ax=ax, color="#2ca25f")
+            assert mpl.colors.to_rgba("#2ca25f") == get_hatchcolor(h)
+
+            h = self.function(da, "*", ax=ax, color="#e5f5f9")
+            assert mpl.colors.to_rgba("#e5f5f9") == get_hatchcolor(h)
 
 
-@pytest.mark.parametrize("dtype", (float, int))
-@pytest.mark.parametrize("function", HATCH_FUNCTIONS)
-def test_hatch_not_bool(dtype, function):
+class TestHatch(HatchBase):
 
-    da = xr.DataArray(np.ones((3, 3), dtype=dtype))
-
-    with pytest.raises(TypeError, match="Expected a boolean array"):
-        function(da, "*")
+    function = staticmethod(mpu.hatch)
+    subplot_kw = {}
 
 
-@pytest.mark.parametrize("ndim", (1, 3))
-@pytest.mark.parametrize("function", HATCH_FUNCTIONS)
-def test_hatch_not_2D(ndim, function):
+class TestHatchMap(HatchBase):
 
-    da = xr.DataArray(np.ones([3] * ndim, dtype=bool))
-
-    with pytest.raises(ValueError, match="Expected a 2D array"):
-        function(da, "*")
-
-
-@pytest.mark.parametrize("function", HATCH_FUNCTIONS)
-def test_hatch_pattern(function):
-
-    da = xr.DataArray(
-        np.ones([3, 3], dtype=bool),
-        dims=("lat", "lon"),
-        coords={"lat": [0, 1, 2], "lon": [1, 2, 3]},
-    )
-
+    function = staticmethod(mpu.hatch_map_global)
     subplot_kw = {"projection": ccrs.PlateCarree()}
 
-    with subplots_context(1, 1, subplot_kw=subplot_kw) as (__, ax):
 
-        h = function(da, "*", ax=ax)
-        assert h.hatches == ["", "*"]
-        h = function(da, "//", ax=ax)
-        assert h.hatches == ["", "//"]
+class TestHatchMapGlobal(HatchBase):
 
-
-@pytest.mark.parametrize("function", HATCH_FUNCTIONS)
-def test_hatch_label(function):
-
-    da = xr.DataArray(
-        np.ones([3, 3], dtype=bool),
-        dims=("lat", "lon"),
-        coords={"lat": [0, 1, 2], "lon": [1, 2, 3]},
-    )
-
+    function = staticmethod(mpu.hatch_map_global)
     subplot_kw = {"projection": ccrs.PlateCarree()}
-
-    # test label with default color
-    with subplots_context(1, 1, subplot_kw=subplot_kw) as (__, ax):
-
-        function(da, "*", ax=ax, label="label")
-
-        legend = ax.legend()
-        h = legend.legend_handles
-
-        assert len(h) == 1
-
-        (rect,) = h
-
-        assert rect.get_label() == "label"
-        assert mpl.colors.to_rgba("0.1") == get_hatchcolor(rect)
-
-    # test 2 labels with non-default color
-    with subplots_context(1, 1, subplot_kw=subplot_kw) as (__, ax):
-
-        function(da, "*", ax=ax, label="label0", color="#2ca25f")
-        function(da, "*", ax=ax, label="label1", color="#2ca25f")
-
-        legend = ax.legend()
-        h = legend.legend_handles
-
-        assert len(h) == 2
-
-        for i, rect in enumerate(h):
-            assert rect.get_label() == f"label{i}"
-            assert mpl.colors.to_rgba("#2ca25f") == get_hatchcolor(rect)
-
-
-@pytest.mark.skipif(MPL_GE_310, reason="only for mpl < 3.10")
-@pytest.mark.parametrize("function", HATCH_FUNCTIONS)
-def test_hatch_linewidth_mpl_lt_310(function):
-
-    da = xr.DataArray(
-        np.ones([3, 3], dtype=bool),
-        dims=("lat", "lon"),
-        coords={"lat": [0, 1, 2], "lon": [1, 2, 3]},
-    )
-
-    subplot_kw = {"projection": ccrs.PlateCarree()}
-
-    # test linewidth default width
-    with subplots_context(1, 1, subplot_kw=subplot_kw) as (__, ax):
-        function(da, "*", ax=ax)
-
-        assert mpl.rcParams["hatch.linewidth"] == 0.25
-
-    # changing away from the default linewidth does not raise a warning
-    with subplots_context(1, 1, subplot_kw=subplot_kw) as (__, ax):
-
-        function(da, "*", ax=ax)
-        assert mpl.rcParams["hatch.linewidth"] == 0.25
-
-        with assert_no_warnings():
-            function(da, "*", ax=ax, linewidth=1)
-
-        assert mpl.rcParams["hatch.linewidth"] == 1
-
-    # changing away from the linewidth does raise a warning
-    with subplots_context(1, 1, subplot_kw=subplot_kw) as (__, ax):
-
-        function(da, "*", ax=ax, linewidth=2)
-        assert mpl.rcParams["hatch.linewidth"] == 2
-
-        with pytest.warns(match="Setting more than one hatch `linewidth`"):
-            function(da, "*", ax=ax, linewidth=1)
-
-        assert mpl.rcParams["hatch.linewidth"] == 1
-
-
-@requires_mpl_ge_310
-@pytest.mark.filterwarnings("ignore:Passing 'N' to ListedColormap is deprecated")
-@pytest.mark.parametrize("function", HATCH_FUNCTIONS)
-def test_hatch_linewidth_mpl_ge_310(function):
-
-    da = xr.DataArray(
-        np.ones([3, 3], dtype=bool),
-        dims=("lat", "lon"),
-        coords={"lat": [0, 1, 2], "lon": [1, 2, 3]},
-    )
-
-    subplot_kw = {"projection": ccrs.PlateCarree()}
-
-    # test linewidth default width
-    with subplots_context(1, 1, subplot_kw=subplot_kw) as (__, ax):
-        q = function(da, "*", ax=ax)
-        assert q.get_hatch_linewidth() == 0.25
-        assert mpl.rcParams["hatch.linewidth"] == 0.25
-
-    # changing away from the default linewidth does not raise a warning
-    with subplots_context(1, 1, subplot_kw=subplot_kw) as (__, ax):
-
-        q = function(da, "*", ax=ax)
-        assert q.get_hatch_linewidth() == 0.25
-        assert mpl.rcParams["hatch.linewidth"] == 0.25
-
-        with assert_no_warnings():
-            q = function(da, "*", ax=ax, linewidth=1)
-
-        assert q.get_hatch_linewidth() == 1
-        assert mpl.rcParams["hatch.linewidth"] == 1
-
-        q = function(da, "*", ax=ax)
-        assert q.get_hatch_linewidth() == 0.25
-        assert mpl.rcParams["hatch.linewidth"] == 0.25
-
-    # changing away from the linewidth does NOT raise a warning
-    with subplots_context(1, 1, subplot_kw=subplot_kw) as (__, ax):
-
-        q = function(da, "*", ax=ax, linewidth=2)
-        assert q.get_hatch_linewidth() == 2
-        assert mpl.rcParams["hatch.linewidth"] == 2
-
-        with assert_no_warnings():
-            q = function(da, "*", ax=ax, linewidth=1)
-
-        assert q.get_hatch_linewidth() == 1
-        assert mpl.rcParams["hatch.linewidth"] == 1
-
-
-@pytest.mark.parametrize("function", HATCH_FUNCTIONS)
-def test_hatch_color(function):
-
-    da = xr.DataArray(
-        np.ones([3, 3], dtype=bool),
-        dims=("lat", "lon"),
-        coords={"lat": [0, 1, 2], "lon": [1, 2, 3]},
-    )
-
-    subplot_kw = {"projection": ccrs.PlateCarree()}
-
-    # test default color
-    with subplots_context(1, 1, subplot_kw=subplot_kw) as (__, ax):
-        h = function(da, "*", ax=ax)
-
-        assert mpl.colors.to_rgba("0.1") == get_hatchcolor(h)
-
-    # different colors can be set
-    with subplots_context(1, 1, subplot_kw=subplot_kw) as (__, ax):
-
-        h = function(da, "*", ax=ax, color="#2ca25f")
-        assert mpl.colors.to_rgba("#2ca25f") == get_hatchcolor(h)
-
-        h = function(da, "*", ax=ax, color="#e5f5f9")
-        assert mpl.colors.to_rgba("#e5f5f9") == get_hatchcolor(h)
 
 
 def test_hatch_bbox():
