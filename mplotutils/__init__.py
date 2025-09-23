@@ -19,7 +19,6 @@ from mplotutils._hatch import hatch, hatch_map, hatch_map_global
 from mplotutils._map_layout import set_map_layout
 from mplotutils._mpl import _get_renderer
 from mplotutils._savefig import autodraw
-from mplotutils._xrcompat import infer_interval_breaks
 
 autodraw(True)
 
@@ -35,7 +34,6 @@ __all__ = [
     "hatch_map_global",
     "hatch_map",
     "hatch",
-    "infer_interval_breaks",
     "sample_data_map",
     "sample_dataarray",
     "set_map_layout",
@@ -61,7 +59,6 @@ def __getattr__(attr):
         "colormaps",
         "map_layout",
         "mpl",
-        "xrcompat",
     )
 
     import mplotutils
