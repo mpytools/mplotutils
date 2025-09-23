@@ -5,11 +5,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.axes_grid1 import AxesGrid
 
-from mplotutils._deprecate import _deprecate_positional_args
 from mplotutils._mpl import _get_renderer
 
 
-@_deprecate_positional_args("0.3")
 def set_map_layout(obj=None, width=17.0, *, nrow=None, ncol=None, axes=None):
     """set figure height, given width, taking axes' aspect ratio into account
 
