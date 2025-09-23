@@ -57,7 +57,7 @@ class HatchBase:
 
             h = self.function(da, "*", ax=ax)
             assert h.hatches == ["", "*"]
-            h = self.function(da, "//", ax=ax)
+            h = self.function(da, "//")
             assert h.hatches == ["", "//"]
 
     def test_hatch_label(self):

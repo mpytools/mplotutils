@@ -144,6 +144,16 @@ def test_colorbar_deprecate_ax1():
             mpu.colorbar(h, ax1=ax)
 
 
+def test_colorbar_error_not_axes():
+
+    with pytest.raises(TypeError, match="ax must be of type mpl.axes.Axes"):
+        mpu.colorbar(None, object())
+
+    with figure_context() as f:
+        with pytest.raises(TypeError, match="ax must be of type mpl.axes.Axes"):
+            mpu.colorbar(None, f)
+
+
 def test_colorbar_different_figures():
     with figure_context() as f1, figure_context() as f2:
         ax1 = f1.subplots()
