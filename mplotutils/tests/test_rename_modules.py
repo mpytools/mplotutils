@@ -17,7 +17,6 @@ DEPRECATED_MODULES = {
     "colormaps": ("from_levels_and_cmap",),
     "map_layout": ("set_map_layout",),
     "mpl": ("_get_renderer",),
-    "xrcompat": ("infer_interval_breaks",),
 }
 
 
