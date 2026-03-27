@@ -59,13 +59,14 @@ def test_xticklabels_robinson(pass_ax):
         ax_ = ax if pass_ax else None
         mpu.xticklabels(lon, ax=ax_, size=8)
 
-        y_pos = -89.99
+        # changed value with proj 9.8; https://github.com/mpytools/mplotutils/issues/202
+        y_pos = -89.845635
 
         # two elements are not added because they are beyond the map limits
         lon = lon[1:-1]
 
         for t, x_pos in zip(ax.texts, lon, strict=True):
-            np.testing.assert_allclose((x_pos, y_pos), t.xy, atol=0.01)
+            np.testing.assert_allclose(t.xy, (x_pos, y_pos), atol=0.01)
 
         assert ax.texts[0].get_text() == "120°W"
         assert ax.texts[-1].get_text() == "120°E"
