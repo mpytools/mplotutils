@@ -22,7 +22,8 @@
 
 - Add python 3.13 to list of supported versions ([#158](https://github.com/mpytools/mplotutils/pull/158)).
 - Increased test coverage ([#180](https://github.com/mpytools/mplotutils/pull/180), [#181](https://github.com/mpytools/mplotutils/pull/181),
-  [#182](https://github.com/mpytools/mplotutils/pull/182), and [#207](https://github.com/mpytools/mplotutils/pull/207)).
+  [#182](https://github.com/mpytools/mplotutils/pull/182), [#207](https://github.com/mpytools/mplotutils/pull/207),
+  and [#208](https://github.com/mpytools/mplotutils/pull/208),).
 
 ### Bug fixes
 
