@@ -13,3 +13,19 @@ def test_get_renderer(backend):
 
         with figure_context() as f:
             _get_renderer(f)
+
+
+def test_error_message_get_renderer():
+
+    # it's a fallback so should never be triggered - here I test the error message only
+
+    backend = matplotlib.get_backend()
+
+    class FakeFig:
+        def canvas(self): ...
+
+    with pytest.raises(
+        AttributeError,
+        match=f"Could not find a renderer for the '{backend}' backend. Please raise an issue",
+    ):
+        _get_renderer(FakeFig())
