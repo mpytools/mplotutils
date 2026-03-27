@@ -1,6 +1,7 @@
 import cartopy.crs as ccrs
 import numpy as np
 import pytest
+import shapely
 
 import mplotutils as mpu
 
@@ -109,3 +110,46 @@ def test_xyticklabels_not_on_map():
 
 #         assert ax.texts[0].get_text() == "60°E"
 #         assert ax.texts[-1].get_text() == "60°W"
+
+
+def test_determine_intersection():
+
+    box = shapely.box(0, 0, 1, 1)
+
+    # case 0 -> the expected two points top & bottom
+
+    a = shapely.Point((0.5, -0.5))
+    b = shapely.Point((0.5, 1.5))
+
+    result = mpu._cartopy_utils._determine_intersection(box, a, b)
+    expected = np.array([[0.5, 0.0], [0.5, 1.0]])
+
+    np.testing.assert_allclose(result, expected)
+
+    # case 1 -> only one intersection (not sure how this would happen)
+
+    b = shapely.Point((0.5, 0.5))
+
+    result = mpu._cartopy_utils._determine_intersection(box, a, b)
+    expected = np.array([[0.5, 0.0]])
+    np.testing.assert_allclose(result, expected)
+
+    # case 2 -> intersection along a polygon edge
+
+    b = shapely.Point((1, 1.5))
+    a = shapely.Point((1, -0.5))
+
+    result = mpu._cartopy_utils._determine_intersection(box, a, b)
+    expected = np.array([[1.0, 0.0], [1.0, 1.0]])
+
+    np.testing.assert_allclose(result, expected)
+
+    # case 3 -> no intersection
+
+    a = shapely.Point((1.5, -0.5))
+    b = shapely.Point((1.5, 1.5))
+    result = mpu._cartopy_utils._determine_intersection(box, a, b)
+
+    expected = np.array([[]])
+
+    np.testing.assert_allclose(result, expected)

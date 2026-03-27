@@ -479,7 +479,7 @@ def _determine_intersection(polygon, xy1, xy2):
         arr = np.atleast_2d(arr)
     elif isinstance(intersection, shapely.geometry.LineString):
         if intersection.is_empty:
-            return np.array([])
+            return np.array([[]])
         else:
             return np.array(intersection.coords)
     else:
