@@ -8,6 +8,7 @@ dependencies:
   - matplotlib-base=3.9
   - numpy=1.26
   - seaborn=0.13
+  - shapely=2.0
   - xarray=2024.7
 # for testing
   - pytest
