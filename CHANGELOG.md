@@ -1,6 +1,8 @@
 # Changelog
 
-## v0.7.0 (unreleased)
+## v0.7.0 (13.07.2026)
+
+Version 0.6.0 uses features available in newer matplotlib versions and bumps the supported versions.
 
 ### Breaking changes
 
@@ -27,8 +29,6 @@
 - Increased test coverage ([#180](https://github.com/mpytools/mplotutils/pull/180), [#181](https://github.com/mpytools/mplotutils/pull/181),
   [#182](https://github.com/mpytools/mplotutils/pull/182), [#207](https://github.com/mpytools/mplotutils/pull/207),
   and [#208](https://github.com/mpytools/mplotutils/pull/208)).
-
-### Bug fixes
 
 ### Internal changes
 
