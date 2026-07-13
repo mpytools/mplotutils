@@ -4,8 +4,9 @@
 
 ### Breaking changes
 
+- Finalized making the following modules private ``_cartopy_utils``, ``_colormaps``,
+  ``_map_layout``, ``_mpl``, and ``_xrcompat``, started in v0.6.0 ([#234](https://github.com/mpytools/mplotutils/pull/234)).
 - Removed support for python 3.11 ([#233](https://github.com/mpytools/mplotutils/pull/233)).
-
 
 ### Enhancements
 
