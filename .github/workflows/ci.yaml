@@ -37,7 +37,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
 
     - name: Set environment variables
       run: |
@@ -49,7 +49,7 @@ jobs:
         fi
 
     - name: Create conda environment
-      uses: mamba-org/setup-micromamba@v2
+      uses: mamba-org/setup-micromamba@v3
       with:
         environment-name: mplotutils-tests
         cache-downloads: true
@@ -70,7 +70,7 @@ jobs:
        --cov-report=xml
 
     - name: Upload code coverage to Codecov
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v7
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:
@@ -87,7 +87,7 @@ jobs:
         python-version: ["3.12"]
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v6
       with:
