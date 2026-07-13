@@ -52,26 +52,3 @@ except Exception:  # pragma: no cover
     __version__ = "999"
 
 
-def __getattr__(attr):
-
-    m = (
-        "cartopy_utils",
-        "colormaps",
-        "map_layout",
-        "mpl",
-    )
-
-    import mplotutils
-
-    if attr in m:
-
-        _module_renamed_warning_init(attr)
-
-        # NOTE: could use importlib.import_module() but it registers the function in
-        # sys.modules such that the warning is only called once
-        # return importlib.import_module(f".{attr}", "mplotutils")
-
-        return getattr(mplotutils, f"_{attr}")
-
-    # required for ipython tab completion
-    raise AttributeError(f"module {__name__!r} has no attribute {attr!r}")
