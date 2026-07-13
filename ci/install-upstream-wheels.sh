@@ -11,6 +11,7 @@ conda uninstall -y --force \
   numpy \
   packaging \
   pandas \
+  shapely \
   xarray
 
 # to limit the runtime of Upstream CI
