@@ -12,6 +12,7 @@
   | cartopy    | 0.22    | 0.23   |
   | matplotlib | 3.8     | 3.9    |
   | numpy      | 1.24    | 1.26   |
+  | shapely    | —       | 2.0    |
   | xarray     | 2023.9  | 2024.7 |
 
 
@@ -20,11 +21,12 @@
 
 ### Enhancements
 
+- Added shapely as an explicit dependency ([#230](https://github.com/mpytools/mplotutils/pull/230)).
 - Add python 3.13 to list of supported versions ([#158](https://github.com/mpytools/mplotutils/pull/158)).
 - Add python 3.14 to list of supported versions ([#209](https://github.com/mpytools/mplotutils/pull/209)).
 - Increased test coverage ([#180](https://github.com/mpytools/mplotutils/pull/180), [#181](https://github.com/mpytools/mplotutils/pull/181),
   [#182](https://github.com/mpytools/mplotutils/pull/182), [#207](https://github.com/mpytools/mplotutils/pull/207),
-  and [#208](https://github.com/mpytools/mplotutils/pull/208),).
+  and [#208](https://github.com/mpytools/mplotutils/pull/208)).
 
 ### Bug fixes
 
