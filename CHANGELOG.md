@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.8.0 (unreleased)
+
+### Breaking changes
+
+### Enhancements
+
+### Bug fixes
+
+### Internal changes
+
+
 ## v0.7.0 (13.07.2026)
 
 Version 0.6.0 uses features available in newer matplotlib versions and bumps the supported versions.
