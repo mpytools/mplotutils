@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+set -e
+set -u
+set -o pipefail
+
 # forcibly remove packages to avoid artifacts
 conda uninstall -y --force \
   cartopy \
@@ -8,17 +12,15 @@ conda uninstall -y --force \
   packaging \
   pandas \
   xarray
+
 # to limit the runtime of Upstream CI
-python -m pip install \
-    -i https://pypi.anaconda.org/scientific-python-nightly-wheels/simple \
-    --no-deps \
-    --pre \
-    --upgrade \
+python -m pip install -i https://pypi.anaconda.org/scientific-python-nightly-wheels/simple --no-deps --pre \
     matplotlib \
     numpy \
     pandas \
     shapely \
     xarray
+
 python -m pip install \
     --no-deps \
     --upgrade \
