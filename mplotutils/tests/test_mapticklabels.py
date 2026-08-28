@@ -61,7 +61,10 @@ def test_xticklabels_robinson(pass_ax):
         mpu.xticklabels(lon, ax=ax_, size=8)
 
         # changed value with proj 9.8; https://github.com/mpytools/mplotutils/issues/202
+        # reverted with https://github.com/SciTools/cartopy/pull/2653
         y_pos = -89.845635
+        y_pos = -89.99 # 6460
+
 
         # two elements are not added because they are beyond the map limits
         lon = lon[1:-1]
