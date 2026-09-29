@@ -4,7 +4,7 @@ import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
 import numpy as np
 import shapely.geometry
-from cartopy.mpl.gridliner import LATITUDE_FORMATTER, LONGITUDE_FORMATTER
+from cartopy.mpl.gridliner import LatitudeFormatter, LongitudeFormatter
 
 from mplotutils._colormaps import _get_label_attr
 
@@ -335,7 +335,7 @@ def yticklabels(
 
     # loop through points
     for y in y_label_points:
-        msg = LATITUDE_FORMATTER(y)
+        msg = LatitudeFormatter(y)
 
         x = _determine_intersection(boundary_pc, [lonmin, y], [lonmax, y])
 
@@ -431,7 +431,7 @@ def xticklabels(
 
     # loop through points
     for x in x_label_points:
-        msg = LONGITUDE_FORMATTER(x)
+        msg = LongitudeFormatter(x)
 
         y = _determine_intersection(boundary_pc, [x, -90], [x, 90])
         if y.size > 0:
